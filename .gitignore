@@ -1,0 +1,22 @@
+.nyc_output
+.sass-cache
+.DS_Store
+.start.pid
+.project
+.settings
+public
+govuk_modules
+node_modules
+node_modules_local
+*/node_modules/*
+reports
+coverage
+pacts
+*.txt
+*.log
+
+# IntelliJ gubbins
+.idea
+*.ipr
+*.iws
+
