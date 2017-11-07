@@ -6,7 +6,7 @@ const { healthcheck } = paths
 
 module.exports.paths = paths
 
-module.exports.bind = function (app) {
+module.exports.bind = app => {
   /**
    * Apply correlation middleware in all requests
    **/

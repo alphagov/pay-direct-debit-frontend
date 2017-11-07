@@ -58,8 +58,7 @@
     "requestretry": "^1.12.0",
     "serve-favicon": "2.4.5",
     "staticify": "0.0.8",
-    "throng": "4.0.x",
-    "winston": "2.3.x"
+    "throng": "4.0.x"
   },
   "devDependencies": {
     "@pact-foundation/pact-node": "4.6.0",
