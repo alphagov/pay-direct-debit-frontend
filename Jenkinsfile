@@ -36,7 +36,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        deploy("direct-debit-frontend", "test", null, true)
+        deployEcs("directdebit-frontend", "test", null, true, true)
       }
     }
   }
