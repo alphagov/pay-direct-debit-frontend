@@ -3,7 +3,7 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const i18n = require('i18n')
-const logger = require('winston')
+const logger = require('pino')()
 const loggingMiddleware = require('morgan')
 const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
@@ -17,11 +17,6 @@ const expressApp = express()
 
 function initialiseGlobalMiddleware (app) {
   app.set('settings', {getVersionedPath: staticify.getVersionedPath})
-  logger.stream = {
-    write: function (message) {
-      logger.info(message)
-    }
-  }
   app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets', 'images', 'favicon.ico')))
   app.use(compression())
   app.use(staticify.middleware)
@@ -73,7 +68,7 @@ function initialiseRoutes (app) {
 function listen () {
   const app = initialise()
   app.listen(port)
-  logger.log('Listening on port ' + port)
+  logger.info('Listening on port ' + port)
 }
 
 /**
