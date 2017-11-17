@@ -26,8 +26,7 @@
   "scripts": {
     "compile": "grunt generate-assets",
     "clean": "grunt clean",
-    "start": "node_modules/forever/bin/forever --minUptime 1000 --spinSleepTime 500 start.js",
-    "stop": "node_modules/forever/bin/forever stop start.js",
+    "start": "node ./start.js",
     "watch": "chokidar app test *.js --initial -c 'npm run test'",
     "watch-live-reload": "./node_modules/.bin/grunt watch",
     "lint": "./node_modules/.bin/standard",
@@ -44,7 +43,6 @@
     "cluster": "0.7.x",
     "compression": "1.6.x",
     "express": "4.15.x",
-    "forever": "0.15.x",
     "govuk-elements-sass": "3.1.0",
     "govuk_frontend_toolkit": "6.0.x",
     "govuk_template_mustache": "0.22.2",
