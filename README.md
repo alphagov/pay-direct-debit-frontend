@@ -4,7 +4,11 @@ The [GOV.UK Pay](https://www.payments.service.gov.uk/) Direct Debit Frontend
 
 ## Environment Variables
 
-## API Specification
+| Variable                    | required | default value | Description                               |
+| --------------------------- |:--------:|:-------------:| ----------------------------------------- |
+| PORT                        | X | 10300 | The port number for the express server to be bound at runtime |
+| NODE_WORKER_COUNT           |   | 1 | The number of worker threads started by node cluster when run in production mode |
+
 
 ## Licence
 
