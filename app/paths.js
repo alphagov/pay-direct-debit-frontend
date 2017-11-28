@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = {
-  default: {
-    index: '/'
+  index: {
+    path: '/'
   },
   healthcheck: {
     path: '/healthcheck'

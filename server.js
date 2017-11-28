@@ -1,4 +1,7 @@
+// Node.js core dependencies
 const path = require('path')
+
+// NPM dependencies
 const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
@@ -7,13 +10,21 @@ const logger = require('pino')()
 const loggingMiddleware = require('morgan')
 const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
+const compression = require('compression')
+const Nunjucks = require('nunjucks')
+
+// Custom dependencies
 const router = require(path.join(__dirname, '/app/router'))
 const noCache = require(path.join(__dirname, '/app/utils/no_cache'))
-const compression = require('compression')
+
+// Global constants
+const expressApp = express()
 const oneYear = 86400000 * 365
 const publicCaching = {maxAge: oneYear}
 const port = (process.env.PORT || 3000)
-const expressApp = express()
+const nodeEnv = process.env.NODE_ENV
+const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.css')
+const JAVASCRIPT_PATH = staticify.getVersionedPath('/js/application.js')
 
 function initialiseGlobalMiddleware (app) {
   app.set('settings', {getVersionedPath: staticify.getVersionedPath})
@@ -23,6 +34,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
     ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'))
   app.use(function (req, res, next) {
+    res.locals.asset_path = '/public/'
     noCache(res)
     next()
   })
@@ -46,10 +58,22 @@ function initialiseProxy (app) {
 }
 
 function initialiseViewsConfiguration (app) {
-  app.engine('html', require(path.join(__dirname, '/lib/template-engine.js')).__express)
-  app.set('view engine', 'html')
-  app.set('vendorViews', path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'))
-  app.set('views', path.join(__dirname, '/app/views'))
+  const environment = Nunjucks.configure(
+    [
+      path.join(__dirname, '/app/views'),
+      path.join(__dirname, '/govuk_modules/govuk_template/views/layouts')
+    ],
+    {
+      autoescape: true,
+      watch: nodeEnv !== 'production',
+      noCache: nodeEnv !== 'production',
+      express: app
+    }
+  )
+  app.set('view engine', 'njk')
+
+  environment.addGlobal('css_path', nodeEnv === 'production' ? CSS_PATH : staticify.getVersionedPath('/stylesheets/application.css'))
+  environment.addGlobal('js_path', nodeEnv === 'production' ? JAVASCRIPT_PATH : staticify.getVersionedPath('/js/application.js'))
 }
 
 function initialisePublic (app) {
@@ -103,5 +127,6 @@ if (argv.i) {
 
 module.exports = {
   start: start,
-  getApp: initialise
+  getApp: initialise,
+  staticify: staticify
 }

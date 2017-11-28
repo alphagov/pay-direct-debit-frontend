@@ -1,8 +1,9 @@
 'use strict'
 const paths = require('./paths.js')
-const healthcheckController = require('./controllers/healthcheck_controller')
-const CORRELATION_HEADER = require('./utils/correlation_header').CORRELATION_HEADER
-const { healthcheck } = paths
+const healthcheckController = require('./controllers/healthcheck-controller')
+const indexController = require('./controllers/index-controller')
+const CORRELATION_HEADER = require('./utils/correlation-header').CORRELATION_HEADER
+const { healthcheck, index } = paths
 
 module.exports.paths = paths
 
@@ -16,4 +17,5 @@ module.exports.bind = app => {
   })
 
   app.get(healthcheck.path, healthcheckController.healthcheck)
+  app.get(index.path, indexController.index)
 }
