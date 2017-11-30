@@ -4,7 +4,7 @@ ARG CHAMBER_URL=https://github.com/segmentio/chamber/releases/download/v1.9.0/ch
 
 RUN apk update &&\
     apk upgrade &&\
-    apk add --update bash python make g++ libc6-compat
+    apk add --update bash libc6-compat
 
 ENV PORT 9000
 EXPOSE 9000
