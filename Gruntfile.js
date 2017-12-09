@@ -7,8 +7,8 @@ module.exports = function (grunt) {
         style: 'expanded',
         sourcemap: true,
         includePaths: [
-          'govuk_modules/govuk_template/assets/stylesheets',
-          'govuk_modules/govuk_frontend_toolkit/stylesheets'
+          'govuk_modules/govuk_frontend_toolkit/stylesheets',
+          'node_modules/govuk-elements-sass/public/sass/'
         ],
         outputStyle: 'expanded'
       },
@@ -24,35 +24,43 @@ module.exports = function (grunt) {
 
   const copy = {
     assets: {
-      files: [{
-        expand: true,
-        cwd: 'app/assets/images/',
-        src: ['**', '**/*'],
-        dest: 'public/images/'
-      }]
+      files: [
+        {
+          expand: true,
+          cwd: 'app/assets/',
+          src: ['**/*', '!sass/**'],
+          dest: 'public/'
+        },
+        {
+          expand: true,
+          cwd: 'govuk_modules/govuk_frontend_toolkit/images/',
+          src: ['**/*', '!sass/**'],
+          dest: 'public/images/icons'
+        }
+      ]
     },
     govuk: {
-      files: [{
-        expand: true,
-        cwd: 'node_modules/govuk_frontend_toolkit',
-        src: '**',
-        dest: 'govuk_modules/govuk_frontend_toolkit/'
-      },
-      {
-        expand: true,
-        cwd: 'node_modules/govuk-elements-sass',
-        src: '**',
-        dest: 'govuk_modules/govuk-elements-sass/'
-      },
-      {
-        expand: true,
-        cwd: 'node_modules/govuk_template_jinja/',
-        src: '**',
-        dest: 'govuk_modules/govuk_template/',
-        rename: function (dest, src) {
-          return dest + src.replace('html', 'njk')
+      files: [
+        {
+          expand: true,
+          cwd: 'node_modules/govuk_frontend_toolkit',
+          src: '**',
+          dest: 'govuk_modules/govuk_frontend_toolkit/'
+        },
+        {
+          expand: true,
+          cwd: 'node_modules/govuk-elements-sass',
+          src: '**',
+          dest: 'govuk_modules/govuk-elements-sass/'
+        },
+        {
+          expand: true,
+          cwd: 'node_modules/govuk_template_jinja/',
+          src: '**',
+          dest: 'govuk_modules/govuk_template/',
+          rename: (dest, src) => dest + src.replace('html', 'njk')
         }
-      }]
+      ]
     }
   }
 
@@ -68,12 +76,14 @@ module.exports = function (grunt) {
 
   const replace = {
     fixSass: {
-      src: ['govuk_modules/govuk_template/**/*.scss', 'govuk_modules/govuk_frontend_toolkit/**/*.scss'],
+      src: ['govuk_modules/govuk_frontend_toolkit/**/*.scss'],
       overwrite: true,
-      replacements: [{
-        from: /filter:chroma(.*);/g,
-        to: 'filter:unquote("chroma$1");'
-      }]
+      replacements: [
+        {
+          from: /filter:chroma(.*);/g,
+          to: 'filter:unquote("chroma$1");'
+        }
+      ]
     }
   }
 
@@ -98,9 +108,7 @@ module.exports = function (grunt) {
   const browserify = {
     'public/javascripts/browsered.js': ['app/browsered.js'],
     options: {
-      browserifyOptions: {
-        standalone: 'module'
-      },
+      browserifyOptions: { standalone: 'module' },
       transform: [
         [
           'babelify',
@@ -164,8 +172,8 @@ module.exports = function (grunt) {
   }
 
   const rewrite = {
-    'application.css': {
-      src: 'public/stylesheets/application.css',
+    'application.min.css': {
+      src: 'public/stylesheets/application.min.css',
       editor: function (contents) {
         const staticify = require('staticify')(path.join(__dirname, 'public'))
         return staticify.replacePaths(contents)
