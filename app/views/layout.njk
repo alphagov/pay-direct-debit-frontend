@@ -1,24 +1,25 @@
-{% extends "../../govuk_modules/govuk_template/views/layouts/govuk_template.njk"%}
-  {% block page_title %}GOV.UK Pay{% endblock %}
+{% extends "../../govuk_modules/govuk_template/views/layouts/govuk_template.njk" %}
 
-  {% block head %}
-    {% include "includes/head.njk" %}
-  {% endblock %}
+{% set homepage_url = '/' %}
 
-  {% set homepage_url = '/' %}
+{% set logo_link_title = 'Go to the the GOV.UK Pay Homepage' %}
 
-  {% set logo_link_title = 'Go to the the GOV.UK Pay Homepage' %}
+{% set global_header_text = 'GOV.UK <span>Pay <strong class="phase-tag">Beta</strong></span>' | safe %}
 
-  {% set global_header_text = 'GOV.UK <span>Pay <strong class="phase-tag">Beta</strong></span>' | safe %}
+{% block page_title %}GOV.UK Pay{% endblock %}
 
-  {% block cookie_message %}
-    {% include "includes/cookies.njk" %}
-  {% endblock %}
+{% block head %}
+  {% include "includes/head.njk" %}
+{% endblock %}
 
-  {% block footer_support_links %}
-    {% include "includes/footer-support-links.njk" %}
-  {% endblock %}
+{% block cookie_message %}
+  {% include "includes/cookies.njk" %}
+{% endblock %}
 
-  {% block body_end %}
-    {% include "includes/scripts.njk" %}
-  {% endblock %}
+{% block footer_support_links %}
+  {% include "includes/footer-support-links.njk" %}
+{% endblock %}
+
+{% block body_end %}
+  {% include "includes/scripts.njk" %}
+{% endblock %}
