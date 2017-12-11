@@ -129,26 +129,6 @@ module.exports = function (grunt) {
     }
   }
 
-  const mochaTest = {
-    run: {
-      src: grunt.option('only')
-        ? [grunt.option('only')]
-        : ['test/**/*.js', '!test/test_helpers/*.js']
-    },
-    test: {
-      options: {
-        reporter: 'spec',
-        captureFile: 'mocha-test-results.txt'
-      }
-    }
-  }
-
-  const env = {
-    test: {
-      src: 'config/test-env.json'
-    }
-  }
-
   const concat = {
     options: {
       separator: ';'
@@ -197,9 +177,7 @@ module.exports = function (grunt) {
     cssmin: cssmin,
     concat: concat,
     rewrite: rewrite,
-    compress: compress,
-    mochaTest: mochaTest,
-    env: env
+    compress: compress
   });
 
   [
@@ -212,8 +190,6 @@ module.exports = function (grunt) {
     'grunt-nodemon',
     'grunt-text-replace',
     'grunt-concurrent',
-    'grunt-mocha-test',
-    'grunt-env',
     'grunt-browserify',
     'grunt-contrib-concat',
     'grunt-rewrite'
@@ -232,8 +208,6 @@ module.exports = function (grunt) {
     'compress',
     'cssmin'
   ])
-
-  grunt.registerTask('test', ['env:test', 'mochaTest'])
 
   grunt.registerTask('default', ['generate-assets', 'concurrent:target'])
 

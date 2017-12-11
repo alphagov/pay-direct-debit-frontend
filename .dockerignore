@@ -19,3 +19,5 @@ pacts
 .project
 *.log
 *.txt
+coverage
+.nyc_output
