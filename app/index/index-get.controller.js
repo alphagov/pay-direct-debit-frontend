@@ -1,5 +1,5 @@
 'use strict'
 
-module.exports.index = (req, res) => {
+module.exports = (req, res) => {
   res.render('layout')
 }
