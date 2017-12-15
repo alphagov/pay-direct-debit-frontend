@@ -6,7 +6,7 @@ const supertest = require('supertest')
 // Local dependencies
 const getApp = require('../../server').getApp
 
-describe('The /confirmation page', function () {
+describe('GET /confirmation page', function () {
   it('should return HTTP 200 status', function (done) {
     supertest(getApp())
       .get('/confirmation')

@@ -7,7 +7,7 @@ const supertest = require('supertest')
 // Local dependencies
 const getApp = require('../../server').getApp
 
-describe('The /healthcheck endpoint', function () {
+describe('GET /healthcheck endpoint', function () {
   it('should return HTTP 200 status with expected JSON', function (done) {
     supertest(getApp())
       .get('/healthcheck')

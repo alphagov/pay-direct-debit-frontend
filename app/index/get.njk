@@ -6,12 +6,15 @@
 
 {% block content %}
   <main id="content" role="main">
+    <div class="back">
+      <a href="/" class="link-back">Back</a>
+    </div>
     <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-large">Set up a Direct Debit</h1>
         <p>We’ll take a one-off payment from your bank account</p>
 
-        <form class="form" method="POST" action="#">
+        <form class="form" method="POST" action="/">
           <div class="form-group">
             <label class="form-label-bold" for="name">Name on the account</label>
             <input class="form-control" id="name" name="name" type="text"/>
@@ -52,35 +55,48 @@
           <div class="form-group">
             <h2 class="heading-medium">Billing address</h2>
             <p>This is the address associated with the account</p>
-            <label class="form-label-bold" for="country">Country</label>
-            <select id="country" name="country" class="form-control">
-              <option value="UK" selected="">United Kingdom</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label class="form-label-bold" for="country">
+                Country
+              </label>
+              <select id="country" name="country" class="form-control">
+                <option value="UK" selected="">United Kingdom</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label class="form-label-bold" for="address-line1">Building and street</label>
-            <input class="form-control" id="address-line1" name="address-line1" type="text" value=""/>
-            <input class="form-control" id="address-line2" name="address-line2" type="text" value=""/>
+            <div class="form-group">
+              <label class="form-label-bold" for="address-line1">
+                Building and street
+              </label>
+              <input class="form-control" id="address-line1" name="address-line1" type="text" value=""/>
+              <input class="form-control" id="address-line2" name="address-line2" type="text" value=""/>
+            </div>
+            <div class="form-group">
+              <label class="form-label-bold" for="address-city">
+                Town or city
+              </label>
+              <input class="form-control" id="address-city" name="address-city" type="text" value=""/>
+            </div>
+            <div class="form-group">
+              <label class="form-label-bold" for="address-postcode">
+                Postcode
+              </label>
+              <input class="form-control" id="address-postcode" name="address-postcode" type="text" value=""/>
+            </div>
+            <div class="form-group">
+              <label class="form-label-bold" for="email-address">Email address<span class="form-hint">We need this to confirm the Direct Debit with you</span>
+              </label>
+              <input class="form-control" id="email-address" type="text"/>
+            </div>
           </div>
           <div class="form-group">
-            <label class="form-label-bold" for="address-city">Town or city</label>
-            <input class="form-control" id="address-city" name="address-city" type="text" value=""/>
+            <input id="submit-direct-debit-data" class="button" type="submit" value="Continue"/>
           </div>
-          <div class="form-group">
-            <label class="form-label-bold" for="address-postcode">Postcode</label>
-            <input class="form-control" id="address-postcode" name="address-postcode" type="text" value=""/>
+          <div class="back">
+            <a href="/">Cancel payment</a>
           </div>
-          <div class="form-group">
-            <label class="form-label-bold" for="email-address">Email address<span class="form-hint">We need this to confirm the Direct Debit with you</span>
-            </label>
-            <input class="form-control" id="email-address" type="text"/>
-          </div>
-          <div class="form-group">
-            <button type="submit" class="button">Continue</button>
-            <a href="#">Cancel payment</a>
-          </div>
-        </div>
+        </form>
+      </div>
       <div class="column-third">
         <div class="">
           <h2 class="heading-small">Payment summary</h2>
