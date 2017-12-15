@@ -1,5 +1,5 @@
 'use strict'
 
 module.exports = (req, res) => {
-  res.render('app/index/get')
+  res.render('app/confirmation/get')
 }
