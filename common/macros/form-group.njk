@@ -1,0 +1,35 @@
+{% macro field(
+  name='',
+  label='',
+  value='',
+  type='text',
+  extraClasses='',
+  hintText='',
+  validate='',
+  errorLabel=''
+  )
+%}
+<div class="form-group">
+  <label
+    class="form-label-bold"
+    for="{{ name }}"
+    {% if errorLabel %}
+      data-error-label="{{ errorLabel }}"
+    {% endif %}
+    >
+    {{ label }}
+    {% if hintText %}
+      <span class="form-hint">{{ hintText }}</span>
+    {% endif %}
+  </label>
+  <input
+    class="form-control {{ extraClasses }}"
+    id="{{ name }}"
+    name="{{ name }}"
+    type="{{ type }}"
+    {% if validate %}
+      data-validate="{{ validate }}"
+    {% endif %}
+  />
+</div>
+{% endmacro %}

@@ -1,11 +1,12 @@
 {% extends "common/templates/layout.njk" %}
+{% import "common/macros/form-group.njk" as form %}
 
 {% block page_title %}
   Set up a Direct Debit
 {% endblock %}
 
 {% block content %}
-  <main id="content" role="main">
+  <main class="content-wrapper" id="content" role="main">
     <div class="back">
       <a href="/" class="link-back">Back</a>
     </div>
@@ -14,20 +15,30 @@
         <h1 class="heading-large">Set up a Direct Debit</h1>
         <p>We’ll take a one-off payment from your bank account</p>
 
-        <form class="form" method="POST" action="/">
-          <div class="form-group">
-            <label class="form-label-bold" for="name">Name on the account</label>
-            <input class="form-control" id="name" name="name" type="text"/>
-          </div>
+        <form class="form" method="POST" action="/" class="direct-debit-form" data-validate>
+          {{ form.field(
+            name='name',
+            label='Name on the account',
+            extraClasses='form-control-2-3',
+            validate='true',
+            errorLabel='Please enter the name on the account'
+          )}}
 
-          <div class="form-group">
-            <label class="form-label-bold" for="sort-code">Sort code</label>
-            <input class="form-control form-control-1-4" id="sort-code" name="sort-code" type="text"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label-bold" for="account-number">Account number</label>
-            <input class="form-control" id="account-number" name="account-number" type="text"/>
-          </div>
+          {{ form.field(
+            name='sort-code',
+            label='Sort code',
+            extraClasses='form-control-1-3',
+            validate='true',
+            errorLabel='Please enter a valid sort code'
+          )}}
+
+          {{ form.field(
+            name='account-number',
+            label='Account number',
+            extraClasses='form-control-1-3',
+            validate='true',
+            errorLabel='Please enter a valid account number'
+          )}}
 
           <div class="form-group">
             <fieldset>
@@ -37,7 +48,7 @@
                 </h1>
               </legend>
               <div class="multiple-choice">
-                <input id="authorise-yes" type="radio" name="authorise" value="yes"/>
+                <input id="authorise-yes" type="radio" name="authorise" value="yes" />
                 <label for="authorise-yes">Yes</label>
               </div>
               <div class="multiple-choice" data-target="unauthorised-message">
@@ -55,63 +66,62 @@
           <div class="form-group">
             <h2 class="heading-medium">Billing address</h2>
             <p>This is the address associated with the account</p>
-            <div class="form-group">
-              <label class="form-label-bold" for="country">
-                Country
-              </label>
-              <select id="country" name="country" class="form-control">
-                <option value="UK" selected="">United Kingdom</option>
-              </select>
-            </div>
 
-            <div class="form-group">
-              <label class="form-label-bold" for="address-line1">
-                Building and street
-              </label>
-              <input class="form-control" id="address-line1" name="address-line1" type="text" value=""/>
-              <input class="form-control" id="address-line2" name="address-line2" type="text" value=""/>
-            </div>
-            <div class="form-group">
-              <label class="form-label-bold" for="address-city">
-                Town or city
-              </label>
-              <input class="form-control" id="address-city" name="address-city" type="text" value=""/>
-            </div>
-            <div class="form-group">
-              <label class="form-label-bold" for="address-postcode">
-                Postcode
-              </label>
-              <input class="form-control" id="address-postcode" name="address-postcode" type="text" value=""/>
-            </div>
-            <div class="form-group">
-              <label class="form-label-bold" for="email-address">Email address<span class="form-hint">We need this to confirm the Direct Debit with you</span>
-              </label>
-              <input class="form-control" id="email-address" type="text"/>
-            </div>
+            <label class="form-label-bold" for="country">Country</label>
+            <select id="country" name="country" class="form-control form-control-2-3" data-validate>
+              <option value="UK" selected="">United Kingdom</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <input id="submit-direct-debit-data" class="button" type="submit" value="Continue"/>
+            <label class="form-label-bold" for="address-line1" data-error-label="Please enter a street name">Building and street</label>
+            <input class="form-control form-control-2-3" id="address-line1" name="address-line1" type="text" value="" data-validate />
+            <input class="form-control form-control-2-3 address-line2" id="address-line2" name="address-line2" type="text" value="" />
           </div>
-          <div class="back">
-            <a href="/">Cancel payment</a>
+
+          {{ form.field(
+            name='address-city',
+            label='Town or city',
+            extraClasses='form-control-2-3',
+            validate='true',
+            errorLabel='Please enter a town or city'
+          )}}
+
+          {{ form.field(
+            name='address-postcode',
+            label='Postcode',
+            extraClasses='form-control-1-3',
+            validate='true',
+            errorLabel='Please enter a postcode'
+          )}}
+
+          {{ form.field(
+            name='email',
+            label='Email address',
+            type='email',
+            extraClasses='form-control-2-3',
+            hintText='We need this to confirm the Direct Debit with you',
+            validate='email'
+          )}}
+
+          <div class="form-group">
+            <button type="submit" id="submit-direct-debit-data" class="button">Continue</button>
+            <a class="cancel-link" href="/">Cancel payment</a>
           </div>
-        </form>
-      </div>
-      <div class="column-third">
-        <div class="">
-          <h2 class="heading-small">Payment summary</h2>
-          <p class="">Lock and Weir Fishing Permit – River Thames</p>
-          <h3>Total amount:</h3>
-          <p class="">£31.00</p>
         </div>
-      </div>
+      <aside class="payment-summary">
+        <div class="payment-summary__inner js-stick-at-top-when-scrolling">
+          <h2 class="heading-medium">Payment summary</h2>
+          <p class="payment-summary__description">Lock and Weir Fishing Permit – River Thames</p>
+          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount">£31.00</span>
+        </div>
+      </aside>
     </div>
 
     <div class="grid-row">
       <div class="column-two-thirds">
-        <div class="dd-images"><img src="/public/images/directdebit.png">
-          <p>Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
-        </div>
+        <img src="/public/images/directdebit.png" class="direct-debit-logo" />
+        <p class="direct-debit-guarantee">Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
       </div>
     </div>
   </main>

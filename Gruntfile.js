@@ -115,6 +115,12 @@ module.exports = function (grunt) {
           {
             presets: ['es2015']
           }
+        ],
+        [
+          'nunjucksify',
+          {
+            extension: '.njk'
+          }
         ]
       ]
     }
