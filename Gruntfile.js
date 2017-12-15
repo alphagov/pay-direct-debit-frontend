@@ -90,7 +90,7 @@ module.exports = function (grunt) {
   const watch = {
     css: {
       files: ['app/assets/sass/**/*.scss'],
-      tasks: ['sass'],
+      tasks: ['sass', 'cssmin'],
       options: {
         spawn: false,
         livereload: true
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
   }
 
   const browserify = {
-    'public/javascripts/browsered.js': ['app/browsered.js'],
+    'public/javascripts/browsered.js': ['common/browsered/index.js'],
     options: {
       browserifyOptions: { standalone: 'module' },
       transform: [
