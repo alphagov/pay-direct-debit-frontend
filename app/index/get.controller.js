@@ -1,5 +1,5 @@
 'use strict'
 
 module.exports = (req, res) => {
-  res.render('common/views/layout')
+  res.render('common/templates/layout')
 }

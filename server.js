@@ -14,9 +14,9 @@ const compression = require('compression')
 const nunjucks = require('nunjucks')
 
 // Local dependencies
-const router = require(path.join(__dirname, '/app/router'))
-const noCache = require(path.join(__dirname, '/app/common/middleware/no-cache'))
-const CORRELATION_HEADER = require(path.join(__dirname, '/app/common/middleware/no-cache')).CORRELATION_HEADER
+const router = require('./app/router')
+const noCache = require('./common/middleware/no-cache')
+const CORRELATION_HEADER = noCache.CORRELATION_HEADER
 
 // Global constants
 const unconfiguredApp = express()
@@ -30,7 +30,7 @@ const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js'
 // Define app views
 const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
-  path.join(__dirname, '/app')
+  __dirname
 ]
 
 function initialiseGlobalMiddleware (app) {

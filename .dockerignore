@@ -1,6 +1,8 @@
 test
 app/**/*.test.js
 app/**/*.tests.js
+common/**/*.test.js
+common/**/*.tests.js
 docs
 .gitignore
 .git
