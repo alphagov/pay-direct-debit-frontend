@@ -1,11 +1,129 @@
 {% extends "common/templates/layout.njk" %}
 
 {% block page_title %}
-  Payment Details
+  Set up a Direct Debit
 {% endblock %}
 
 {% block content %}
   <main id="content" role="main">
-    Payment Details
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <h1 class="heading-large">Set up a Direct Debit</h1>
+        <p>We’ll take a one-off payment from your bank account</p>
+
+        <form class="form" method="POST" action="#">
+          <div class="form-group">
+            <label class="form-label-bold" for="name">
+              Name on the account
+            </label>
+            <input class="form-control" id="name" name="name" type="text"/>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label-bold" for="sort-code">
+              Sort code
+            </label>
+            <input class="form-control form-control-1-4" id="sort-code" name="sort-code" type="text"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label-bold" for="account-number">
+              Account number
+            </label>
+            <input class="form-control" id="account-number" name="account-number" type="text"/>
+          </div>
+
+          <div class="form-group">
+            <fieldset>
+              <legend>
+                <h1 class="heading-small">
+                  Are you allowed to authorise Direct Debits on this account? <span class="form-hint">If it’s a joint account but you can authorise payments on your own, click “Yes”</span>
+                </h1>
+              </legend>
+              <div class="multiple-choice">
+                <input id="authorise-yes" type="radio" name="authorise" value="yes"/>
+                <label for="authorise-yes">Yes</label>
+              </div>
+              <div class="multiple-choice" data-target="unauthorised-message">
+                <input id="authorise-no" type="radio" name="authorise" value="no" aria-controls="unauthorised-message"
+                       aria-expanded="false"/>
+                <label for="example-contact-by-phone">No</label>
+              </div>
+              <div class="panel panel-border-narrow js-hidden" id="unauthorised-message" aria-hidden="true">
+                <p>
+                  If more than one person is required to authorise Direct Debits on this bank account, you can’t proceed
+                  with this online payment method.
+                </p>
+                <p><a href="#">Go back and try a different payment method</a></p>
+              </div>
+            </fieldset>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <h2 class="heading-medium">Billing address</h2>
+          <p>This is the address associated with the account</p>
+
+          <div class="form-group">
+            <label class="form-label-bold" for="country">
+              Country
+            </label>
+            <select id="country" name="country" class="form-control">
+              <option value="UK" selected="">United Kingdom</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label-bold" for="address-line1">
+              Building and street
+            </label>
+            <input class="form-control" id="address-line1" name="address-line1" type="text" value=""/>
+            <input class="form-control" id="address-line2" name="address-line2" type="text" value=""/>
+          </div>
+          <div class="form-group">
+            <label class="form-label-bold" for="address-city">
+              Town or city
+            </label>
+            <input class="form-control" id="address-city" name="address-city" type="text" value=""/>
+          </div>
+          <div class="form-group">
+            <label class="form-label-bold" for="address-postcode">
+              Postcode
+            </label>
+            <input class="form-control" id="address-postcode" name="address-postcode" type="text" value=""/>
+          </div>
+          <div class="form-group">
+            <label class="form-label-bold" for="email-address">Email address<span class="form-hint">We need this to confirm the Direct Debit with you</span>
+            </label>
+            <input class="form-control" id="email-address" type="text"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <a href="#">
+            <button class="button">Continue</button>
+          </a>
+        </div>
+        <div class="back">
+          <a href="#">Cancel payment</a>
+        </div>
+      </div>
+      <div class="column-third">
+        <div class="payment-summary-small">
+          <h2>Payment summary</h2>
+          <p class="payment-info">Lock and Weir Fishing Permit – River Thames</p>
+          <h3>Total amount:</h3>
+          <p class="payment-amount">£31.00</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <div class="dd-terms-conditions">
+          <div class="dd-images"><img src="/public/images/directdebit.png">
+            <p>Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 {% endblock %}
