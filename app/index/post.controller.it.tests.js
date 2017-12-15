@@ -6,11 +6,12 @@ const supertest = require('supertest')
 // Local dependencies
 const getApp = require('../../server').getApp
 
-describe('GET /direct-debit-guarantee page', function () {
-  it('should return HTTP 200 status', function (done) {
+describe('POST / page', function () {
+  it('should return HTTP 302 status and redirect', function (done) {
     supertest(getApp())
-      .get('/direct-debit-guarantee')
-      .expect(200)
+      .post('/')
+      .expect(302)
+      .expect('Location', '/confirmation')
       .end(done)
   })
 })
