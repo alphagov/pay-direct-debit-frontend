@@ -5,7 +5,6 @@ const fs = require('fs')
 const logger = require('pino')()
 const throng = require('throng')
 const server = require('./server')
-const environment = require('./app/services/environment')
 const pidFile = path.join(__dirname, '/.start.pid')
 const fileOptions = {encoding: 'utf-8'}
 let pid
@@ -16,7 +15,7 @@ let pid
  */
 function start () {
   throng({
-    workers: environment.getWorkerCount(),
+    workers: process.env.NODE_WORKER_COUNT || 1,
     master: startMaster,
     start: startWorker
   })

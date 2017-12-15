@@ -145,8 +145,11 @@ module.exports = function (grunt) {
       separator: ';'
     },
     dist: {
-      src: ['public/javascripts/browsered.js', 'app/assets/javascripts/base/*.js',
-        'app/assets/javascripts/modules/*.js'],
+      src: [
+        'public/javascripts/browsered.js',
+        'app/assets/javascripts/base/*.js',
+        'app/assets/javascripts/modules/*.js'
+      ],
       dest: 'public/javascripts/application.js'
     }
   }
