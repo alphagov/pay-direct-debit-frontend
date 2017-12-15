@@ -30,7 +30,7 @@ const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js'
 // Define app views
 const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
-  path.join(__dirname, '/app/common/views')
+  path.join(__dirname, '/app')
 ]
 
 function initialiseGlobalMiddleware (app) {
