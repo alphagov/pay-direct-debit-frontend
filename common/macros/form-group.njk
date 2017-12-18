@@ -63,3 +63,30 @@
   </select>
 </div>
 {% endmacro %}
+
+{% macro selectCountries(
+  name='',
+  label='',
+  extraClasses='',
+  before='',
+  options
+  )
+%}
+  <div class="form-group">
+    {{ before | safe }}
+
+    <label class="form-label-bold" for="{{ name }}">{{ label }}</label>
+    <select
+        id="{{ name }}"
+        name="{{ name }}"
+        class="form-control {{ extraClasses}}"
+        {% if validate %}
+          data-validate="{{ validate }}"
+        {% endif %}
+    >
+      {% for option in options %}
+        <option value="{{ option.entry.country }}" {{ 'selected' if option.entry.selected }}>{{ option.entry.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endmacro %}

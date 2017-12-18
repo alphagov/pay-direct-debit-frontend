@@ -63,12 +63,12 @@
             </fieldset>
           </div>
 
-          {{ form.select(
+          {{ form.selectCountries(
             name='country',
             label='Countries',
             extraClasses='form-control-2-3',
             before='<h2 class="heading-medium">Billing address</h2><p>This is the address associated with the account</p>',
-            options= countries
+            options=countries
             )
           }}
 
