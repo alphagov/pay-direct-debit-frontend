@@ -1,4 +1,4 @@
-{% macro field(
+{% macro input(
   name='',
   label='',
   value='',
@@ -6,10 +6,13 @@
   extraClasses='',
   hintText='',
   validate='',
-  errorLabel=''
+  errorLabel='',
+  before=''
   )
 %}
 <div class="form-group">
+  {{ before | safe }}
+
   <label
     class="form-label-bold"
     for="{{ name }}"
@@ -31,5 +34,32 @@
       data-validate="{{ validate }}"
     {% endif %}
   />
+</div>
+{% endmacro %}
+
+{% macro select(
+  name='',
+  label='',
+  extraClasses='',
+  before='',
+  options
+  )
+%}
+<div class="form-group">
+  {{ before | safe }}
+
+  <label class="form-label-bold" for="{{ name }}">{{ label }}</label>
+  <select
+    id="{{ name }}"
+    name="{{ name }}"
+    class="form-control {{ extraClasses}}"
+    {% if validate %}
+      data-validate="{{ validate }}"
+    {% endif %}
+    >
+    {% for option in options %}
+      <option value="{{ option.value }}" {{ 'selected' if option.selected }}>{{ option.name }}</option>
+    {% endfor %}
+  </select>
 </div>
 {% endmacro %}
