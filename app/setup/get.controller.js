@@ -7,5 +7,5 @@ module.exports = (req, res) => {
   const params = {
     countries: countries.retrieveCountries()
   }
-  res.render('app/index/get', params)
+  res.render('app/setup/get', params)
 }

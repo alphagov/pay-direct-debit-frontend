@@ -9,7 +9,7 @@ const postController = require('./post.controller')
 
 // Initialisation
 const router = express.Router()
-const indexPath = '/'
+const indexPath = '/setup'
 const paths = {
   index: indexPath
 }

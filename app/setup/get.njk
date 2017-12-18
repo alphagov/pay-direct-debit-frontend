@@ -8,14 +8,14 @@
 {% block content %}
   <main id="content" role="main">
     <div>
-      <a href="/" class="link-back">Back</a>
+      <a href="/setup" class="link-back">Back</a>
     </div>
     <div class="grid-row relative">
       <div class="column-two-thirds">
         <h1 class="heading-large">Set up a Direct Debit</h1>
         <p>We’ll take a one-off payment from your bank account</p>
 
-        <form class="form" method="POST" action="/" class="direct-debit-form" data-validate>
+        <form class="form" method="POST" action="/setup" class="direct-debit-form" data-validate>
           {{ form.input(
             name='name',
             label='Name on the account',
@@ -105,7 +105,7 @@
 
           <div class="form-group">
             <button type="submit" id="submit-direct-debit-data" class="button">Continue</button>
-            <a class="cancel-link" href="/">Cancel payment</a>
+            <a class="cancel-link" href="/setup">Cancel payment</a>
           </div>
         </div>
       <aside class="payment-summary">
