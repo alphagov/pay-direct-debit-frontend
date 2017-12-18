@@ -6,59 +6,50 @@
 
 {% block content %}
   <main id="content" role="main">
-    <div class="back">
+    <div>
       <a href="/" class="link-back">Back</a>
     </div>
-    <div class="grid-row">
+    <div class="grid-row relative">
       <div class="column-two-thirds">
         <h1 class="heading-large">Check your details are correct</h1>
-        <div class="check-details">
-          <table>
-            <tbody>
-            <tr>
-              <td>Name on the account:</td>
-              <td class="table-info">Alex Smith</td>
-            </tr>
-            <tr>
-              <td>Sort code:</td>
-              <td class="table-info">400500</td>
-            </tr>
-            <tr>
-              <td>Account number:</td>
-              <td class="table-info">12345678</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="panel panel-border-wide">
+        <table>
+          <tbody>
+          <tr>
+            <td>Name on the account:</td>
+            <td>Alex Smith</td>
+          </tr>
+          <tr>
+            <td>Sort code:</td>
+            <td>400500</td>
+          </tr>
+          <tr>
+            <td>Account number:</td>
+            <td>12345678</td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="panel panel-border-wide bank-statment-message">
           <p><span class="bold-small">‘Thames-Fishing-Permit’</span> will appear on your bank statement</p>
         </div>
         <div class="form-group">
-          <a href="#">
-            <button class="button">Confirm payment</button>
-          </a>
-        </div>
-        <div class="back">
-          <a href="/">Cancel payment</a>
+          <a href="#" class="button">Confirm payment</a>
+          <a class="cancel-link" href="/">Cancel payment</a>
         </div>
       </div>
-      <div class="column-third">
-        <div class="payment-summary-small">
-          <h2>Payment summary</h2>
-          <p class="payment-info">Lock and Weir Fishing Permit – River Thames</p>
-          <h3>Total amount:</h3>
-          <p class="payment-amount">£31.00</p>
+      <aside class="payment-summary">
+        <div class="payment-summary__inner js-stick-at-top-when-scrolling">
+          <h2 class="heading-medium">Payment summary</h2>
+          <p class="payment-summary__description">Lock and Weir Fishing Permit – River Thames</p>
+          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount">£31.00</span>
         </div>
-      </div>
+      </aside>
     </div>
     <div class="grid-row">
       <div class="column-two-thirds">
-        <div class="dd-terms-conditions">
-          <div class="dd-images"><img src="/public/images/directdebit.png">
-            <p>Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
-          </div>
-        </div>
+        <img src="/public/images/directdebit.png" class="direct-debit-logo" />
+        <p class="direct-debit-guarantee">Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
       </div>
+    </div>
     </div>
   </main>
 {% endblock %}

@@ -1,4 +1,4 @@
-.content-wrapper {
+.relative {
   position: relative;
 }
 
@@ -27,8 +27,8 @@
 
   @include media(tablet) {
     position: absolute;
-    top: $gutter;
-    right: 0;
+    top: $gutter * 1.5;
+    right: $gutter-half;
     width: 250px;
     margin: 0;
   }
