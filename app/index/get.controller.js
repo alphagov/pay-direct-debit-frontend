@@ -1,7 +1,7 @@
 'use strict'
 
 // Local dependencies
-const countries = require('../../common/middleware/countries')
+const countries = require('../../common/utils/countries')
 
 module.exports = (req, res) => {
   const params = {

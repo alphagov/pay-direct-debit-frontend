@@ -6,9 +6,9 @@ const expect = require('chai').expect
 // Local dependencies
 const countries = require('./index')
 
-describe('countries middleware', function () {
+describe('countries util', function () {
   it('should list countries ordered', function () {
-    let retrievedCountries = countries.retrieveCountries()
+    const retrievedCountries = countries.retrieveCountries()
 
     expect(retrievedCountries[0].entry.country).to.eql('AF')
     expect(retrievedCountries[1].entry.country).to.eql('AL')

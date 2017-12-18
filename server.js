@@ -15,8 +15,8 @@ const nunjucks = require('nunjucks')
 
 // Local dependencies
 const router = require('./app/router')
-const noCache = require('./common/middleware/no-cache')
-const CORRELATION_HEADER = noCache.CORRELATION_HEADER
+const noCache = require('./common/utils/no-cache')
+const correlationHeader = require('./common/middleware/correlation-header')
 
 // Global constants
 const unconfiguredApp = express()
@@ -52,13 +52,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  /**
-   * Apply correlation middleware in all requests
-   **/
-  app.use('*', (req, res, next) => {
-    req.correlationId = req.headers[CORRELATION_HEADER] || ''
-    next()
-  })
+  app.use('*', correlationHeader)
 }
 
 function initialiseI18n (app) {
