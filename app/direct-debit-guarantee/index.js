@@ -8,7 +8,7 @@ const getController = require('./get.controller')
 
 // Initialisation
 const router = express.Router()
-const indexPath = '/healthcheck'
+const indexPath = '/direct-debit-guarantee'
 const paths = {
   index: indexPath
 }

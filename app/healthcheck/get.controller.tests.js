@@ -1,16 +1,13 @@
 'use strict'
 
-// Node.js core dependencies
-const path = require('path')
-
 // npm dependencies
 const expect = require('chai').expect
 const supertest = require('supertest')
 
 // Local dependencies
-const getApp = require(path.join(__dirname, '/../../server')).getApp
+const getApp = require('../../server').getApp
 
-describe('The /healthcheck endpoint', function () {
+describe('GET /healthcheck endpoint', function () {
   it('should return HTTP 200 status with expected JSON', function (done) {
     supertest(getApp())
       .get('/healthcheck')

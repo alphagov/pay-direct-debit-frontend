@@ -14,9 +14,9 @@ const compression = require('compression')
 const nunjucks = require('nunjucks')
 
 // Local dependencies
-const router = require(path.join(__dirname, '/app/router'))
-const noCache = require(path.join(__dirname, '/app/common/middleware/no-cache'))
-const CORRELATION_HEADER = require(path.join(__dirname, '/app/common/middleware/no-cache')).CORRELATION_HEADER
+const router = require('./app/router')
+const noCache = require('./common/utils/no-cache')
+const correlationHeader = require('./common/middleware/correlation-header')
 
 // Global constants
 const unconfiguredApp = express()
@@ -30,7 +30,7 @@ const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js'
 // Define app views
 const APP_VIEWS = [
   path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
-  path.join(__dirname, '/app')
+  __dirname
 ]
 
 function initialiseGlobalMiddleware (app) {
@@ -52,13 +52,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  /**
-   * Apply correlation middleware in all requests
-   **/
-  app.use('*', (req, res, next) => {
-    req.correlationId = req.headers[CORRELATION_HEADER] || ''
-    next()
-  })
+  app.use('*', correlationHeader)
 }
 
 function initialiseI18n (app) {

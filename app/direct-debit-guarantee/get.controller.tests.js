@@ -1,18 +1,15 @@
 'use strict'
 
-// Node.js core dependencies
-const path = require('path')
-
 // npm dependencies
 const supertest = require('supertest')
 
 // Local dependencies
-const getApp = require(path.join(__dirname, '/../../server.js')).getApp
+const getApp = require('../../server').getApp
 
-describe('The / page', function () {
+describe('GET /direct-debit-guarantee page', function () {
   it('should return HTTP 200 status', function (done) {
     supertest(getApp())
-      .get('/')
+      .get('/direct-debit-guarantee')
       .expect(200)
       .end(done)
   })

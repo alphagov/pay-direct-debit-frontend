@@ -1,0 +1,92 @@
+{% macro input(
+  name='',
+  label='',
+  value='',
+  type='text',
+  extraClasses='',
+  hintText='',
+  validate='',
+  errorLabel='',
+  before=''
+  )
+%}
+<div class="form-group">
+  {{ before | safe }}
+
+  <label
+    class="form-label-bold"
+    for="{{ name }}"
+    {% if errorLabel %}
+      data-error-label="{{ errorLabel }}"
+    {% endif %}
+    >
+    {{ label }}
+    {% if hintText %}
+      <span class="form-hint">{{ hintText }}</span>
+    {% endif %}
+  </label>
+  <input
+    class="form-control {{ extraClasses }}"
+    id="{{ name }}"
+    name="{{ name }}"
+    type="{{ type }}"
+    {% if validate %}
+      data-validate="{{ validate }}"
+    {% endif %}
+  />
+</div>
+{% endmacro %}
+
+{% macro select(
+  name='',
+  label='',
+  extraClasses='',
+  before='',
+  options
+  )
+%}
+<div class="form-group">
+  {{ before | safe }}
+
+  <label class="form-label-bold" for="{{ name }}">{{ label }}</label>
+  <select
+    id="{{ name }}"
+    name="{{ name }}"
+    class="form-control {{ extraClasses}}"
+    {% if validate %}
+      data-validate="{{ validate }}"
+    {% endif %}
+    >
+    {% for option in options %}
+      <option value="{{ option.value }}" {{ 'selected' if option.selected }}>{{ option.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+{% endmacro %}
+
+{% macro selectCountries(
+  name='',
+  label='',
+  extraClasses='',
+  before='',
+  options
+  )
+%}
+  <div class="form-group">
+    {{ before | safe }}
+
+    <label class="form-label-bold" for="{{ name }}">{{ label }}</label>
+    <select
+        id="{{ name }}"
+        name="{{ name }}"
+        class="form-control {{ extraClasses}}"
+        {% if validate %}
+          data-validate="{{ validate }}"
+        {% endif %}
+    >
+      {% for option in options %}
+        <option value="{{ option.entry.country }}" {{ 'selected' if option.entry.selected }}>{{ option.entry.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endmacro %}

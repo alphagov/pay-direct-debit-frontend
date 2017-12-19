@@ -19,7 +19,7 @@
       "expect"
     ],
     "ignore": [
-      "app/assets/**/*.js",
+      "common/assets/**/*.js",
       "node_modules_local/**/*.*"
     ]
   },
@@ -40,6 +40,7 @@
     "compression": "1.7.x",
     "express": "4.16.x",
     "i18n": "0.8.x",
+    "lodash": "^4.17.4",
     "minimist": "1.2.x",
     "morgan": "1.9.x",
     "nunjucks": "^3.0.1",
@@ -79,7 +80,9 @@
     "jquery": "^3.2.1",
     "mocha": "4.0.x",
     "node-sass": "4.7.x",
+    "nunjucksify": "^2.2.0",
     "nyc": "^11.3.0",
+    "rfc822-validate": "^1.0.0",
     "sass-lint": "^1.10.2",
     "snyk": "1.54.x",
     "standard": "^10.0.2",

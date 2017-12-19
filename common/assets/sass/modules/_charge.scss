@@ -1,0 +1,18 @@
+.address-line2 {
+  margin-top: 10px;
+}
+
+.cancel-link {
+  display: block;
+  margin-top: $gutter;
+}
+
+.direct-debit-logo {
+  margin-top: $gutter-half;
+}
+
+.direct-debit-guarantee {
+  @include core-16;
+
+  color: $secondary-text-colour;
+}

@@ -14,7 +14,7 @@ module.exports = function (grunt) {
       },
       files: [{
         expand: true,
-        cwd: 'app/assets/sass',
+        cwd: 'common/assets/sass',
         src: ['*.scss', 'custom/*.scss'],
         dest: 'public/stylesheets/',
         ext: '.css'
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
       files: [
         {
           expand: true,
-          cwd: 'app/assets/',
+          cwd: 'common/assets/',
           src: ['**/*', '!sass/**'],
           dest: 'public/'
         },
@@ -89,15 +89,15 @@ module.exports = function (grunt) {
 
   const watch = {
     css: {
-      files: ['app/assets/sass/**/*.scss'],
-      tasks: ['sass'],
+      files: ['common/assets/sass/**/*.scss'],
+      tasks: ['sass', 'cssmin'],
       options: {
         spawn: false,
         livereload: true
       }
     },
     assets: {
-      files: ['app/assets/**/*', '!app/assets/sass/**'],
+      files: ['common/assets/**/*', '!common/assets/sass/**'],
       tasks: ['copy:assets'],
       options: {
         spawn: false
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
   }
 
   const browserify = {
-    'public/javascripts/browsered.js': ['app/browsered.js'],
+    'public/javascripts/browsered.js': ['common/browsered/index.js'],
     options: {
       browserifyOptions: { standalone: 'module' },
       transform: [
@@ -114,6 +114,12 @@ module.exports = function (grunt) {
           'babelify',
           {
             presets: ['es2015']
+          }
+        ],
+        [
+          'nunjucksify',
+          {
+            extension: '.njk'
           }
         ]
       ]
@@ -125,7 +131,7 @@ module.exports = function (grunt) {
       script: 'server.js',
       options: {
         ext: 'js',
-        ignore: ['node_modules/**', 'app/assets/**', 'public/**'],
+        ignore: ['node_modules/**', 'common/assets/**', 'public/**'],
         args: ['-i=true']
       }
     }
@@ -147,8 +153,8 @@ module.exports = function (grunt) {
     dist: {
       src: [
         'public/javascripts/browsered.js',
-        'app/assets/javascripts/base/*.js',
-        'app/assets/javascripts/modules/*.js'
+        'common/assets/javascripts/base/*.js',
+        'common/assets/javascripts/modules/*.js'
       ],
       dest: 'public/javascripts/application.js'
     }
@@ -232,7 +238,7 @@ module.exports = function (grunt) {
     if (target === 'assets') {
       grunt.config(
         'copy.assets.files.0.src',
-        filepath.replace('app/assets/', '')
+        filepath.replace('common/assets/', '')
       )
     }
   })

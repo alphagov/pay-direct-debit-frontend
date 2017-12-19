@@ -4,17 +4,17 @@
 const express = require('express')
 
 // Local dependencies
-const getIndexController = require('./index-get.controller')
+const getController = require('./get.controller')
 
 // Initialisation
 const router = express.Router()
-const indexPath = '/'
+const indexPath = '/confirmation'
 const paths = {
   index: indexPath
 }
 
 // Routing
-router.get(paths.index, getIndexController)
+router.get(paths.index, getController)
 
 // Export
 module.exports = {
