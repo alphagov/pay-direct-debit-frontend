@@ -1,0 +1,14 @@
+{% extends "common/templates/layout.njk" %}
+
+{% block page_title %}An error occurred - GOV.UK Pay{% endblock %}
+
+{% block content %}
+  <main id="content" role="main">
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <h1 class="heading-large">Sorry, we’re experiencing technical problems</h1>
+          <p id="errorMsg">{{message}}</p>
+      </div>
+    </div>
+  </main>
+{% endblock %}
