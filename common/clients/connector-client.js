@@ -3,12 +3,11 @@
 // Local Dependencies
 const baseClient = require('./base-client/base-client')
 const {CONNECTOR_URL} = require('../config')
-const PaymentRequest = require('../../app/secure/models/PaymentRequest.class')
+const PaymentRequest = require('../../common/classes/PaymentRequest.class')
 
 const service = 'connector'
 const baseUrl = `${CONNECTOR_URL}/v1`
 const headers = {
-  // Authorization: `Bearer ${PRODUCTS_API_TOKEN}`
 }
 
 // Exports

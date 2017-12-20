@@ -8,7 +8,7 @@ module.exports = (req, res) => {
   connectorClient.secure.retrievePaymentRequest(token)
     .then(paymentRequest => {
       // todo need to generate csrf
-      //todo need to delete token
+      // todo need to delete token
       let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.externalId)
       return res.redirect(303, url)
     })

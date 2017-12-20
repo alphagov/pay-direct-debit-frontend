@@ -12,7 +12,7 @@ const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const setup = require('../setup')
 const expect = chai.expect
 let paymentRequest, response, $
-describe.only('secure controller', () => {
+describe('secure controller', () => {
   afterEach(() => {
     nock.cleanAll()
   })
