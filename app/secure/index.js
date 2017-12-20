@@ -4,18 +4,15 @@
 const express = require('express')
 
 // Local dependencies
-const getController = require('./get.controller')
 const postController = require('./post.controller')
 
 // Initialisation
 const router = express.Router()
-const indexPath = '/setup/:paymentRequestExternalId'
 const paths = {
-  index: indexPath
+  index: '/secure'
 }
 
 // Routing
-router.get(paths.index, getController)
 router.post(paths.index, postController)
 
 // Export
