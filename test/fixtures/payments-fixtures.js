@@ -3,7 +3,7 @@
 const randomExternalId = () => Math.random().toString(36).substring(7)
 const randomAmount = () => Math.round(Math.random() * 10000) + 1
 
-//todo add pactified
+// todo add pactified
 module.exports = {
   validTokenExchangeResponse: (opts = {}) => {
     const data = {
