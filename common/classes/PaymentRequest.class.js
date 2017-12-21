@@ -1,8 +1,5 @@
 'use strict'
 
-// NPM Dependencies
-const lodash = require('lodash')
-
 class PaymentRequest {
   constructor (opts) {
     this.externalId = opts.external_id

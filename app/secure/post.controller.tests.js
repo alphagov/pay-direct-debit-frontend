@@ -66,5 +66,4 @@ describe('secure controller', () => {
       expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
     })
   })
-
 })
