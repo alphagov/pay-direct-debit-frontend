@@ -31,7 +31,7 @@
     "watch-live-reload": "./node_modules/.bin/grunt watch",
     "lint": "./node_modules/.bin/standard",
     "lint-sass": "./node_modules/.bin/sass-lint -v",
-    "test": "node ./node_modules/nyc/bin/nyc node ./node_modules/mocha/bin/mocha '!(node_modules)/**/*+(.test|.tests)'.js",
+    "test": "node ./node_modules/mocha/bin/mocha '!(node_modules)/**/*+(.test|.tests)'.js",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
@@ -86,7 +86,6 @@
     "nock": "^9.0.13",
     "node-sass": "4.7.x",
     "nunjucksify": "^2.2.0",
-    "nyc": "^11.3.0",
     "rfc822-validate": "^1.0.0",
     "sass-lint": "^1.10.2",
     "snyk": "1.54.x",
