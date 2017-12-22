@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "body-parser": "1.18.x",
+    "client-sessions": "0.8.x",
     "compression": "1.7.x",
     "correlation-id": "^2.0.0",
     "express": "4.16.x",
