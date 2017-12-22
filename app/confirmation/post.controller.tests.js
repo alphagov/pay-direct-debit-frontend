@@ -10,24 +10,25 @@ const nock = require('nock')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
-const setup = require('../setup')
-let paymentRequest, response, $
-describe('secure controller', () => {
+const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
+let response, $
+let paymentRequestExternalId = 'sdfihsdufh2e'
+let paymentRequest = paymentFixtures.validPaymentRequest({
+  external_id: paymentRequestExternalId
+})
+describe('confirmation POST controller', () => {
+  const cookieHeader = new CookieBuilder()
+    .withPaymentRequest(paymentRequest)
+    .build()
   afterEach(() => {
     nock.cleanAll()
   })
-  describe('when navigating to /secure with a valid one-time token', () => {
-    let token = 'sdfihsdufh2e'
+  describe('when a payment is successfully confirmed', () => {
     before(done => {
-      paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
+      nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(201)
       supertest(getApp())
-        .post(`/secure`)
-        .send({
-          chargeTokenId: token
-        })
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
+        .post(`/confirmation/${paymentRequestExternalId}`)
+        .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res
           done(err)
@@ -36,22 +37,17 @@ describe('secure controller', () => {
     it('should redirect to /setup', () => {
       expect(response.statusCode).to.equal(303)
     })
-    it('should redirect to the insert direct debit details page', () => {
-      let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.external_id)
+    it('should redirect back to the service using its return url', () => {
+      let url = paymentRequest.returnUrl
       expect(response.header).property('location').to.equal(url)
     })
   })
-  describe('when navigating to /secure with an invalid one-time token', () => {
+  describe('when failing to confirm a payment', () => {
     before(done => {
-      let token = 'invalid'
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(404)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(409)
       supertest(getApp())
-        .post(`/secure`)
-        .send({
-          chargeTokenId: token
-        })
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
+        .post(`/confirmation/${paymentRequestExternalId}`)
+        .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res
           $ = cheerio.load(res.text || '')

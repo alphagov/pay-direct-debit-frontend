@@ -2,7 +2,6 @@
 
 // npm dependencies
 const clientSession = require('client-sessions')
-const _ = require('lodash')
 
 // local dependencies
 const cookieConfig = require('../../common/config/cookies')
@@ -19,13 +18,13 @@ exports.CookieBuilder = class CookieBuilder {
   }
   withPaymentRequest (paymentRequestfixture) {
     this.withCookie('session', {
-      paymentRequest: paymentRequestfixture,
+      paymentRequest: paymentRequestfixture
     })
     return this
   }
   withConfirmationDetails (payerFixture) {
     this.withCookie('session', {
-      confirmationDetails: payerFixture,
+      confirmationDetails: payerFixture
     })
     return this
   }
