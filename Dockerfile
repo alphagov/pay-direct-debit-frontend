@@ -1,16 +1,12 @@
-FROM node:6.12.2-alpine
+FROM govukpay/nodejs:6.12.2
 
 ARG CHAMBER_URL=https://github.com/segmentio/chamber/releases/download/v1.13.0/chamber-v1.13.0-linux-amd64
 
-RUN apk update &&\
-    apk upgrade &&\
-    apk add --update bash libc6-compat
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install --production
 
 ENV PORT 9000
 EXPOSE 9000
-
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install --production
 
 WORKDIR /app
 ADD . /app
@@ -24,4 +20,4 @@ RUN apk add openssl && \
     chmod 755 bin/chamber && \
     apk del --purge openssl
 
-CMD bash ./docker-startup.sh
+CMD ./docker-startup.sh
