@@ -15,11 +15,14 @@ const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
 const compression = require('compression')
 const nunjucks = require('nunjucks')
+const clientSession = require('client-sessions')
 
 // Local dependencies
 const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
 const correlationHeader = require('./common/middleware/correlation-header')
+const middlwareUtils = require('./common/utils/middleware')
+const cookieConfig = require('./common/config/cookies')
 
 // Global constants
 const unconfiguredApp = express()
@@ -56,6 +59,9 @@ function initialiseGlobalMiddleware (app) {
   app.use(bodyParser.urlencoded({ extended: true }))
 
   app.use('*', correlationHeader)
+}
+function initialiseCookies (app) {
+  app.use(middlwareUtils.excludingPaths(['/healthcheck'], clientSession(cookieConfig.session)))
 }
 
 function initialiseI18n (app) {
@@ -125,6 +131,7 @@ function initialise () {
   const app = unconfiguredApp
   app.disable('x-powered-by')
   initialiseProxy(app)
+  initialiseCookies(app)
   initialiseI18n(app)
   initialiseGlobalMiddleware(app)
   initialiseTemplateEngine(app)

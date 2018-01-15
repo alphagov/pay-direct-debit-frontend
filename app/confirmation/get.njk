@@ -7,7 +7,7 @@
 {% block content %}
   <main id="content" role="main">
     <div>
-      <a href="/setup" class="link-back">Back</a>
+      <a href="/setup/{{paymentRequestExternalId}}" class="link-back">Back</a>
     </div>
     <div class="grid-row relative">
       <div class="column-two-thirds">
@@ -16,31 +16,33 @@
           <tbody>
           <tr>
             <td>Name on the account:</td>
-            <td>Alex Smith</td>
+            <td id="account-holder-name">{{accountHolderName}}</td>
           </tr>
           <tr>
             <td>Sort code:</td>
-            <td>400500</td>
+            <td id="sort-code">{{sortCode}}</td>
           </tr>
           <tr>
             <td>Account number:</td>
-            <td>12345678</td>
+            <td id="account-number">{{accountNumber}}</td>
           </tr>
           </tbody>
         </table>
-        <div class="panel panel-border-wide bank-statment-message">
-          <p><span class="bold-small">‘Thames-Fishing-Permit’</span> will appear on your bank statement</p>
+        <div class="panel panel-border-wide bank-statement-message">
+          <p><span class="bold-small" id="bank-statement-description">'{{description}}'</span> will appear on your bank statement</p>
         </div>
-        <div class="form-group">
-          <a href="#" class="button">Confirm payment</a>
-          <a class="cancel-link" href="/setup">Cancel payment</a>
-        </div>
+        <form class="form" method="POST" action="/confirmation/{{paymentRequestExternalId}}">
+          <div class="form-group">
+            <button type="submit" id="submit-direct-debit" class="button">Confirm payment</button>
+            <a class="cancel-link" href="/setup/{{paymentRequestExternalId}}">Cancel payment</a>
+          </div>
+        </form>
       </div>
       <aside class="payment-summary">
         <div class="payment-summary__inner js-stick-at-top-when-scrolling">
           <h2 class="heading-medium">Payment summary</h2>
-          <p class="payment-summary__description">Lock and Weir Fishing Permit – River Thames</p>
-          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount">£31.00</span>
+          <p class="payment-summary__description" id="payment-description">{{description}}</p>
+          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
         </div>
       </aside>
     </div>

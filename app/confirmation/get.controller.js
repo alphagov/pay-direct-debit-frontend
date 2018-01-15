@@ -1,5 +1,16 @@
 'use strict'
 
 module.exports = (req, res) => {
-  res.render('app/confirmation/get')
+  const confirmationDetails = req.session.confirmationDetails
+  const paymentRequest = req.session.paymentRequest
+  const params = {
+    paymentRequestExternalId: req.params.paymentRequestExternalId,
+    accountHolderName: confirmationDetails.accountHolderName,
+    accountNumber: confirmationDetails.accountNumber,
+    sortCode: confirmationDetails.sortCode,
+    returnUrl: paymentRequest.returnUrl,
+    description: paymentRequest.description,
+    amount: paymentRequest.amount
+  }
+  res.render('app/confirmation/get', params)
 }

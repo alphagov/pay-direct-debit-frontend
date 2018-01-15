@@ -2,15 +2,50 @@
 
 // npm dependencies
 const supertest = require('supertest')
-
+const cheerio = require('cheerio')
+const chai = require('chai')
+const expect = chai.expect
 // Local dependencies
 const getApp = require('../../server').getApp
+const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 
-describe('GET /setup page', function () {
-  it('should return HTTP 200 status', function (done) {
-    supertest(getApp())
-      .get('/setup/somepaymentrequest')
-      .expect(200)
-      .end(done)
+describe('setup get controller', () => {
+  let response, $
+  let paymentRequestExternalId = 'sdfihsdufh2e'
+  let amount = 100
+  let description = 'please buy Silvia a coffee'
+  describe('when a charge is valid', () => {
+    let paymentRequest = paymentFixtures.validPaymentRequest({
+      external_id: paymentRequestExternalId,
+      amount: amount,
+      description: description
+    })
+    const cookieHeader = new CookieBuilder()
+      .withPaymentRequest(paymentRequest)
+      .build()
+    before(done => {
+      supertest(getApp())
+        .get(`/setup/${paymentRequestExternalId}`)
+        .set('cookie', cookieHeader)
+        .end((err, res) => {
+          response = res
+          $ = cheerio.load(res.text)
+          done(err)
+        })
+    })
+    it('should return a 200 status code', () => {
+      expect(response.statusCode).to.equal(200)
+    })
+    it('should display the enter direct debit page with correct description and amount', () => {
+      expect($(`#payment-description`).text()).to.equal(description)
+      expect($(`#amount`).text()).to.equal(`£1.00`)
+    })
+    it('should display the enter direct debit page with United Kingdom selected by default', () => {
+      expect($(`#country-code`).val()).to.equal('GB')
+    })
+    it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
+      expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal('/direct-debit-guarantee')
+    })
   })
 })

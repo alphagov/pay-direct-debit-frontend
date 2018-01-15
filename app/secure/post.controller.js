@@ -9,6 +9,8 @@ module.exports = (req, res) => {
     .then(paymentRequest => {
       // todo need to generate csrf
       // todo need to delete token
+      // fixme probably not ideal to stick the charge in the session, but will do for now
+      req.session.paymentRequest = paymentRequest
       let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.externalId)
       return res.redirect(303, url)
     })
