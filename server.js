@@ -88,7 +88,7 @@ function initialiseTemplateEngine (app) {
     throwOnUndefined: false, // throw errors when outputting a null/undefined value
     trimBlocks: true, // automatically remove trailing newlines from a block/tag
     lstripBlocks: true, // automatically remove leading whitespace from a block/tag
-    watch: false, // reload templates when they are changed (server-side). To use watch, make sure optional dependency chokidar is installed
+    watch: NODE_ENV !== 'production', // reload templates when they are changed (server-side). To use watch, make sure optional dependency chokidar is installed
     noCache: NODE_ENV !== 'production' // never use a cache and recompile templates each time (server-side)
   }
 
