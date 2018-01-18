@@ -67,7 +67,7 @@ module.exports.isBelowMaxAmount = value => {
 }
 
 module.exports.isSortCode = value => {
-  if (!/^\s?(\d{2}\s?-?){2}\d{2}\s?$/.test(value)) {
+  if (!/^\s?(\d{2}\s?-?\s?){2}\d{2}\s?$/.test(value)) {
     return validationErrors.sortCode
   } else {
     return false
@@ -75,7 +75,7 @@ module.exports.isSortCode = value => {
 }
 
 module.exports.isAccountNumber = value => {
-  if (!/^\s?(\d{2}\s?-?){3,4}\d{2}\s?$/.test(value)) {
+  if (!/^\s?(\d{2}\s?-?\s?){3,4}\d{2}\s?$/.test(value)) {
     return validationErrors.accountNumber
   } else {
     return false
