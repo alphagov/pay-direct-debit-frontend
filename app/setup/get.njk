@@ -17,7 +17,7 @@
             name='account-holder-name',
             label='Name on the account',
             extraClasses='form-control-2-3',
-            validate='true',
+            attributes={'data-validate': 'true'},
             errorLabel='Please enter the name on the account'
           )}}
 
@@ -25,16 +25,16 @@
             name='sort-code',
             label='Sort code',
             extraClasses='form-control-1-3',
-            validate='true',
-            errorLabel='Please enter a valid sort code'
+            attributes={'data-validate': 'sort-code'},
+            errorLabel='Sort codes must contain 6 digits'
           )}}
 
           {{ form.input(
             name='account-number',
             label='Account number',
             extraClasses='form-control-1-3',
-            validate='true',
-            errorLabel='Please enter a valid account number'
+            attributes={'data-validate': 'account-number'},
+            errorLabel='Account numbers must contain 8-10 digits'
           )}}
 
           <div class="form-group">
@@ -79,7 +79,7 @@
             name='city',
             label='Town or city',
             extraClasses='form-control-2-3',
-            validate='true',
+            attributes={'data-validate': 'true'},
             errorLabel='Please enter a town or city'
           )}}
 
@@ -87,7 +87,7 @@
             name='postcode',
             label='Postcode',
             extraClasses='form-control-1-3',
-            validate='true',
+            attributes={'data-validate': 'true'},
             errorLabel='Please enter a postcode'
           )}}
 
@@ -97,7 +97,11 @@
             type='email',
             extraClasses='form-control-2-3',
             hintText='We need this to confirm the Direct Debit with you',
-            validate='email'
+            attributes={
+              'data-validate': 'email',
+              'data-confirmation': 'true',
+              'data-confirmation-label': 'An email will be sent to: '
+            }
           )}}
 
           <div class="form-group">

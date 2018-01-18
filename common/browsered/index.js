@@ -9,6 +9,7 @@ require('../../govuk_modules/govuk_frontend_toolkit/javascripts/govuk/stick-at-t
 
 // Local dependencies
 const fieldValidation = require('./field-validation')
+const inputConfirm = require('./input-confirm')
 
 $(document).ready($ => {
   const showHideContent = new window.GOVUK.ShowHideContent()
@@ -17,3 +18,4 @@ $(document).ready($ => {
 })
 
 fieldValidation.enableFieldValidation()
+inputConfirm()

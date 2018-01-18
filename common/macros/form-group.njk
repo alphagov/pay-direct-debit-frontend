@@ -5,9 +5,9 @@
   type='text',
   extraClasses='',
   hintText='',
-  validate='',
   errorLabel='',
-  before=''
+  before='',
+  attributes=''
   )
 %}
 <div class="form-group">
@@ -30,10 +30,7 @@
     id="{{ name }}"
     name="{{ name }}"
     type="{{ type }}"
-    {% if validate %}
-      data-validate="{{ validate }}"
-    {% endif %}
-  />
+    {%- for attribute, value in attributes %} {{ attribute }}="{{ value }}"{% endfor -%}/>
 </div>
 {% endmacro %}
 
@@ -53,10 +50,7 @@
     id="{{ name }}"
     name="{{ name }}"
     class="form-control {{ extraClasses}}"
-    {% if validate %}
-      data-validate="{{ validate }}"
-    {% endif %}
-    >
+    {%- for attribute, value in params.attributes %} {{ attribute }}="{{ value }}"{% endfor -%}>
     {% for option in options %}
       <option value="{{ option.value }}" {{ 'selected' if option.selected }}>{{ option.name }}</option>
     {% endfor %}
