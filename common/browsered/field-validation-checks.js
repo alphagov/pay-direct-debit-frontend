@@ -18,7 +18,7 @@ const validationErrors = {
   accountNumber: `Account numbers must contain 8-10 digits`
 }
 
-exports.isEmpty = function (value) {
+module.exports.isEmpty = function (value) {
   if (value === '') {
     return validationErrors.required
   } else {
@@ -26,7 +26,7 @@ exports.isEmpty = function (value) {
   }
 }
 
-exports.isCurrency = function (value) {
+module.exports.isCurrency = function (value) {
   if (!/^([0-9]+)(?:\.([0-9]{2}))?$/.test(value)) {
     return validationErrors.currency
   } else {
@@ -34,7 +34,7 @@ exports.isCurrency = function (value) {
   }
 }
 
-exports.isValidEmail = function (value) {
+module.exports.isValidEmail = function (value) {
   if (!emailValidator(value)) {
     return validationErrors.validEmail
   } else {
@@ -42,7 +42,7 @@ exports.isValidEmail = function (value) {
   }
 }
 
-exports.isPhoneNumber = function (value) {
+module.exports.isPhoneNumber = function (value) {
   const trimmedTelephoneNumber = value.replace(/\s/g, '')
   if (trimmedTelephoneNumber.length < 11 || !NUMBERS_ONLY.test(trimmedTelephoneNumber)) {
     return validationErrors.phoneNumber
@@ -51,7 +51,7 @@ exports.isPhoneNumber = function (value) {
   }
 }
 
-exports.isHttps = function (value) {
+module.exports.isHttps = function (value) {
   if (value.substr(0, 8) !== 'https://') {
     return validationErrors.https
   } else {
@@ -59,14 +59,14 @@ exports.isHttps = function (value) {
   }
 }
 
-exports.isBelowMaxAmount = value => {
-  if (!exports.isCurrency(value) && parseFloat(value) >= MAX_AMOUNT) {
+module.exports.isBelowMaxAmount = value => {
+  if (!module.exports.isCurrency(value) && parseFloat(value) >= MAX_AMOUNT) {
     return validationErrors.belowMaxAmount
   }
   return false
 }
 
-exports.isSortCode = value => {
+module.exports.isSortCode = value => {
   if (!/^\s?(\d{2}\s?-?){2}\d{2}\s?$/.test(value)) {
     return validationErrors.sortCode
   } else {
@@ -74,7 +74,7 @@ exports.isSortCode = value => {
   }
 }
 
-exports.isAccountNumber = value => {
+module.exports.isAccountNumber = value => {
   if (!/^\s?(\d{2}\s?-?){3,4}\d{2}\s?$/.test(value)) {
     return validationErrors.accountNumber
   } else {
