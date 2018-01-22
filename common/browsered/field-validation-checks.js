@@ -15,7 +15,7 @@ const validationErrors = {
   https: 'URL must begin with https://',
   belowMaxAmount: `Choose an amount under £${MAX_AMOUNT.toLocaleString()}`,
   sortCode: `Sort codes must contain 6 digits`,
-  accountNumber: `Account numbers must contain 8-10 digits`
+  accountNumber: `Account numbers must contain 6-8 digits`
 }
 
 module.exports.isEmpty = function (value) {
@@ -75,7 +75,7 @@ module.exports.isSortCode = value => {
 }
 
 module.exports.isAccountNumber = value => {
-  if (!/^\s?(\d{2}\s?-?\s?){3,4}\d{2}\s?$/.test(value)) {
+  if (!/^\s?(\d{2}\s?-?\s?){2,3}\d{2}\s?$/.test(value)) {
     return validationErrors.accountNumber
   } else {
     return false
