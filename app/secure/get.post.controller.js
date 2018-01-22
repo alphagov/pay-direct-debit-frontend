@@ -4,7 +4,7 @@ const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
 const setup = require('../setup')
 module.exports = (req, res) => {
-  const token = req.body.chargeTokenId
+  const token = req.body.chargeTokenId || req.params.chargeTokenId
   connectorClient.secure.retrievePaymentRequest(token)
     .then(paymentRequest => {
       // todo need to generate csrf

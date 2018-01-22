@@ -40,7 +40,6 @@ describe('confirmation get controller', function () {
       .end((err, res) => {
         response = res
         $ = cheerio.load(res.text)
-        // sessionCookie = decryptCookie(res.header['set-cookie']).session
         done(err)
       })
   })
