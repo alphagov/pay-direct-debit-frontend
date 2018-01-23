@@ -1,6 +1,5 @@
 FROM govukpay/nodejs:6.12.2
 
-
 ADD package.json /tmp/package.json
 RUN cd /tmp && npm install --production
 
