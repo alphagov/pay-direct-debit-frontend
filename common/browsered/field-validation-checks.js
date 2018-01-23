@@ -12,11 +12,13 @@ const validationErrors = {
   currency: 'Choose an amount in pounds and pence using digits and a decimal point. For example “10.50”',
   phoneNumber: 'Must be a 11 digit phone number',
   validEmail: 'Please use a valid email address',
-  isHttps: 'URL must begin with https://',
-  isBelowMaxAmount: `Choose an amount under £${MAX_AMOUNT.toLocaleString()}`
+  https: 'URL must begin with https://',
+  belowMaxAmount: `Choose an amount under £${MAX_AMOUNT.toLocaleString()}`,
+  sortCode: `Sort codes must contain 6 digits`,
+  accountNumber: `Account numbers must contain 6-8 digits`
 }
 
-exports.isEmpty = function (value) {
+module.exports.isEmpty = function (value) {
   if (value === '') {
     return validationErrors.required
   } else {
@@ -24,7 +26,7 @@ exports.isEmpty = function (value) {
   }
 }
 
-exports.isCurrency = function (value) {
+module.exports.isCurrency = function (value) {
   if (!/^([0-9]+)(?:\.([0-9]{2}))?$/.test(value)) {
     return validationErrors.currency
   } else {
@@ -32,7 +34,7 @@ exports.isCurrency = function (value) {
   }
 }
 
-exports.isValidEmail = function (value) {
+module.exports.isValidEmail = function (value) {
   if (!emailValidator(value)) {
     return validationErrors.validEmail
   } else {
@@ -40,7 +42,7 @@ exports.isValidEmail = function (value) {
   }
 }
 
-exports.isPhoneNumber = function (value) {
+module.exports.isPhoneNumber = function (value) {
   const trimmedTelephoneNumber = value.replace(/\s/g, '')
   if (trimmedTelephoneNumber.length < 11 || !NUMBERS_ONLY.test(trimmedTelephoneNumber)) {
     return validationErrors.phoneNumber
@@ -49,17 +51,33 @@ exports.isPhoneNumber = function (value) {
   }
 }
 
-exports.isHttps = function (value) {
+module.exports.isHttps = function (value) {
   if (value.substr(0, 8) !== 'https://') {
-    return validationErrors.isHttps
+    return validationErrors.https
   } else {
     return false
   }
 }
 
-exports.isBelowMaxAmount = value => {
-  if (!exports.isCurrency(value) && parseFloat(value) >= MAX_AMOUNT) {
-    return validationErrors.isBelowMaxAmount
+module.exports.isBelowMaxAmount = value => {
+  if (!module.exports.isCurrency(value) && parseFloat(value) >= MAX_AMOUNT) {
+    return validationErrors.belowMaxAmount
   }
   return false
+}
+
+module.exports.isSortCode = value => {
+  if (!/^\s?(\d{2}\s?-?\s?){2}\d{2}\s?$/.test(value)) {
+    return validationErrors.sortCode
+  } else {
+    return false
+  }
+}
+
+module.exports.isAccountNumber = value => {
+  if (!/^\s?(\d{2}\s?-?\s?){2,3}\d{2}\s?$/.test(value)) {
+    return validationErrors.accountNumber
+  } else {
+    return false
+  }
 }
