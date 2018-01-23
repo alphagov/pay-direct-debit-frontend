@@ -4,16 +4,18 @@
 const express = require('express')
 
 // Local dependencies
-const postController = require('./post.controller')
+const getAndPostController = require('./get.post.controller')
 
 // Initialisation
 const router = express.Router()
 const paths = {
-  index: '/secure'
+  get: '/secure/:chargeTokenId',
+  post: '/secure'
 }
 
 // Routing
-router.post(paths.index, postController)
+router.get(paths.get, getAndPostController)
+router.post(paths.post, getAndPostController)
 
 // Export
 module.exports = {
