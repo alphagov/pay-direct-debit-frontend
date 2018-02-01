@@ -1,6 +1,11 @@
 {% extends "common/templates/layout.njk" %}
 {% import "common/macros/form-group.njk" as form %}
 
+{% if validationErrors %}
+  {% set fields = validationErrors %}
+  {% set errors = validationErrors | groupby('id') %}
+{% endif %}
+
 {% block page_title %}
   Set up a Direct Debit
 {% endblock %}
@@ -9,6 +14,9 @@
   <main id="content" role="main">
     <div class="grid-row relative">
       <div class="column-two-thirds">
+        {% if validationErrors %}
+            {% include "common/templates/includes/validation-errors.njk" %}
+        {% endif %}
         <h1 class="heading-large">Set up a Direct Debit</h1>
         <p>We’ll take a one-off payment from your bank account</p>
 
@@ -16,41 +24,51 @@
           {{ form.input(
             name='account-holder-name',
             label='Name on the account',
+            value=formValues.account_holder_name,
             extraClasses='form-control-2-3',
             attributes={'data-validate': 'true'},
-            errorLabel='Please enter the name on the account'
+            errorLabel=errors['account-holder-name'][0].errorMessage,
+            isError=errors['account-holder-name']
           )}}
 
           {{ form.input(
             name='sort-code',
             label='Sort code',
+            value=formValues.sort_code,
             extraClasses='form-control-1-3',
             attributes={'data-validate': 'sort-code'},
-            errorLabel='Sort codes must contain 6 digits'
+            errorLabel=errors['sort-code'][0].errorMessage,
+            isError=errors['sort-code']
           )}}
 
           {{ form.input(
             name='account-number',
             label='Account number',
+            value=formValues.account_number,
             extraClasses='form-control-1-3',
             attributes={'data-validate': 'account-number'},
-            errorLabel='Account numbers must contain 6-8 digits'
+            errorLabel=errors['account-number'][0].errorMessage,
+            isError=errors['account-number']
           )}}
 
           <div class="form-group">
             <fieldset>
               <legend>
-                <h1 class="heading-small">
-                  Are you allowed to authorise Direct Debits on this account? <span class="form-hint">If it’s a joint account but you can authorise payments on your own, click “Yes”</span>
+                <h1 id="requires-authorisation" class="heading-small">
+                  Are you allowed to authorise Direct Debits on this account?
                 </h1>
+                <span class="form-hint">If it’s a joint account but you can authorise payments on your own, click “Yes”</span>
+                {% if errors['requires-authorisation'] %}
+                  <span class="error-message">{{ errors['requires-authorisation'][0].errorMessage }}</span>
+                {% endif %}
               </legend>
               <div class="multiple-choice">
-                <input id="authorise-yes" type="radio" name="requires-authorisation" value="false" />
+                <input id="authorise-yes" type="radio" name="requires-authorisation" value="false"{% if formValues.requires_authorisation == 'false' %} checked="checked"{% endif %} data-validate="is-checked"/>
                 <label for="authorise-yes">Yes</label>
               </div>
               <div class="multiple-choice" data-target="unauthorised-message">
-                <input id="authorise-no" type="radio" name="requires-authorisation" value="true" aria-controls="unauthorised-message" aria-expanded="false"/>
-                <label for="example-contact-by-phone">No</label>
+                <input id="authorise-no" type="radio" name="requires-authorisation" value="true"{% if formValues.requires_authorisation == 'true' %} checked="checked"{% endif %} aria-controls="unauthorised-message" aria-expanded="false"/>
+                <label for="authorise-no">No</label>
               </div>
               <div class="panel panel-border-narrow js-hidden" id="unauthorised-message" aria-hidden="true">
                 <p>If more than one person is required to authorise Direct Debits on this bank account, you can’t proceed
@@ -70,33 +88,45 @@
           }}
 
           <div class="form-group">
-            <label class="form-label-bold" for="address-line1" data-error-label="Please enter a street name">Building and street</label>
-            <input class="form-control form-control-2-3" id="address-line1" name="address-line1" type="text" value="" data-validate />
-            <input class="form-control form-control-2-3 address-line2" id="address-line2" name="address-line2" type="text" value="" />
+            <label class="form-label-bold" for="address-line1" data-error-label="Please enter a street name">
+              Building and street
+              {% if errors['address-line1'] %}
+                <span class="error-message">{{ errors['address-line1'][0].errorMessage }}</span>
+              {% endif %}
+            </label>
+            <input class="form-control form-control-2-3" id="address-line1" name="address-line1" type="text" value="{{ formValues.address_line1 }}" data-validate />
+            <input class="form-control form-control-2-3 address-line2" id="address-line2" name="address-line2" type="text" value="{{ formValues.address_line2 }}" />
           </div>
 
           {{ form.input(
             name='city',
             label='Town or city',
+            value=formValues.city,
             extraClasses='form-control-2-3',
             attributes={'data-validate': 'true'},
-            errorLabel='Please enter a town or city'
+            errorLabel=errors['city'][0].errorMessage,
+            isError=errors['city']
           )}}
 
           {{ form.input(
             name='postcode',
             label='Postcode',
+            value=formValues.postcode,
             extraClasses='form-control-1-3',
             attributes={'data-validate': 'true'},
-            errorLabel='Please enter a postcode'
+            errorLabel=errors['postcode'][0].errorMessage,
+            isError=errors['postcode']
           )}}
 
           {{ form.input(
             name='email',
             label='Email address',
+            value=formValues.email,
             type='email',
             extraClasses='form-control-2-3',
             hintText='We need this to confirm the Direct Debit with you',
+            errorLabel=errors['email'][0].errorMessage,
+            isError=errors['email'],
             attributes={
               'data-validate': 'email',
               'data-confirmation': 'true',

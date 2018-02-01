@@ -12,11 +12,12 @@ const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 
 describe('setup get controller', () => {
   let response, $
-  let paymentRequestExternalId = 'sdfihsdufh2e'
-  let amount = 100
-  let description = 'please buy Silvia a coffee'
+  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const amount = 100
+  const description = 'please buy Silvia a coffee'
+
   describe('when a charge is valid', () => {
-    let paymentRequest = paymentFixtures.validPaymentRequest({
+    const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId,
       amount: amount,
       description: description
@@ -24,6 +25,7 @@ describe('setup get controller', () => {
     const cookieHeader = new CookieBuilder()
       .withPaymentRequest(paymentRequest)
       .build()
+
     before(done => {
       supertest(getApp())
         .get(`/setup/${paymentRequestExternalId}`)
@@ -34,16 +36,20 @@ describe('setup get controller', () => {
           done(err)
         })
     })
+
     it('should return a 200 status code', () => {
       expect(response.statusCode).to.equal(200)
     })
+
     it('should display the enter direct debit page with correct description and amount', () => {
       expect($(`#payment-description`).text()).to.equal(description)
       expect($(`#amount`).text()).to.equal(`£1.00`)
     })
+
     it('should display the enter direct debit page with United Kingdom selected by default', () => {
       expect($(`#country-code`).val()).to.equal('GB')
     })
+
     it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
       expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal('/direct-debit-guarantee')
     })

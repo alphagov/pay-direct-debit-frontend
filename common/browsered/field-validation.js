@@ -25,7 +25,7 @@ function initValidation (e) {
   clearPreviousErrors()
 
   let validatedFields = findFields(form)
-  .map(field => validateField(form, field))
+    .map(field => validateField(form, field))
 
   if (every(validatedFields)) {
     form.submit()
@@ -51,7 +51,7 @@ function findFields (form) {
 }
 
 function validateField (form, field) {
-  let result
+  let result = null
   let validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
@@ -77,16 +77,19 @@ function validateField (form, field) {
       case 'account-number' :
         result = checks.isAccountNumber(field.value)
         break
+      case 'is-checked' :
+        result = checks.isRequiresAuthorisationChecked(field.checked)
+        break
       default :
-        result = checks.isEmpty(field.value)
+        result = checks.isNotEmpty(field.value)
         break
     }
-    if (result) {
+    if (result !== null) {
       applyErrorMessaging(form, field, result)
     }
   })
 
-  if (!result) {
+  if (result === null) {
     return true
   }
 }
@@ -95,23 +98,42 @@ function applyErrorMessaging (form, field, result) {
   let formGroup = field.closest('.form-group')
   if (!formGroup.classList.contains('error')) {
     formGroup.classList.add('error')
-    let label = document.querySelector('label[for="' + field.name + '"]')
-    let errorLabel = label.getAttribute('data-error-label')
-    if (errorLabel) {
-      result = errorLabel
+    const errorLegendElement = formGroup.querySelector('legend')
+    if (errorLegendElement === null) {
+      const errorElement = document.querySelector('label[for="' + field.name + '"]')
+      const errorLabel = errorElement.getAttribute('data-error-label')
+      if (errorLabel) {
+        result = errorLabel
+      }
+      errorElement.insertAdjacentHTML('beforeend',
+        '<span class="error-message">' + result + '</span>')
+    } else {
+      const errorLabel = errorLegendElement.getAttribute('data-error-label')
+      if (errorLabel) {
+        result = errorLabel
+      }
+      const errorElement = document.createElement('span')
+      errorElement.setAttribute('class', 'error-message')
+      errorElement.innerText = result
+      errorLegendElement.appendChild(errorElement)
     }
-    label.insertAdjacentHTML('beforeend',
-      '<span class="error-message">' + result + '</span>')
   }
 }
 
 function populateErrorSummary (form) {
-  let erroringFields = Array.prototype.slice.call(form.querySelectorAll('.form-group.error label'))
-  let configuration = {
-    fields: erroringFields.map(field => {
-      let label = field.innerHTML.split('<')[0].trim()
-      let id = field.getAttribute('for')
-      return {label, id}
+  const erroringformGroups = Array.prototype.slice.call(form.querySelectorAll('.form-group.error'))
+  const configuration = {
+    fields: erroringformGroups.map(formGroup => {
+      const errorLegendElement = formGroup.querySelector('legend')
+      if (errorLegendElement === null) {
+        const label = formGroup.querySelector('label').innerHTML.split('<')[0].trim()
+        const id = formGroup.querySelector('label').getAttribute('for')
+        return {label, id}
+      } else {
+        const label = formGroup.querySelector('h1').innerText.trim()
+        const id = formGroup.querySelector('h1').getAttribute('id')
+        return {label, id}
+      }
     })
   }
 
