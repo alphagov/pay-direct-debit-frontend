@@ -6,75 +6,66 @@ const fieldValidationChecks = require('../../browsered/field-validation-checks')
 module.exports = (payer) => {
   const errors = []
 
-  if (fieldValidationChecks.isNotEmpty(payer.accountHolderName) !== null) {
+  if (fieldValidationChecks.isEmpty(payer.accountHolderName) === true) {
     errors.push({
       id: 'account-holder-name',
-      label: 'Name on the account',
-      errorMessage: fieldValidationChecks.isNotEmpty(payer.accountHolderName)
+      label: 'Name on the account'
     })
   }
 
-  if (fieldValidationChecks.isSortCode(payer.sortCode) !== null) {
+  if (fieldValidationChecks.isSortCode(payer.sortCode) === false) {
     errors.push({
       id: 'sort-code',
-      label: 'Sort code',
-      errorMessage: fieldValidationChecks.isSortCode(payer.sortCode)
+      label: 'Sort code'
     })
   }
 
-  if (fieldValidationChecks.isAccountNumber(payer.accountNumber) !== null) {
+  if (fieldValidationChecks.isAccountNumber(payer.accountNumber) === false) {
     errors.push({
       id: 'account-number',
-      label: 'Account number',
-      errorMessage: fieldValidationChecks.isAccountNumber(payer.accountNumber)
+      label: 'Account number'
     })
   }
 
   if (payer.requiresAuthorisation === true) {
     errors.push({
       id: 'requires-authorisation',
-      label: 'Are you allowed to authorise Direct Debits on this account?',
-      errorMessage: fieldValidationChecks.isChecked({checked: false})
+      label: 'Are you allowed to authorise Direct Debits on this account?'
     })
   }
 
-  if (fieldValidationChecks.isNotEmpty(payer.country) !== null) {
+  if (fieldValidationChecks.isEmpty(payer.country) === true) {
     errors.push({
       id: 'country-code',
-      label: 'Country',
-      errorMessage: fieldValidationChecks.isNotEmpty(payer.country)
+      label: 'Country'
     })
   }
 
-  if (fieldValidationChecks.isNotEmpty(payer.addressLine1) !== null) {
+  if (fieldValidationChecks.isEmpty(payer.addressLine1) === true) {
     errors.push({
       id: 'address-line1',
-      label: 'Building and street',
-      errorMessage: fieldValidationChecks.isNotEmpty(payer.addressLine1)
+      label: 'Building and street'
     })
   }
 
-  if (fieldValidationChecks.isNotEmpty(payer.city) !== null) {
+  if (fieldValidationChecks.isEmpty(payer.city) === true) {
     errors.push({
       id: 'city',
-      label: 'Town or city',
-      errorMessage: fieldValidationChecks.isNotEmpty(payer.city)
+      label: 'Town or city'
     })
   }
 
-  if (fieldValidationChecks.isNotEmpty(payer.postcode) !== null) {
+  if (fieldValidationChecks.isEmpty(payer.postcode) === true) {
     errors.push({
       id: 'postcode',
-      label: 'Postcode',
-      errorMessage: fieldValidationChecks.isNotEmpty(payer.postcode)
+      label: 'Postcode'
     })
   }
 
-  if (fieldValidationChecks.isValidEmail(payer.email) !== null) {
+  if (fieldValidationChecks.isValidEmail(payer.email) === false) {
     errors.push({
       id: 'email',
-      label: 'Email address',
-      errorMessage: fieldValidationChecks.isValidEmail(payer.email)
+      label: 'Email address'
     })
   }
 

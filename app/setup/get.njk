@@ -59,7 +59,7 @@
                 </h1>
                 <span class="form-hint">If it’s a joint account but you can authorise payments on your own, click “Yes”</span>
                 {% if errors['requires-authorisation'] %}
-                  <span class="error-message">{{ errors['requires-authorisation'][0].errorMessage }}</span>
+                  <span class="error-message">If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below</span>
                 {% endif %}
               </legend>
               <div class="multiple-choice">
@@ -91,7 +91,7 @@
             <label class="form-label-bold" for="address-line1" data-error-label="Please enter a street name">
               Building and street
               {% if errors['address-line1'] %}
-                <span class="error-message">{{ errors['address-line1'][0].errorMessage }}</span>
+                <span class="error-message">Please enter a street name</span>
               {% endif %}
             </label>
             <input class="form-control form-control-2-3" id="address-line1" name="address-line1" type="text" value="{{ formValues.address_line1 }}" data-validate />

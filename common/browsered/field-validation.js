@@ -51,50 +51,36 @@ function findFields (form) {
 }
 
 function validateField (form, field) {
-  let result = null
+  let isValid = true
   let validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
     switch (validationType) {
-      case 'currency' :
-        result = checks.isCurrency(field.value)
-        break
-      case 'email' :
-        result = checks.isValidEmail(field.value)
-        break
-      case 'phone' :
-        result = checks.isPhoneNumber(field.value)
-        break
-      case 'https' :
-        result = checks.isHttps(field.value)
-        break
-      case 'belowMaxAmount' :
-        result = checks.isBelowMaxAmount(field.value)
-        break
       case 'sort-code' :
-        result = checks.isSortCode(field.value)
+        isValid = checks.isSortCode(field.value)
         break
       case 'account-number' :
-        result = checks.isAccountNumber(field.value)
+        isValid = checks.isAccountNumber(field.value)
+        break
+      case 'email' :
+        isValid = checks.isValidEmail(field.value)
         break
       case 'is-checked' :
-        result = checks.isChecked(field)
+        isValid = checks.isChecked(field)
         break
       default :
-        result = checks.isNotEmpty(field.value)
+        isValid = !checks.isEmpty(field.value)
         break
     }
-    if (result !== null) {
-      applyErrorMessaging(form, field, result)
+    if (!isValid) {
+      applyErrorMessaging(form, field)
     }
   })
 
-  if (result === null) {
-    return true
-  }
+  return isValid
 }
 
-function applyErrorMessaging (form, field, result) {
+function applyErrorMessaging (form, field) {
   let formGroup = field.closest('.form-group')
   if (!formGroup.classList.contains('error')) {
     formGroup.classList.add('error')
@@ -102,38 +88,31 @@ function applyErrorMessaging (form, field, result) {
     if (errorLegendElement === null) {
       const errorElement = document.querySelector('label[for="' + field.name + '"]')
       const errorLabel = errorElement.getAttribute('data-error-label')
-      if (errorLabel) {
-        result = errorLabel
-      }
       errorElement.insertAdjacentHTML('beforeend',
-        '<span class="error-message">' + result + '</span>')
+        '<span class="error-message">' + errorLabel + '</span>')
     } else {
       const errorLabel = errorLegendElement.getAttribute('data-error-label')
-      if (errorLabel) {
-        result = errorLabel
-      }
       const errorElement = document.createElement('span')
       errorElement.setAttribute('class', 'error-message')
-      errorElement.innerText = result
+      errorElement.innerText = errorLabel
       errorLegendElement.appendChild(errorElement)
     }
   }
 }
 
 function populateErrorSummary (form) {
-  const erroringformGroups = Array.prototype.slice.call(form.querySelectorAll('.form-group.error'))
   const configuration = {
-    fields: erroringformGroups.map(formGroup => {
-      const errorLegendElement = formGroup.querySelector('legend')
-      if (errorLegendElement === null) {
-        const label = formGroup.querySelector('label').innerHTML.split('<')[0].trim()
-        const id = formGroup.querySelector('label').getAttribute('for')
-        return {label, id}
+    fields: Array.prototype.slice.call(form.querySelectorAll('.form-group.error')).map(formGroup => {
+      let label = null
+      let id = null
+      if (formGroup.querySelector('legend') === null) {
+        label = formGroup.querySelector('label').innerHTML.split('<')[0].trim()
+        id = formGroup.querySelector('label').getAttribute('for')
       } else {
-        const label = formGroup.querySelector('h1').innerText.trim()
-        const id = formGroup.querySelector('h1').getAttribute('id')
-        return {label, id}
+        label = formGroup.querySelector('h1').innerText.trim()
+        id = formGroup.querySelector('h1').getAttribute('id')
       }
+      return {label, id}
     })
   }
 
