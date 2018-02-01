@@ -99,7 +99,7 @@ describe('setup post controller', () => {
       postcode: 'W1 3EF',
       addressLine1: 'address line 1',
       addressLine2: 'address line 2',
-      email: 'payer@willpay.co.uk'
+      email: 'payer@example.test'
     }
 
     before(done => {

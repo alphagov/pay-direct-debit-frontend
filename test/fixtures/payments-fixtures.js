@@ -37,7 +37,7 @@ module.exports = {
     const data = {
       payer_external_id: opts.payer_external_id || randomExternalId(),
       account_holder_name: opts.account_holder_name || 'mr. payment',
-      email: opts.email || 'aa@bb.com',
+      email: opts.email || 'user@example.test',
       account_number: opts.account_number || '12345678',
       sort_code: opts.sort_code || '123456',
       requires_authorisation: opts.requires_authorisation || 'false',
