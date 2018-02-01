@@ -88,16 +88,18 @@ function applyErrorMessaging (form, field) {
     if (errorLegendElement === null) {
       const errorElement = document.querySelector('label[for="' + field.name + '"]')
       const errorLabel = errorElement.getAttribute('data-error-label')
-      errorElement.insertAdjacentHTML('beforeend',
-        '<span class="error-message">' + errorLabel + '</span>')
+      errorElement.appendChild(generateErrorMessageElement(errorLabel))
     } else {
-      const errorLabel = errorLegendElement.getAttribute('data-error-label')
-      const errorElement = document.createElement('span')
-      errorElement.setAttribute('class', 'error-message')
-      errorElement.innerText = errorLabel
-      errorLegendElement.appendChild(errorElement)
+      errorLegendElement.appendChild(generateErrorMessageElement(errorLegendElement.getAttribute('data-error-label')))
     }
   }
+}
+
+function generateErrorMessageElement (message) {
+  const errorElement = document.createElement('span')
+  errorElement.setAttribute('class', 'error-message')
+  errorElement.innerText = message
+  return errorElement
 }
 
 function populateErrorSummary (form) {
