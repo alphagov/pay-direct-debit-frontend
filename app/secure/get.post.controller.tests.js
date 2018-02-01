@@ -12,12 +12,14 @@ const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const setup = require('../setup')
 let paymentRequest, response, $
+
 describe('secure controller', () => {
   afterEach(() => {
     nock.cleanAll()
   })
+
   describe('when getting /secure with a valid one-time token', () => {
-    let token = 'sdfihsdufh2e'
+    const token = 'sdfihsdufh2e'
     before(done => {
       paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
       nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
@@ -30,17 +32,20 @@ describe('secure controller', () => {
           done(err)
         })
     })
+
     it('should redirect to /setup', () => {
       expect(response.statusCode).to.equal(303)
     })
+
     it('should redirect to the insert direct debit details page', () => {
-      let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.external_id)
+      const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.external_id)
       expect(response.header).property('location').to.equal(url)
     })
   })
+
   describe('when getting /secure with an invalid one-time token', () => {
     before(done => {
-      let token = 'invalid'
+      const token = 'invalid'
       nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(404)
       supertest(getApp())
         .get(`/secure/${token}`)
@@ -52,15 +57,19 @@ describe('secure controller', () => {
           done(err)
         })
     })
+
     it('should return a 500', () => {
       expect(response.statusCode).to.equal(500)
     })
+
     it('should render error page', () => {
       expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
       expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
     })
+
     describe('when posting to /secure with a valid one-time token', () => {
-      let token = 'sdfihsdufh2e'
+      const token = 'sdfihsdufh2e'
+
       before(done => {
         paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
         nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
@@ -76,17 +85,20 @@ describe('secure controller', () => {
             done(err)
           })
       })
+
       it('should redirect to /setup', () => {
         expect(response.statusCode).to.equal(303)
       })
+
       it('should redirect to the insert direct debit details page', () => {
-        let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.external_id)
+        const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.external_id)
         expect(response.header).property('location').to.equal(url)
       })
     })
+
     describe('when posting to /secure with an invalid one-time token', () => {
       before(done => {
-        let token = 'invalid'
+        const token = 'invalid'
         nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(404)
         supertest(getApp())
           .post(`/secure`)
@@ -101,9 +113,11 @@ describe('secure controller', () => {
             done(err)
           })
       })
+
       it('should return a 500', () => {
         expect(response.statusCode).to.equal(500)
       })
+
       it('should render error page', () => {
         expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
         expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
