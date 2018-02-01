@@ -8,7 +8,7 @@ const NUMBERS_ONLY = new RegExp('^[0-9]+$')
 const MAX_AMOUNT = 10000000
 
 const validationErrors = {
-  required: 'This is field cannot be blank',
+  required: 'This field cannot be blank',
   currency: 'Choose an amount in pounds and pence using digits and a decimal point. For example “10.50”',
   phoneNumber: 'Must be a 11 digit phone number',
   validEmail: 'Please use a valid email address',
@@ -16,7 +16,7 @@ const validationErrors = {
   belowMaxAmount: `Choose an amount under £${MAX_AMOUNT.toLocaleString()}`,
   sortCode: 'Sort codes must contain 6 digits',
   accountNumber: 'Account numbers must contain 6-8 digits',
-  requiresAuthorisation: 'Please authorize'
+  checked: 'Please select an option'
 }
 
 module.exports.isNotEmpty = function (value) {
@@ -84,9 +84,9 @@ module.exports.isAccountNumber = value => {
   }
 }
 
-module.exports.isRequiresAuthorisationChecked = value => {
-  if (value === false) {
-    return validationErrors.requiresAuthorisation
+module.exports.isChecked = field => {
+  if (field && field.checked === false) {
+    return validationErrors.checked
   } else {
     return null
   }

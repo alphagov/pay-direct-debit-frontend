@@ -4,7 +4,7 @@
 const {expect} = require('chai')
 
 // Local dependencies
-const {isSortCode, isAccountNumber, isRequiresAuthorisationChecked} = require('./field-validation-checks')
+const {isSortCode, isAccountNumber, isChecked} = require('./field-validation-checks')
 
 describe('field validation checks', () => {
   describe('isSortCode', () => {
@@ -47,13 +47,13 @@ describe('field validation checks', () => {
 })
 
 describe('field validation checks', () => {
-  describe('isRequiresAuthorisationChecked', () => {
-    it('should return an error message if the value is false', () => {
-      expect(isRequiresAuthorisationChecked(false)).to.equal('Please authorize')
+  describe('isChecked', () => {
+    it('should return an error message if the field is not checked', () => {
+      expect(isChecked({checked: false})).to.equal('Please select an option')
     })
 
-    it('should return null if if the value is true', () => {
-      expect(isRequiresAuthorisationChecked(true)).to.equal(null)
+    it('should return null if the field is checked', () => {
+      expect(isChecked({checked: true})).to.equal(null)
     })
   })
 })

@@ -34,7 +34,7 @@ module.exports = (payer) => {
     errors.push({
       id: 'requires-authorisation',
       label: 'Are you allowed to authorise Direct Debits on this account?',
-      errorMessage: fieldValidationChecks.isRequiresAuthorisationChecked(false)
+      errorMessage: fieldValidationChecks.isChecked({checked: false})
     })
   }
 

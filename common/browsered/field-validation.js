@@ -78,7 +78,7 @@ function validateField (form, field) {
         result = checks.isAccountNumber(field.value)
         break
       case 'is-checked' :
-        result = checks.isRequiresAuthorisationChecked(field.checked)
+        result = checks.isChecked(field)
         break
       default :
         result = checks.isNotEmpty(field.value)
