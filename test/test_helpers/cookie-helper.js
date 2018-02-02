@@ -28,6 +28,12 @@ exports.CookieBuilder = class CookieBuilder {
     })
     return this
   }
+  withCsrfSecret (value) {
+    this.withCookie('session', {
+      csrfSecret: value
+    })
+    return this
+  }
   withCookie (cookieName, value) {
     this._cookies[cookieName] = Object.assign(this._cookies[cookieName] || {}, value)
     return this
