@@ -34,6 +34,7 @@ describe('confirmation get controller', function () {
     })
     const cookieHeader = new CookieBuilder()
       .withPaymentRequest(paymentRequest)
+      .withCsrfSecret('123')
       .withConfirmationDetails(payer)
       .build()
     supertest(getApp())

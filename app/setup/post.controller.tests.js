@@ -7,6 +7,7 @@ const cheerio = require('cheerio')
 const supertest = require('supertest')
 const nock = require('nock')
 const lodash = require('lodash')
+const csrf = require('csrf')
 
 // Local dependencies
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
@@ -24,15 +25,44 @@ describe('setup post controller', () => {
     nock.cleanAll()
   })
 
+  describe('when CSRF is not valid', () => {
+    let response
+    let paymentRequestExternalId = 'sdfihsdufh2ff'
+    let paymentRequest = paymentFixtures.validPaymentRequest({
+      external_id: paymentRequestExternalId
+    })
+    before(done => {
+      const cookieHeader = new CookieBuilder()
+        .withPaymentRequest(paymentRequest)
+        .withCsrfSecret('123')
+        .build()
+      supertest(getApp())
+        .post(`/setup/${paymentRequestExternalId}`)
+        .send({ 'csrfToken': 'whatever' })
+        .set('Cookie', cookieHeader)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+          response = res
+          done(err)
+        })
+    })
+    it('should return Bad Request', () => {
+      expect(response.statusCode).to.equal(400)
+    })
+  })
   describe('when submitting the form for a valid payment request', () => {
     const paymentRequestExternalId = 'sdfihsdufh2e'
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
     const formValues = paymentFixtures.validPayer()
+    let csrfSecret = '123'
+    let csrfToken = csrf().create(csrfSecret)
     before(done => {
       const cookieHeader = new CookieBuilder()
         .withPaymentRequest(paymentRequest)
+        .withCsrfSecret(csrfSecret)
         .build()
       const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
       nock(config.CONNECTOR_URL)
@@ -51,7 +81,7 @@ describe('setup post controller', () => {
         .reply(201, createPayerResponse)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
-        .send({
+        .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -87,6 +117,8 @@ describe('setup post controller', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
+    let csrfSecret = '123'
+    let csrfToken = csrf().create(csrfSecret)
     let cookieHeader
     let $
     const formValues = {
@@ -105,10 +137,11 @@ describe('setup post controller', () => {
     before(done => {
       cookieHeader = new CookieBuilder()
         .withPaymentRequest(paymentRequest)
+        .withCsrfSecret(csrfSecret)
         .build()
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
-        .send({
+        .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -194,6 +227,8 @@ describe('setup post controller', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
+    let csrfSecret = '123'
+    let csrfToken = csrf().create(csrfSecret)
     let cookieHeader
     const formValues = {
       accountHolderName: '',
@@ -211,10 +246,11 @@ describe('setup post controller', () => {
     before(done => {
       cookieHeader = new CookieBuilder()
         .withPaymentRequest(paymentRequest)
+        .withCsrfSecret(csrfSecret)
         .build()
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
-        .send({
+        .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,

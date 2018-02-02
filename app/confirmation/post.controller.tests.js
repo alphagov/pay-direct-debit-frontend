@@ -6,6 +6,8 @@ const expect = chai.expect
 const supertest = require('supertest')
 const cheerio = require('cheerio')
 const nock = require('nock')
+const csrf = require('csrf')
+
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
@@ -18,8 +20,11 @@ const paymentRequest = paymentFixtures.validPaymentRequest({
 })
 
 describe('confirmation POST controller', () => {
+  let csrfSecret = '123'
+  let csrfToken = csrf().create(csrfSecret)
   const cookieHeader = new CookieBuilder()
     .withPaymentRequest(paymentRequest)
+    .withCsrfSecret(csrfSecret)
     .build()
   afterEach(() => {
     nock.cleanAll()
@@ -30,6 +35,7 @@ describe('confirmation POST controller', () => {
       nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(201)
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
+        .send({ 'csrfToken': csrfToken })
         .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res
@@ -52,6 +58,7 @@ describe('confirmation POST controller', () => {
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(409)
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
+        .send({ 'csrfToken': csrfToken })
         .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res

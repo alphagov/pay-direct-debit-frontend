@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const cheerio = require('cheerio')
 const chai = require('chai')
 const expect = chai.expect
+
 // Local dependencies
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
@@ -15,7 +16,7 @@ describe('setup get controller', () => {
   const paymentRequestExternalId = 'sdfihsdufh2e'
   const amount = 100
   const description = 'please buy Silvia a coffee'
-
+  let csrfSecret = '123'
   describe('when a charge is valid', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId,
@@ -24,6 +25,7 @@ describe('setup get controller', () => {
     })
     const cookieHeader = new CookieBuilder()
       .withPaymentRequest(paymentRequest)
+      .withCsrfSecret(csrfSecret)
       .build()
 
     before(done => {

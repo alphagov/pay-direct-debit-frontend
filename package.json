@@ -42,6 +42,7 @@
     "client-sessions": "0.8.x",
     "compression": "1.7.x",
     "correlation-id": "^2.0.0",
+    "csrf": "3.0.x",
     "express": "4.16.x",
     "i18n": "0.8.x",
     "lodash": "^4.17.4",
