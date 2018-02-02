@@ -8,10 +8,21 @@ const {isSortCode, isAccountNumber, isChecked} = require('./field-validation-che
 
 describe('field validation checks', () => {
   describe('isSortCode', () => {
-    it('should return an error message if its a invalid sort code', () => {
+    it('should return false if it is a invalid sort code', () => {
+      expect(isSortCode('12345')).to.equal(false)
+      expect(isSortCode('1234567')).to.equal(false)
+      expect(isSortCode('0234567')).to.equal(false)
+      expect(isSortCode('-12345')).to.equal(false)
+      expect(isSortCode('12345-')).to.equal(false)
       expect(isSortCode('12-3-45')).to.equal(false)
       expect(isSortCode('12-34-567')).to.equal(false)
       expect(isSortCode('12-3a-56')).to.equal(false)
+      expect(isSortCode(' 12345')).to.equal(false)
+      expect(isSortCode('12345 ')).to.equal(false)
+      expect(isSortCode('12 3 45')).to.equal(false)
+      expect(isSortCode('12 34 567')).to.equal(false)
+      expect(isSortCode('12 3a 56')).to.equal(false)
+      expect(isSortCode('123$@456')).to.equal(false)
     })
 
     it('should return true if it is a valid sort code', () => {
@@ -19,6 +30,10 @@ describe('field validation checks', () => {
       expect(isSortCode('12 34 56')).to.equal(true)
       expect(isSortCode('123456')).to.equal(true)
       expect(isSortCode('01-23-45')).to.equal(true)
+      expect(isSortCode('01 23 45')).to.equal(true)
+      expect(isSortCode('----0-1-2-3-4-5----')).to.equal(true)
+      expect(isSortCode('    0  1 2   3 4 5   ')).to.equal(true)
+      expect(isSortCode('-123456-')).to.equal(true)
       expect(isSortCode(' 123456 ')).to.equal(true)
     })
   })
@@ -26,7 +41,7 @@ describe('field validation checks', () => {
 
 describe('field validation checks', () => {
   describe('isAccountNumber', () => {
-    it('should return an error message if its a invalid account number', () => {
+    it('should return false if it is a invalid account number', () => {
       expect(isAccountNumber('123-456')).to.equal(false)
       expect(isAccountNumber('1-2-3-4-5-6')).to.equal(false)
       expect(isAccountNumber('12-34-56')).to.equal(false)
@@ -48,7 +63,7 @@ describe('field validation checks', () => {
 
 describe('field validation checks', () => {
   describe('isChecked', () => {
-    it('should return an error message if the field is not checked', () => {
+    it('should return false if the field is not checked', () => {
       expect(isChecked({checked: false})).to.equal(false)
     })
 

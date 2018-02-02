@@ -5,31 +5,16 @@ const emailValidator = require('../utils/email-validator')
 // Constants
 const NUMBERS_ONLY = new RegExp('^[0-9]+$')
 
-const isEmpty = value => {
-  return value.trim() === ''
-}
+// Exports
+exports.isEmpty = value => value.trim() === ''
 
-const isChecked = field => {
-  return field && (field.checked === true)
-}
+exports.isChecked = field => field && (field.checked === true)
 
-const isValidEmail = function (value) {
-  return emailValidator(value)
-}
+exports.isValidEmail = value => emailValidator(value)
 
-const isSortCode = value => {
-  return /^\s?(\d{2}\s?-?\s?){2}\d{2}\s?$/.test(value)
-}
+exports.isSortCode = value => /^[ -]*(?:[0-9][ -]*){6}$/.test(value)
 
-const isAccountNumber = value => {
+exports.isAccountNumber = value => {
   const trimmedAccountNumber = value.replace(/\s/g, '')
   return NUMBERS_ONLY.test(trimmedAccountNumber) && (trimmedAccountNumber.length >= 6 && trimmedAccountNumber.length <= 8)
-}
-
-module.exports = {
-  isEmpty,
-  isChecked,
-  isSortCode,
-  isAccountNumber,
-  isValidEmail
 }
