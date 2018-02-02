@@ -6,11 +6,12 @@
   extraClasses='',
   hintText='',
   errorLabel='',
+  isError=false,
   before='',
   attributes=''
   )
 %}
-<div class="form-group">
+<div class="form-group{% if isError %} form-group-error{% endif %}">
   {{ before | safe }}
 
   <label
@@ -24,12 +25,16 @@
     {% if hintText %}
       <span class="form-hint">{{ hintText }}</span>
     {% endif %}
+    {% if isError %}
+      <span class="error-message">{{ errorLabel }}</span>
+    {% endif %}
   </label>
   <input
-    class="form-control {{ extraClasses }}"
+    class="form-control{% if isError %} form-control-error{% endif %} {{ extraClasses }}"
     id="{{ name }}"
     name="{{ name }}"
     type="{{ type }}"
+    value="{{ value }}"
     {%- for attribute, value in attributes %} {{ attribute }}="{{ value }}"{% endfor -%}/>
 </div>
 {% endmacro %}
