@@ -27,8 +27,8 @@ describe('setup post controller', () => {
 
   describe('when CSRF is not valid', () => {
     let response
-    let paymentRequestExternalId = 'sdfihsdufh2ff'
-    let paymentRequest = paymentFixtures.validPaymentRequest({
+    const paymentRequestExternalId = 'sdfihsdufh2ff'
+    const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
     before(done => {
@@ -57,8 +57,8 @@ describe('setup post controller', () => {
       external_id: paymentRequestExternalId
     })
     const formValues = paymentFixtures.validPayer()
-    let csrfSecret = '123'
-    let csrfToken = csrf().create(csrfSecret)
+    const csrfSecret = '123'
+    const csrfToken = csrf().create(csrfSecret)
     before(done => {
       const cookieHeader = new CookieBuilder()
         .withPaymentRequest(paymentRequest)
@@ -117,8 +117,8 @@ describe('setup post controller', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
-    let csrfSecret = '123'
-    let csrfToken = csrf().create(csrfSecret)
+    const csrfSecret = '123'
+    const csrfToken = csrf().create(csrfSecret)
     let cookieHeader
     let $
     const formValues = {
@@ -224,11 +224,11 @@ describe('setup post controller', () => {
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     const paymentRequestExternalId = 'wsfihsdufh2g'
     let $
-    const paymentRequest = paymentFixtures.validPaymentRequest({
+    let paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
-    let csrfSecret = '123'
-    let csrfToken = csrf().create(csrfSecret)
+    const csrfSecret = '123'
+    const csrfToken = csrf().create(csrfSecret)
     let cookieHeader
     const formValues = {
       accountHolderName: '',

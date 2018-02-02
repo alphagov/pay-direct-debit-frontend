@@ -3,7 +3,7 @@ const sinon = require('sinon')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
 
-describe.only('CSRF', function () {
+describe('CSRF', function () {
   it('should create a CSRF token', function () {
     const verify = sinon.stub()
       .withArgs("it's a secret", 'submitted token')

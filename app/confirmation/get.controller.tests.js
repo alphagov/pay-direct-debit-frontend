@@ -52,7 +52,7 @@ describe('confirmation get controller', function () {
   })
 
   it('should display the confirmation page with a back link to the setup page', () => {
-    let url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+    const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
     expect($('.link-back').attr('href')).to.equal(url)
   })
 

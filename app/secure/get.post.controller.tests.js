@@ -6,6 +6,7 @@ const expect = chai.expect
 const supertest = require('supertest')
 const cheerio = require('cheerio')
 const nock = require('nock')
+
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp

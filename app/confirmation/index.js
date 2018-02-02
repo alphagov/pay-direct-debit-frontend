@@ -6,6 +6,7 @@ const express = require('express')
 // Local dependencies
 const getController = require('./get.controller')
 const postController = require('./post.controller')
+const {validateAndRefreshCsrf} = require('../../common/middleware/csrf')
 
 // Initialisation
 const router = express.Router()
@@ -15,8 +16,8 @@ const paths = {
 }
 
 // Routing
-router.get(paths.index, getController)
-router.post(paths.index, postController)
+router.get(paths.index, validateAndRefreshCsrf, getController)
+router.post(paths.index, validateAndRefreshCsrf, postController)
 
 // Export
 module.exports = {

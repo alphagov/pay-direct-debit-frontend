@@ -21,6 +21,7 @@
         <p>We’ll take a one-off payment from your bank account</p>
 
         <form class="form" method="POST" action="/setup/{{paymentRequestExternalId}}" class="direct-debit-form" data-validate>
+          <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           {{ form.input(
             name='account-holder-name',
             label='Name on the account',

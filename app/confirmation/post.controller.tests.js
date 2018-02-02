@@ -20,8 +20,8 @@ const paymentRequest = paymentFixtures.validPaymentRequest({
 })
 
 describe('confirmation POST controller', () => {
-  let csrfSecret = '123'
-  let csrfToken = csrf().create(csrfSecret)
+  const csrfSecret = '123'
+  const csrfToken = csrf().create(csrfSecret)
   const cookieHeader = new CookieBuilder()
     .withPaymentRequest(paymentRequest)
     .withCsrfSecret(csrfSecret)

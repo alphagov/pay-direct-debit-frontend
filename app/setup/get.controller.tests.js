@@ -16,7 +16,7 @@ describe('setup get controller', () => {
   const paymentRequestExternalId = 'sdfihsdufh2e'
   const amount = 100
   const description = 'please buy Silvia a coffee'
-  let csrfSecret = '123'
+  const csrfSecret = '123'
   describe('when a charge is valid', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId,
