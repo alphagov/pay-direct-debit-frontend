@@ -51,7 +51,7 @@
             isError=errors['account-number']
           )}}
 
-          <div class="form-group">
+          <div class="form-group{% if errors['requires-authorisation'] %} form-group-error{% endif %}">
             <fieldset>
               <legend  data-error-label="If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below">
                 <h1 id="requires-authorisation" class="heading-small">
@@ -87,14 +87,14 @@
             )
           }}
 
-          <div class="form-group">
+          <div class="form-group{% if errors['address-line1'] %} form-group-error{% endif %}">
             <label class="form-label-bold" for="address-line1" data-error-label="Please enter a street name">
               Building and street
               {% if errors['address-line1'] %}
                 <span class="error-message">Please enter a street name</span>
               {% endif %}
             </label>
-            <input class="form-control form-control-2-3" id="address-line1" name="address-line1" type="text" value="{{ formValues.address_line1 }}" data-validate />
+            <input class="form-control form-control-2-3{% if errors['address-line1'] %} form-control-error{% endif %}" id="address-line1" name="address-line1" type="text" value="{{ formValues.address_line1 }}" data-validate />
             <input class="form-control form-control-2-3 address-line2" id="address-line2" name="address-line2" type="text" value="{{ formValues.address_line2 }}" />
           </div>
 

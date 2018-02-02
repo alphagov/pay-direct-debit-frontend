@@ -35,11 +35,13 @@ function initValidation (e) {
 }
 
 function clearPreviousErrors () {
-  let previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll('.error-message, .error-summary'))
-  let previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll('.form-group.error'))
+  const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll('.error-message, .error-summary'))
+  const previousErrorsFieldGroups = Array.prototype.slice.call(document.querySelectorAll('.form-group.form-group-error'))
+  const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll('.form-control.form-control-error'))
 
   previousErrorsMessages.map(error => error.remove())
-  previousErrorsFields.map(errorField => errorField.classList.remove('error'))
+  previousErrorsFieldGroups.map(errorFieldGroup => errorFieldGroup.classList.remove('form-group-error'))
+  previousErrorsFields.map(errorField => errorField.classList.remove('form-control-error'))
 }
 
 function findFields (form) {
@@ -81,9 +83,14 @@ function validateField (form, field) {
 }
 
 function applyErrorMessaging (form, field) {
+  // Modify the field
+  if (!field.classList.contains('form-control-error')) {
+    field.classList.add('form-control-error')
+  }
+  // Modify the form group
   let formGroup = field.closest('.form-group')
-  if (!formGroup.classList.contains('error')) {
-    formGroup.classList.add('error')
+  if (!formGroup.classList.contains('form-group-error')) {
+    formGroup.classList.add('form-group-error')
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
       const errorElement = document.querySelector('label[for="' + field.name + '"]')
@@ -104,7 +111,7 @@ function generateErrorMessageElement (message) {
 
 function populateErrorSummary (form) {
   const configuration = {
-    fields: Array.prototype.slice.call(form.querySelectorAll('.form-group.error')).map(formGroup => {
+    fields: Array.prototype.slice.call(form.querySelectorAll('.form-group.form-group-error')).map(formGroup => {
       let label = null
       let id = null
       if (formGroup.querySelector('legend') === null) {

@@ -11,7 +11,7 @@
   attributes=''
   )
 %}
-<div class="form-group">
+<div class="form-group{% if isError %} form-group-error{% endif %}">
   {{ before | safe }}
 
   <label
@@ -30,7 +30,7 @@
     {% endif %}
   </label>
   <input
-    class="form-control {{ extraClasses }}"
+    class="form-control{% if isError %} form-control-error{% endif %} {{ extraClasses }}"
     id="{{ name }}"
     name="{{ name }}"
     type="{{ type }}"
