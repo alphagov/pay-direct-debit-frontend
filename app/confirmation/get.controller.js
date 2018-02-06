@@ -7,7 +7,7 @@ module.exports = (req, res) => {
     paymentRequestExternalId: req.params.paymentRequestExternalId,
     accountHolderName: confirmationDetails.accountHolderName,
     accountNumber: confirmationDetails.accountNumber,
-    sortCode: confirmationDetails.sortCode,
+    sortCode: confirmationDetails.sortCode.match(/.{2}/g).join(' '),
     returnUrl: paymentRequest.returnUrl,
     description: paymentRequest.description,
     amount: paymentRequest.amount
