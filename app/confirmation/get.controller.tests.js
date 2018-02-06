@@ -17,6 +17,7 @@ describe('confirmation get controller', function () {
   const paymentRequestExternalId = 'sdfihsdufh2e'
   const accountName = 'bla'
   const sortCode = '123456'
+  const formattedSortCode = '12 34 56'
   const accountNumber = '12345678'
   const description = 'this is a description'
   const amount = 1000
@@ -58,7 +59,7 @@ describe('confirmation get controller', function () {
 
   it('should display the confirmation page with the payer details', () => {
     expect($('#account-holder-name').text()).to.equal(accountName)
-    expect($('#sort-code').text()).to.equal(sortCode)
+    expect($('#sort-code').text()).to.equal(formattedSortCode)
     expect($('#account-number').text()).to.equal(accountNumber)
   })
 
