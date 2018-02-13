@@ -23,8 +23,7 @@ describe('setup get controller', () => {
       amount: amount,
       description: description
     })
-    const cookieHeader = new CookieBuilder()
-      .withPaymentRequest(paymentRequest)
+    const cookieHeader = new CookieBuilder(paymentRequest)
       .withCsrfSecret(csrfSecret)
       .build()
 
@@ -42,7 +41,6 @@ describe('setup get controller', () => {
     it('should return a 200 status code', () => {
       expect(response.statusCode).to.equal(200)
     })
-
     it('should display the enter direct debit page with correct description and amount', () => {
       expect($(`#payment-description`).text()).to.equal(description)
       expect($(`#amount`).text()).to.equal(`£1.00`)

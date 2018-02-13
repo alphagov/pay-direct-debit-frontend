@@ -32,8 +32,7 @@ describe('setup post controller', () => {
       external_id: paymentRequestExternalId
     })
     before(done => {
-      const cookieHeader = new CookieBuilder()
-        .withPaymentRequest(paymentRequest)
+      const cookieHeader = new CookieBuilder(paymentRequest)
         .withCsrfSecret('123')
         .build()
       supertest(getApp())
@@ -60,8 +59,7 @@ describe('setup post controller', () => {
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     before(done => {
-      const cookieHeader = new CookieBuilder()
-        .withPaymentRequest(paymentRequest)
+      const cookieHeader = new CookieBuilder(paymentRequest)
         .withCsrfSecret(csrfSecret)
         .build()
       const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
@@ -119,8 +117,7 @@ describe('setup post controller', () => {
     })
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
-    let cookieHeader
-    let $
+    let cookieHeader, $
     const formValues = {
       accountHolderName: 'Mr T',
       sortCode: '12 34 567',
@@ -135,8 +132,7 @@ describe('setup post controller', () => {
     }
 
     before(done => {
-      cookieHeader = new CookieBuilder()
-        .withPaymentRequest(paymentRequest)
+      cookieHeader = new CookieBuilder(paymentRequest)
         .withCsrfSecret(csrfSecret)
         .build()
       supertest(getApp())
@@ -162,7 +158,7 @@ describe('setup post controller', () => {
         .then(() => {
           supertest(getApp())
             .get(responseRedirect.header['location'])
-            .set('cookie', responseRedirect.header['set-cookie'])
+            .set('cookie', responseRedirect.header['set-cookie'][1])
             .end((err, res) => {
               $ = cheerio.load(res.text)
               done(err)
@@ -244,8 +240,7 @@ describe('setup post controller', () => {
     }
 
     before(done => {
-      cookieHeader = new CookieBuilder()
-        .withPaymentRequest(paymentRequest)
+      cookieHeader = new CookieBuilder(paymentRequest)
         .withCsrfSecret(csrfSecret)
         .build()
       supertest(getApp())
@@ -268,10 +263,9 @@ describe('setup post controller', () => {
         .then((response) => {
           supertest(getApp())
             .get(response.header['location'])
-            .set('cookie', response.header['set-cookie'])
+            .set('cookie', response.header['set-cookie'][1])
             .end((err, res) => {
               $ = cheerio.load(res.text)
-              console.log(res.text)
               done(err)
             })
         })

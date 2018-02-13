@@ -33,8 +33,7 @@ describe('confirmation get controller', function () {
       sort_code: sortCode,
       account_number: accountNumber
     })
-    const cookieHeader = new CookieBuilder()
-      .withPaymentRequest(paymentRequest)
+    const cookieHeader = new CookieBuilder(paymentRequest)
       .withCsrfSecret('123')
       .withConfirmationDetails(payer)
       .build()

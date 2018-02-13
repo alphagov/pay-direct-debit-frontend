@@ -1,10 +1,13 @@
 'use strict'
+const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const confirmationDetails = req.session.confirmationDetails
-  const paymentRequest = req.session.paymentRequest
+  const paymentRequestExternalId = req.params.paymentRequestExternalId
+  const session = getSessionVariable(req, paymentRequestExternalId)
+  const paymentRequest = session.paymentRequest
+  const confirmationDetails = session.confirmationDetails
   const params = {
-    paymentRequestExternalId: req.params.paymentRequestExternalId,
+    paymentRequestExternalId,
     accountHolderName: confirmationDetails.accountHolderName,
     accountNumber: confirmationDetails.accountNumber,
     sortCode: confirmationDetails.sortCode.match(/.{2}/g).join(' '),

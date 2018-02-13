@@ -24,6 +24,7 @@ describe('secure controller', () => {
     before(done => {
       paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
       nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
+      nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
       supertest(getApp())
         .get(`/secure/${token}`)
         .set('Content-Type', 'application/json')
@@ -48,6 +49,7 @@ describe('secure controller', () => {
     before(done => {
       const token = 'invalid'
       nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(404)
+      nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
       supertest(getApp())
         .get(`/secure/${token}`)
         .set('Content-Type', 'application/json')
@@ -74,6 +76,7 @@ describe('secure controller', () => {
       before(done => {
         paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
         nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
+        nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
         supertest(getApp())
           .post(`/secure`)
           .send({
@@ -101,6 +104,7 @@ describe('secure controller', () => {
       before(done => {
         const token = 'invalid'
         nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(404)
+        nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
         supertest(getApp())
           .post(`/secure`)
           .send({

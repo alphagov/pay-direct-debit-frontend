@@ -52,12 +52,12 @@ module.exports = {
   validPaymentRequest: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
-      return_url: randomUrl() || opts.return_url,
+      return_url: opts.return_url || randomUrl(),
       gateway_account_id: 23 || opts.gateway_account_id,
       description: opts.description || 'buy Silvia a coffee',
       amount: opts.amount || randomAmount(),
-      type: 'CHARGE' || opts.type,
-      state: 'NEW' || opts.state
+      type: opts.type || 'CHARGE',
+      state: opts.state || 'NEW'
     }
     return new PaymentRequest(data)
   }

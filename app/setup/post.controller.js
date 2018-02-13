@@ -2,6 +2,7 @@
 
 // NPM dependencies
 const lodash = require('lodash')
+const logger = require('pino')()
 
 // Local dependencies
 const confirmation = require('./../confirmation')
@@ -10,10 +11,11 @@ const Payer = require('../../common/classes/Payer.class')
 const payerValidator = require('../../common/utils/payer-validator')
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
+const {getSessionVariable, setSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  // Get request data
-  const paymentRequest = req.session.paymentRequest
+  const paymentRequestExternalId = req.params.paymentRequestExternalId
+  const paymentRequest = getSessionVariable(req, paymentRequestExternalId).paymentRequest
   const requestBody = req.body
   const formValues = {
     account_holder_name: lodash.get(requestBody, 'account-holder-name'),
@@ -40,20 +42,21 @@ module.exports = (req, res) => {
   const payerValidatorErrors = payerValidator(payer)
   if (lodash.isEmpty(payerValidatorErrors)) {
     // Process request
-    connectorClient.payment.submitDirectDebitDetails(paymentRequest.gatewayAccountId, req.params.paymentRequestExternalId, normalisedFormValues)
+    connectorClient.payment.submitDirectDebitDetails(paymentRequest.gatewayAccountId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
       .then(payerExternalId => {
+        logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
         req.body.payer_external_id = payerExternalId
-        req.session.confirmationDetails = payer
-        const url = confirmation.paths.index.replace(':paymentRequestExternalId', req.params.paymentRequestExternalId)
+        setSessionVariable(req, `${paymentRequestExternalId}.confirmationDetails`, payer)
+        const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
         return res.redirect(303, url)
       })
       .catch(() => {
         renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
       })
   } else {
-    req.session.formValues = formValues
-    req.session.validationErrors = payerValidatorErrors
-    const url = '/setup/:paymentRequestExternalId'.replace(':paymentRequestExternalId', req.params.paymentRequestExternalId)
+    setSessionVariable(req, `${paymentRequestExternalId}.formValues`, formValues)
+    setSessionVariable(req, `${paymentRequestExternalId}.validationErrors`, payerValidatorErrors)
+    const url = '/setup/:paymentRequestExternalId'.replace(':paymentRequestExternalId', paymentRequestExternalId)
     return res.redirect(303, url)
   }
 }
