@@ -5,9 +5,8 @@ const csrf = require('csrf')
 const logger = require('pino')()
 
 // Local Dependencies
-const errorView = require('../response.js').renderErrorView
-const CORRELATION_HEADER = require('../config/index').CORRELATION_HEADER
-
+const {renderErrorView} = require('../response')
+const {getSessionVariable, setSessionVariable} = require('../../common/config/cookies')
 // Assignments and Variables
 const errorMsg = 'There is a problem with the payments platform'
 
@@ -19,36 +18,42 @@ module.exports = {
 
 // Middleware methods
 function validateAndRefreshCsrf (req, res, next) {
-  let session = req.session
+  const paymentRequestExternalId = res.locals.paymentRequestExternalId
+  const session = getSessionVariable(req, paymentRequestExternalId)
+
   if (!session) {
-    logger.warn('Session is not defined')
-    return errorView(req, res, errorMsg, 400)
+    logger.warn(`[${req.correlationId}] Session is not defined`)
+    return renderErrorView(req, res, errorMsg, 400)
   }
 
-  if (!session.csrfSecret) {
-    logger.warn('CSRF secret is not defined for session')
-    return errorView(req, res, errorMsg, 400)
+  const csrfSecret = session.csrfSecret
+  if (!csrfSecret) {
+    logger.warn(`[${req.correlationId}] CSRF secret is not defined for session`)
+    return renderErrorView(req, res, errorMsg, 400)
   }
 
-  if (req.method !== 'GET' && !isValidCsrf(req)) {
-    logger.warn('CSRF secret provided is invalid')
-    return errorView(req, res, errorMsg, 400)
+  if (req.method !== 'GET' && !isValidCsrf(req, res)) {
+    logger.warn(`[${req.correlationId}] CSRF secret provided is invalid`)
+    return renderErrorView(req, res, errorMsg, 400)
   }
 
-  res.locals.csrf = csrf().create(session.csrfSecret)
+  res.locals.csrf = csrf().create(csrfSecret)
   next()
 }
 
 function ensureSessionHasCsrfSecret (req, res, next) {
-  if (req.session.csrfSecret) return next()
-  req.session.csrfSecret = csrf().secretSync()
-  let correlationId = req.headers[CORRELATION_HEADER] || ''
-  logger.info(`[${correlationId}] Saved csrfSecret: ${req.session.csrfSecret}`)
+  const paymentRequestExternalId = res.locals.paymentRequestExternalId
+  const csrfSecret = getSessionVariable(req, paymentRequestExternalId).csrfSecret
+  if (csrfSecret) return next()
+  setSessionVariable(req, `${paymentRequestExternalId}.csrfSecret`, csrf().secretSync())
+  logger.info(`[${req.correlationId}] Saved csrfSecret: ${getSessionVariable(req, paymentRequestExternalId).csrfSecret}`)
 
   return next()
 }
 
 // Other Methods
-function isValidCsrf (req) {
-  return csrf().verify(req.session.csrfSecret, req.body.csrfToken)
+function isValidCsrf (req, res) {
+  const paymentRequestExternalId = res.locals.paymentRequestExternalId
+  const csrfSecret = getSessionVariable(req, paymentRequestExternalId).csrfSecret
+  return csrf().verify(csrfSecret, req.body.csrfToken)
 }

@@ -15,7 +15,7 @@ module.exports = function (method, verb) {
     if (verb) opts.method = verb.toUpperCase()
     if (uri && !opts.uri && !opts.url) opts.uri = uri
     const context = {
-      correlationId: correlator.getId(),
+      correlationId: opts.correlationId || correlator.getId(),
       startTime: new Date(),
       url: joinURL(lodash.get(opts, 'baseUrl', ''), opts.url),
       method: opts.method,

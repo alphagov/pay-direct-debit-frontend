@@ -7,6 +7,7 @@ const express = require('express')
 const getController = require('./get.controller')
 const postController = require('./post.controller')
 const {validateAndRefreshCsrf, ensureSessionHasCsrfSecret} = require('../../common/middleware/csrf')
+const {ensureSessionHasPaymentRequest} = require('../../common/middleware/get-payment-request')
 
 // Initialisation
 const router = express.Router()
@@ -16,8 +17,8 @@ const paths = {
 }
 
 // Routing
-router.get(paths.index, ensureSessionHasCsrfSecret, validateAndRefreshCsrf, getController)
-router.post(paths.index, validateAndRefreshCsrf, postController)
+router.get(paths.index, ensureSessionHasPaymentRequest, ensureSessionHasCsrfSecret, validateAndRefreshCsrf, getController)
+router.post(paths.index, ensureSessionHasPaymentRequest, validateAndRefreshCsrf, postController)
 
 // Export
 module.exports = {

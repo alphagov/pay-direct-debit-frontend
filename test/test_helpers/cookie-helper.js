@@ -2,70 +2,51 @@
 
 // npm dependencies
 const clientSession = require('client-sessions')
+const _ = require('lodash')
 
 // local dependencies
 const cookieConfig = require('../../common/config/cookies')
 
-let configs = []
-
-for (const property in cookieConfig) {
-  configs.push(cookieConfig[property])
-}
-
 exports.CookieBuilder = class CookieBuilder {
-  constructor () {
+  constructor (paymentRequestFixture) {
     this._cookies = {}
-  }
-  withPaymentRequest (paymentRequestfixture) {
-    this.withCookie('session', {
-      paymentRequest: paymentRequestfixture
+    this.cookieName = 'direct_debit_frontend_state'
+    this.paymentRequest = paymentRequestFixture
+    this.withCookie(this.cookieName, {
+      paymentRequest: paymentRequestFixture
     })
+  }
+  withCookieName (cookieName) {
+    this.cookieName = cookieName
     return this
   }
   withConfirmationDetails (payerFixture) {
-    this.withCookie('session', {
+    this.withCookie(this.cookieName, {
       confirmationDetails: payerFixture
     })
     return this
   }
   withCsrfSecret (value) {
-    this.withCookie('session', {
+    this.withCookie(this.cookieName, {
       csrfSecret: value
     })
     return this
   }
   withCookie (cookieName, value) {
-    this._cookies[cookieName] = Object.assign(this._cookies[cookieName] || {}, value)
+    _.merge(this._cookies, {
+      [cookieName]: {
+        [this.paymentRequest.externalId]: value
+      }
+    })
     return this
   }
   build () {
-    let cookiesArray = []
+    const config = cookieConfig.namedCookie(this.cookieName, process.env.SESSION_ENCRYPTION_KEY)
+    const cookiesArray = []
     Object.keys(this._cookies).forEach(cookieName => {
-      const config = configs.find(config => config.cookieName === cookieName)
       const value = config ? clientSession.util.encode(config, this._cookies[cookieName]) : this._cookies[cookieName]
       cookiesArray.push(`${cookieName}=${value}`)
     })
     return cookiesArray.join('; ')
   }
-}
-
-exports.decryptCookie = (rawCookieHeader) => {
-  const cookies = {}
-
-  rawCookieHeader.forEach(rawCookie => {
-    const formatted = {}
-    const tuples = rawCookie
-      .split(';')
-      .map(cookie => cookie.split('=').map(item => item.trim()))
-    const cookieName = tuples[0][0]
-    const config = configs.find(config => config.cookieName === cookieName)
-    tuples[0][0] = 'content'
-    tuples.forEach(tuple => {
-      formatted[tuple[0]] = tuple[1] || true
-    })
-    if (config) Object.assign(formatted, clientSession.util.decode(config, formatted.content))
-    cookies[cookieName] = formatted
-  })
-
-  return cookies
 }

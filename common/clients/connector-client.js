@@ -21,27 +21,29 @@ module.exports = {
   }
 }
 
-function retrievePaymentRequest (token) {
+function retrievePaymentRequest (token, correlationId) {
   return baseClient.get({
     headers,
     baseUrl,
     url: `/tokens/${token}/payment-request`,
     service: service,
+    correlationId: correlationId,
     description: `retrieve a payment request by its one-time token`
   }).then(paymentRequest => new PaymentRequest(paymentRequest))
 }
 
-function deleteToken (token) {
+function deleteToken (token, correlationId) {
   return baseClient.delete({
     headers,
     baseUrl,
     url: `/tokens/${token}`,
     service: service,
+    correlationId: correlationId,
     description: `delete a one-time token`
   })
 }
 
-function submitDirectDebitDetails (accountId, paymentRequestExternalId, body) {
+function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
@@ -49,18 +51,20 @@ function submitDirectDebitDetails (accountId, paymentRequestExternalId, body) {
     url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/payers`,
     service: service,
     body: body,
+    correlationId: correlationId,
     description: `create a payer and store hashed bank account details`
   }).then(response => {
     return response.payer_external_id
   })
 }
-function confirmDirectDebitDetails (accountId, paymentRequestExternalId) {
+function confirmDirectDebitDetails (accountId, paymentRequestExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
     json: true,
     url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/confirm`,
     service: service,
+    correlationId: correlationId,
     description: `confirm a payment`
   })
 }

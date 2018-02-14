@@ -13,7 +13,7 @@ describe('CSRF', function () {
       .withArgs("it's a secret")
       .returns('newly-created token')
 
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf.js'),
+    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'),
       {'csrf': () => {
         return {
           verify: verify,
@@ -22,13 +22,20 @@ describe('CSRF', function () {
       }
       }).validateAndRefreshCsrf
 
+    const paymentRequestExternalId = 'aaaaa'
     const req = {
       route: {methods: {post: {}}},
-      session: {csrfSecret: "it's a secret"},
+      direct_debit_frontend_state: {
+        [paymentRequestExternalId]: {
+          csrfSecret: "it's a secret"
+        }
+      },
       body: {csrfToken: 'submitted token'}
     }
 
-    const res = {locals: {}}
+    const res = {locals: {
+      paymentRequestExternalId: paymentRequestExternalId
+    }}
 
     const next = sinon.spy()
 
@@ -40,8 +47,8 @@ describe('CSRF', function () {
 
   it('should error if session not present', function () {
     const renderErrorView = sinon.spy()
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf.js'), {
-      '../response.js': {
+    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
+      '../response': {
         renderErrorView: renderErrorView
       }
     }).validateAndRefreshCsrf
@@ -62,8 +69,8 @@ describe('CSRF', function () {
 
   it('should error if session has no CSRF secret', function () {
     const renderErrorView = sinon.spy()
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf.js'), {
-      '../response.js': {
+    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
+      '../response': {
         renderErrorView: renderErrorView
       }
     }).validateAndRefreshCsrf
@@ -88,8 +95,8 @@ describe('CSRF', function () {
     const verify = sinon.stub()
       .withArgs("it's a secret", 'forged token - call the police')
       .returns(false)
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf.js'), {
-      '../response.js': {
+    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
+      '../response': {
         renderErrorView: renderErrorView
       },
       'csrf': () => {
@@ -123,7 +130,7 @@ describe('CSRF', function () {
       .withArgs("it's a secret")
       .returns('newly-created token')
 
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf.js'),
+    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'),
       {'csrf': () => {
         return {
           verify: verify,
@@ -132,13 +139,20 @@ describe('CSRF', function () {
       }
       }).validateAndRefreshCsrf
 
+    const paymentRequestExternalId = 'aaaaa'
     const req = {
       method: 'GET',
-      session: {csrfSecret: "it's a secret"},
+      direct_debit_frontend_state: {
+        [paymentRequestExternalId]: {
+          csrfSecret: "it's a secret"
+        }
+      },
       body: {csrfToken: "submitted forged token - but we don't really care"}
     }
 
-    const res = {locals: {}}
+    const res = {locals: {
+      paymentRequestExternalId: paymentRequestExternalId
+    }}
 
     const next = sinon.spy()
 
