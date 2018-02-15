@@ -41,7 +41,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        deployEcs("directdebit-frontend", "test", null, true, true)
+        deployEcs("directdebit-frontend", "test", null, true, true, "uk.gov.pay.endtoend.categories.SmokeDirectDebitPayments", false)
       }
     }
   }
