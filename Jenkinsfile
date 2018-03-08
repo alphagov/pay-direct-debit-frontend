@@ -12,13 +12,23 @@ pipeline {
     lib("pay-jenkins-library@master")
   }
 
+  environment {
+    HOSTED_GRAPHITE_ACCOUNT_ID = credentials('graphite_account_id')
+    HOSTED_GRAPHITE_API_KEY = credentials('graphite_api_key')
+  }
+
   stages {
     stage('Docker Build') {
       steps {
         script {
-          buildApp{
+          buildAppWithMetrics {
             app = "directdebit-frontend"
           }
+        }
+      }
+      post {
+        failure {
+          postMetric("directdebit-frontend.docker-build.failure", 1, "new")
         }
       }
     }
@@ -30,9 +40,14 @@ pipeline {
     stage('Docker Tag') {
       steps {
         script {
-          dockerTag {
+          dockerTagWithMetrics {
             app = "directdebit-frontend"
           }
+        }
+      }
+      post {
+        failure {
+          postMetric("directdebit-frontend.docker-tag.failure", 1, "new")
         }
       }
     }
@@ -43,6 +58,14 @@ pipeline {
       steps {
         deployEcs("directdebit-frontend", "test", null, true, true, "uk.gov.pay.endtoend.categories.SmokeDirectDebitPayments", false)
       }
+    }
+  }
+  post {
+    failure {
+      postMetric("directdebit-frontend.failure", 1, "new")
+    }
+    success {
+      postSuccessfulMetrics("directdebit-frontend")
     }
   }
 }
