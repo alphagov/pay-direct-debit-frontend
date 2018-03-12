@@ -12,11 +12,6 @@ pipeline {
     lib("pay-jenkins-library@master")
   }
 
-  environment {
-    HOSTED_GRAPHITE_ACCOUNT_ID = credentials('graphite_account_id')
-    HOSTED_GRAPHITE_API_KEY = credentials('graphite_api_key')
-  }
-
   stages {
     stage('Docker Build') {
       steps {
