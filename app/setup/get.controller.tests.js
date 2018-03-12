@@ -46,10 +46,6 @@ describe('setup get controller', () => {
       expect($(`#amount`).text()).to.equal(`£1.00`)
     })
 
-    it('should display the enter direct debit page with United Kingdom selected by default', () => {
-      expect($(`#country-code`).val()).to.equal('GB')
-    })
-
     it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
       expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal('/direct-debit-guarantee')
     })

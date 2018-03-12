@@ -22,11 +22,6 @@ module.exports = (req, res) => {
     sort_code: lodash.get(requestBody, 'sort-code'),
     account_number: lodash.get(requestBody, 'account-number'),
     requires_authorisation: lodash.get(requestBody, 'requires-authorisation'),
-    country_code: lodash.get(requestBody, 'country-code'),
-    address_line1: lodash.get(requestBody, 'address-line1'),
-    address_line2: lodash.get(requestBody, 'address-line2'),
-    city: lodash.get(requestBody, 'city'),
-    postcode: lodash.get(requestBody, 'postcode'),
     email: lodash.get(requestBody, 'email')
   }
 
