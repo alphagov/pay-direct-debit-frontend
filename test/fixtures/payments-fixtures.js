@@ -40,12 +40,7 @@ module.exports = {
       email: opts.email || 'user@example.test',
       account_number: opts.account_number || '12345678',
       sort_code: opts.sort_code || '123456',
-      requires_authorisation: opts.requires_authorisation || 'false',
-      country_code: opts.country_code || 'GB',
-      address_line1: opts.address_line1 || 'line1',
-      address_line2: opts.address_line2 || 'line2',
-      postcode: opts.postcode || 'postcode',
-      city: opts.city || 'city'
+      requires_authorisation: opts.requires_authorisation || 'false'
     }
     return new Payer(data)
   },

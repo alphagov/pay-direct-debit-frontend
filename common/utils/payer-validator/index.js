@@ -34,34 +34,6 @@ module.exports = (payer) => {
     })
   }
 
-  if (fieldValidationChecks.isEmpty(payer.country) === true) {
-    errors.push({
-      id: 'country-code',
-      label: 'Country'
-    })
-  }
-
-  if (fieldValidationChecks.isEmpty(payer.addressLine1) === true) {
-    errors.push({
-      id: 'address-line1',
-      label: 'Building and street'
-    })
-  }
-
-  if (fieldValidationChecks.isEmpty(payer.city) === true) {
-    errors.push({
-      id: 'city',
-      label: 'Town or city'
-    })
-  }
-
-  if (fieldValidationChecks.isEmpty(payer.postcode) === true) {
-    errors.push({
-      id: 'postcode',
-      label: 'Postcode'
-    })
-  }
-
   if (fieldValidationChecks.isValidEmail(payer.email) === false) {
     errors.push({
       id: 'email',

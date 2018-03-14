@@ -69,11 +69,6 @@ describe('setup post controller', () => {
           sort_code: normalise.sortCode(formValues.sortCode),
           account_number: normalise.accountNumber(formValues.accountNumber),
           requires_authorisation: (lodash.isNil(formValues.requiresAuthorisation) || normalise.toBoolean(formValues.requiresAuthorisation)),
-          country_code: formValues.country,
-          address_line1: formValues.addressLine1,
-          address_line2: formValues.addressLine2,
-          city: formValues.city,
-          postcode: formValues.postcode,
           email: formValues.email
         })
         .reply(201, createPayerResponse)
@@ -84,11 +79,6 @@ describe('setup post controller', () => {
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
           'requires-authorisation': formValues.requiresAuthorisation,
-          'country-code': formValues.country,
-          'address-line1': formValues.addressLine1,
-          'address-line2': formValues.addressLine2,
-          'city': formValues.city,
-          'postcode': formValues.postcode,
           'email': formValues.email
         })
         .set('Cookie', cookieHeader)
@@ -123,11 +113,6 @@ describe('setup post controller', () => {
       sortCode: '12 34 567',
       accountNumber: '1234567',
       requiresAuthorisation: 'false',
-      city: 'Sofia',
-      countryCode: 'ES',
-      postcode: 'W1 3EF',
-      addressLine1: 'address line 1',
-      addressLine2: 'address line 2',
       email: 'payer@example.test'
     }
 
@@ -142,11 +127,6 @@ describe('setup post controller', () => {
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
           'requires-authorisation': formValues.requiresAuthorisation,
-          'country-code': formValues.countryCode,
-          'address-line1': formValues.addressLine1,
-          'address-line2': formValues.addressLine2,
-          'city': formValues.city,
-          'postcode': formValues.postcode,
           'email': formValues.email
         })
         .set('Cookie', cookieHeader)
@@ -187,26 +167,6 @@ describe('setup post controller', () => {
       expect($('#account-number').val()).to.equal(formValues.accountNumber)
     })
 
-    it('should contain address line1 pre-filled after redirect', () => {
-      expect($('#address-line1').val()).to.equal(formValues.addressLine1)
-    })
-
-    it('should contain address line2 pre-filled after redirect', () => {
-      expect($('#address-line2').val()).to.equal(formValues.addressLine2)
-    })
-
-    it('should contain city pre-filled after redirect', () => {
-      expect($('#city').val()).to.equal(formValues.city)
-    })
-
-    it('should contain country pre-filled after redirect', () => {
-      expect($('#country-code').val()).to.equal(formValues.countryCode)
-    })
-
-    it('should contain postcode pre-filled after redirect', () => {
-      expect($('#postcode').val()).to.equal(formValues.postcode)
-    })
-
     it('should contain email pre-filled after redirect', () => {
       expect($('#email').val()).to.equal(formValues.email)
     })
@@ -230,12 +190,7 @@ describe('setup post controller', () => {
       accountHolderName: '',
       sortCode: '',
       accountNumber: '',
-      city: '',
       requiresAuthorisation: 'true',
-      countryCode: 'GB',
-      postcode: '',
-      addressLine1: '',
-      addressLine2: '',
       email: ''
     }
 
@@ -250,11 +205,6 @@ describe('setup post controller', () => {
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
           'requires-authorisation': formValues.requiresAuthorisation,
-          'country-code': formValues.countryCode,
-          'address-line1': formValues.addressLine1,
-          'address-line2': formValues.addressLine2,
-          'city': formValues.city,
-          'postcode': formValues.postcode,
           'email': formValues.email
         })
         .set('Cookie', cookieHeader)
@@ -288,24 +238,6 @@ describe('setup post controller', () => {
       const errorField = $('.error-account-number')
       expect(errorField.length).to.equal(1)
       expect(errorField.find('a[href="#account-number"]').length).to.equal(1)
-    })
-
-    it('should contain expected address line 1 field as error', () => {
-      const errorField = $('.error-address-line1')
-      expect(errorField.length).to.equal(1)
-      expect(errorField.find('a[href="#address-line1"]').length).to.equal(1)
-    })
-
-    it('should contain expected city field as error', () => {
-      const errorField = $('.error-city')
-      expect(errorField.length).to.equal(1)
-      expect(errorField.find('a[href="#city"]').length).to.equal(1)
-    })
-
-    it('should contain expected postcode field as error', () => {
-      const errorField = $('.error-postcode')
-      expect(errorField.length).to.equal(1)
-      expect(errorField.find('a[href="#postcode"]').length).to.equal(1)
     })
 
     it('should contain expected email field as error', () => {
