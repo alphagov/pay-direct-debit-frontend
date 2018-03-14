@@ -23,7 +23,7 @@ pipeline {
       }
       post {
         failure {
-          postMetric("directdebit-frontend.docker-build.failure", 1, "new")
+          postMetric("directdebit-frontend.docker-build.failure", 1)
         }
       }
     }
@@ -42,7 +42,7 @@ pipeline {
       }
       post {
         failure {
-          postMetric("directdebit-frontend.docker-tag.failure", 1, "new")
+          postMetric("directdebit-frontend.docker-tag.failure", 1)
         }
       }
     }
@@ -57,10 +57,10 @@ pipeline {
   }
   post {
     failure {
-      postMetric("directdebit-frontend.failure", 1, "new")
+      postMetric(appendBranchSuffix("directdebit-frontend") + ".failure", 1)
     }
     success {
-      postSuccessfulMetrics("directdebit-frontend")
+      postSuccessfulMetrics(appendBranchSuffix("directdebit-frontend"))
     }
   }
 }
