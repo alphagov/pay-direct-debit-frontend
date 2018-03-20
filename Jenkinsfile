@@ -70,7 +70,7 @@ pipeline {
             branch 'master'
           }
           steps {
-            tagDeployment("directdebit-frontend")
+            tagDeployment("direct-debit-frontend")
           }
         }
         stage('Trigger Deploy Notification') {
