@@ -51,7 +51,37 @@ pipeline {
         branch 'master'
       }
       steps {
-        deployEcs("directdebit-frontend", "test", null, true, true, "uk.gov.pay.endtoend.categories.SmokeDirectDebitPayments", false)
+        deployEcs("directdebit-frontend", "test", null, false, false, "dummy", false)
+      }
+    }
+    stage('Smoke Tests') {
+      when {
+        branch 'master'
+      }
+      steps {
+        runDirectDebitSmokeTest()
+      }
+    }
+    stage('Complete') {
+      failFast true
+      parallel {
+        stage('Tag Build') {
+          when {
+            branch 'master'
+          }
+          steps {
+            tagDeployment("directdebit-frontend")
+          }
+        }
+        stage('Trigger Deploy Notification') {
+          when {
+            branch 'master'
+          }
+          steps {
+            // until we fix the repo name to match the microservice
+            triggerGraphiteDeployEvent("direct-debit-frontend")
+          }
+        }
       }
     }
   }
