@@ -30,6 +30,13 @@ const PORT = (process.env.PORT || 3000)
 const {NODE_ENV} = process.env
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css')
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js')
+const ANALYTICS_TRACKING_ID = process.env.ANALYTICS_TRACKING_ID || ''
+
+function warnIfAnalyticsNotSet () {
+  if (ANALYTICS_TRACKING_ID === '') {
+    logger.warn('Google Analytics Tracking ID [ANALYTICS_TRACKING_ID] is not set')
+  }
+}
 
 // Define app views
 const APP_VIEWS = [
@@ -50,6 +57,7 @@ function initialiseGlobalMiddleware (app) {
 
   app.use(function (req, res, next) {
     res.locals.asset_path = '/public/'
+    res.locals.analyticsTrackingId = ANALYTICS_TRACKING_ID
     noCache(res)
     next()
   })
@@ -135,6 +143,7 @@ function initialise () {
   initialiseTemplateEngine(app)
   initialiseRoutes(app)
   initialisePublic(app)
+  warnIfAnalyticsNotSet()
   return app
 }
 

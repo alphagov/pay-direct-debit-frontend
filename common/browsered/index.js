@@ -2,6 +2,7 @@
 
 // NPM dependencies
 const $ = window.$ = window.jQuery = require('jquery') // Put this on window for cross compatability
+const analytics = require('gaap-analytics')
 
 // GOV.UK Toolkit dependencies
 require('../../govuk_modules/govuk_frontend_toolkit/javascripts/govuk/show-hide-content')
@@ -19,3 +20,4 @@ $(document).ready($ => {
 
 fieldValidation.enableFieldValidation()
 inputConfirm()
+analytics.virtualPageview.init()
