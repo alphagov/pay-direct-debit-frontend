@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = () => {
-  const inputs = document.querySelectorAll('[data-confirmation]')
+  const inputs = Array.prototype.slice.call(document.querySelectorAll('[data-confirmation]'))
 
   inputs.forEach(input => {
     input.addEventListener('input', confirmInput, false)
