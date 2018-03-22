@@ -31,7 +31,13 @@
         <div class="panel panel-border-wide bank-statement-message">
           <p><span class="bold-small" id="bank-statement-description">'{{description}}'</span> will appear on your bank statement</p>
         </div>
-        <form class="form" method="POST" action="/confirmation/{{paymentRequestExternalId}}">
+        <form
+          class="form"
+          method="POST"
+          action="/confirmation/{{paymentRequestExternalId}}"
+          data-virtual-pageview="/success/{{paymentRequestExternalId}}"
+          data-parameters="dimension2:test dimension3:GoCardless metric1:{{amount}}"
+        >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           <div class="form-group">
             <button type="submit" id="submit-direct-debit" class="button">Confirm payment</button>
