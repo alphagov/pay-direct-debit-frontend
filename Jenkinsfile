@@ -29,7 +29,7 @@ pipeline {
     }
     stage('Direct-Debit End-to-End') {
       steps {
-        runDirectDebitE2E("directdebitfrontend")
+        runDirectDebitE2E("directdebit-frontend")
       }
     }
     stage('Docker Tag') {
@@ -51,7 +51,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        deployEcs("directdebit-frontend", "test", null, false, false, "dummy", false)
+        deployEcs("directdebit-frontend")
       }
     }
     stage('Smoke Tests') {
