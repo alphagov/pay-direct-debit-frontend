@@ -9,12 +9,15 @@ const getController = require('./get.controller')
 // Initialisation
 const router = express.Router()
 const indexPath = '/direct-debit-guarantee'
+const paymentJourneyPath = '/direct-debit-guarantee/:paymentRequestExternalId'
 const paths = {
-  index: indexPath
+  index: indexPath,
+  paymentJourney: paymentJourneyPath
 }
 
 // Routing
 router.get(paths.index, getController)
+router.get(paths.paymentJourney, getController)
 
 // Export
 module.exports = {

@@ -6,9 +6,11 @@
 
 {% block content %}
   <main id="content" role="main">
+  {% if paymentRequestExternalId %}
     <div class="back">
-      <a href="/setup" class="link-back">Back to payment</a>
+      <a href="/setup/{{paymentRequestExternalId}}" class="link-back">Back to payment</a>
     </div>
+  {% endif %}
     <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-large">Direct Debit Guarantee</h1>
@@ -18,9 +20,11 @@
         <p>If an error is made in the payment of your Direct Debit, by GOV.UK Pay or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society.</p>
         <p>If you receive a refund you are not entitled to, you must pay it back when GOV.UK Pay asks you to.</p>
         <p>You can cancel a Direct Debit at any time by simply contacting your bank or building society. Written confirmation may be required. Please also notify GOV.UK Pay.</p>
+      {% if paymentRequestExternalId %}
         <div class="form-group">
-          <a href="/setup"><button class="button">Back to payment</button></a>
+          <a href="/setup/{{paymentRequestExternalId}}" class="button-link-back"><button class="button">Back to payment</button></a>
         </div>
+      {% endif %}
       </div>
     </div>
   </main>

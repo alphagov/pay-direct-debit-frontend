@@ -47,7 +47,7 @@ describe('setup get controller', () => {
     })
 
     it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
-      expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal('/direct-debit-guarantee')
+      expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/${paymentRequestExternalId}`)
     })
   })
 })
