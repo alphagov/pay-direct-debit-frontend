@@ -1,8 +1,5 @@
 'use strict'
 
-// Polyfills introduced as a temporary fix to make Smoketests pass. See PP-3489
-require('./polyfills')
-
 module.exports = () => {
   const inputs = Array.prototype.slice.call(document.querySelectorAll('[data-confirmation]'))
 

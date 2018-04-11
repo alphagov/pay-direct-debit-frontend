@@ -1,5 +1,8 @@
 'use strict'
 
+// Polyfills introduced as a temporary fix to make Smoketests pass. See PP-3489
+require('./polyfills')
+
 // NPM dependencies
 const $ = window.$ = window.jQuery = require('jquery') // Put this on window for cross compatability
 const analytics = require('gaap-analytics')
