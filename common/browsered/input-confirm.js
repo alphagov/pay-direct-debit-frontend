@@ -1,6 +1,10 @@
 'use strict'
 
 module.exports = () => {
+  function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+  }
+  
   const inputs = Array.prototype.slice.call(document.querySelectorAll('[data-confirmation]'))
 
   inputs.forEach(input => {
@@ -22,7 +26,9 @@ module.exports = () => {
           ${input.dataset.confirmationLabel}<span class="input-confirmation"></span>
         </p>
       </div>`
-      input.closest('.form-group').after(confirmation)
+      // throw Error(input.closest('.form-group').after(confirmation))
+      let formGroup = input.closest('.form-group')
+      insertAfter(confirmation, formGroup)
     }
 
     if (value === '') {
