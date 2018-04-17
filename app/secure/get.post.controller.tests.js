@@ -12,7 +12,7 @@ const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const setup = require('../setup')
-let paymentRequest, response, $
+let paymentRequest, validGatewayAccountResponse, response, $
 
 describe('secure controller', () => {
   afterEach(() => {
@@ -23,12 +23,15 @@ describe('secure controller', () => {
     const token = 'sdfihsdufh2e'
     before(done => {
       paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
+      validGatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+        gatewayAccountExternalId: paymentRequest.gatewayAccountExternalId
+      }).getPlain()
       nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
       nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gateway_account_external_id}`)
+        .reply(200, validGatewayAccountResponse)
       supertest(getApp())
         .get(`/secure/${token}`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
         .end((err, res) => {
           response = res
           done(err)
@@ -52,8 +55,6 @@ describe('secure controller', () => {
       nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
       supertest(getApp())
         .get(`/secure/${token}`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
         .end((err, res) => {
           response = res
           $ = cheerio.load(res.text || '')
@@ -75,15 +76,18 @@ describe('secure controller', () => {
 
       before(done => {
         paymentRequest = paymentFixtures.validTokenExchangeResponse().getPlain()
+        validGatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+          gatewayAccountExternalId: paymentRequest.gatewayAccountExternalId
+        }).getPlain()
         nock(config.CONNECTOR_URL).get(`/v1/tokens/${token}/payment-request`).reply(200, paymentRequest)
         nock(config.CONNECTOR_URL).delete(`/v1/tokens/${token}`).reply(200)
+        nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gateway_account_external_id}`)
+          .reply(200, validGatewayAccountResponse)
         supertest(getApp())
           .post(`/secure`)
           .send({
             chargeTokenId: token
           })
-          .set('Content-Type', 'application/json')
-          .set('Accept', 'application/json')
           .end((err, res) => {
             response = res
             done(err)
@@ -110,8 +114,6 @@ describe('secure controller', () => {
           .send({
             chargeTokenId: token
           })
-          .set('Content-Type', 'application/json')
-          .set('Accept', 'application/json')
           .end((err, res) => {
             response = res
             $ = cheerio.load(res.text || '')

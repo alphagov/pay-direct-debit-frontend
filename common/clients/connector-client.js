@@ -4,13 +4,16 @@
 const baseClient = require('./base-client/base-client')
 const {CONNECTOR_URL} = require('../config')
 const PaymentRequest = require('../../common/classes/PaymentRequest.class')
+const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 
 const service = 'connector'
 const baseUrl = `${CONNECTOR_URL}/v1`
 const headers = {
 }
+
 // Exports
 module.exports = {
+  retrieveGatewayAccount,
   secure: {
     retrievePaymentRequest: retrievePaymentRequest,
     deleteToken: deleteToken
@@ -19,6 +22,17 @@ module.exports = {
     submitDirectDebitDetails: submitDirectDebitDetails,
     confirmDirectDebitDetails: confirmDirectDebitDetails
   }
+}
+
+function retrieveGatewayAccount (gatewayAccountId, correlationId) {
+  return baseClient.get({
+    headers,
+    baseUrl,
+    url: `/api/accounts/${gatewayAccountId}`,
+    service: service,
+    correlationId: correlationId,
+    description: `retrieve a gateway account`
+  }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
 function retrievePaymentRequest (token, correlationId) {
@@ -57,6 +71,7 @@ function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, co
     return response.payer_external_id
   })
 }
+
 function confirmDirectDebitDetails (accountId, paymentRequestExternalId, correlationId) {
   return baseClient.post({
     headers,
