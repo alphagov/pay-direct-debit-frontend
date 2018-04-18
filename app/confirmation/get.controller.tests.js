@@ -70,4 +70,8 @@ describe('confirmation get controller', function () {
   it('should display the enter confirmation page with bank statement description', () => {
     expect($(`#bank-statement-description`).text()).to.equal(`'${description}'`)
   })
+
+  it('should display the enter direct debit page with a link to cancel the payment', () => {
+    expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
+  })
 })

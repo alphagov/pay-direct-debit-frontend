@@ -70,6 +70,7 @@ module.exports = {
       external_id: opts.external_id || randomExternalId(),
       return_url: opts.return_url || randomUrl(),
       gateway_account_id: 23 || opts.gateway_account_id,
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       description: opts.description || 'buy Silvia a coffee',
       amount: opts.amount || randomNumber(),
       type: opts.type || 'CHARGE',
