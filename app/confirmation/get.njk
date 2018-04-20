@@ -53,12 +53,9 @@
         </div>
       </aside>
     </div>
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <img src="/public/images/directdebit.png" class="direct-debit-logo" />
-        <p class="direct-debit-guarantee">Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
-      </div>
-    </div>
+    {% block dd_guarantee_anchor %}
+      {% include "app/direct-debit-guarantee/anchor.njk" %}
+    {% endblock %}
     </div>
   </main>
 {% endblock %}
