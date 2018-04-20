@@ -51,11 +51,6 @@ describe('confirmation get controller', function () {
     expect(response.statusCode).to.equal(200)
   })
 
-  it('should display the confirmation page with a back link to the setup page', () => {
-    const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
-    expect($('.link-back').attr('href')).to.equal(url)
-  })
-
   it('should display the confirmation page with the payer details', () => {
     expect($('#account-holder-name').text()).to.equal(accountName)
     expect($('#sort-code').text()).to.equal(formattedSortCode)
