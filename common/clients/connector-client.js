@@ -21,7 +21,8 @@ module.exports = {
   payment: {
     submitDirectDebitDetails: submitDirectDebitDetails,
     confirmDirectDebitDetails: confirmDirectDebitDetails,
-    cancelPaymentRequest: cancelPaymentRequest
+    cancelPaymentRequest: cancelPaymentRequest,
+    changePaymentMethod: changePaymentMethod
   }
 }
 
@@ -89,6 +90,16 @@ function cancelPaymentRequest (accountId, paymentRequestExternalId, correlationI
     headers,
     baseUrl,
     url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/cancel`,
+    service: service,
+    correlationId: correlationId,
+    description: `cancel a payment request`
+  })
+}
+function changePaymentMethod (accountId, paymentRequestExternalId, correlationId) {
+  return baseClient.post({
+    headers,
+    baseUrl,
+    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/change-payment-method`,
     service: service,
     correlationId: correlationId,
     description: `cancel a payment request`

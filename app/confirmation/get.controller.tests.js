@@ -8,7 +8,6 @@ const expect = chai.expect
 
 // Local dependencies
 const getApp = require('../../server').getApp
-const setup = require('../setup')
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 

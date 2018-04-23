@@ -21,7 +21,8 @@ describe('setup get controller', () => {
     const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId,
       amount: amount,
-      description: description
+      description: description,
+      return_url: `/change-payment-method/${paymentRequestExternalId}`
     })
     const cookieHeader = new CookieBuilder(paymentRequest)
       .withCsrfSecret(csrfSecret)
@@ -52,6 +53,10 @@ describe('setup get controller', () => {
 
     it('should display the enter direct debit page with a link to cancel the payment', () => {
       expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
+    })
+
+    it('should display the enter direct debit page with a link to go back to a different payment option', () => {
+      expect($(`#return-url`).attr('href')).to.equal(`/change-payment-method/${paymentRequestExternalId}`)
     })
   })
 })
