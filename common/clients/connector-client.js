@@ -102,6 +102,6 @@ function changePaymentMethod (accountId, paymentRequestExternalId, correlationId
     url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/change-payment-method`,
     service: service,
     correlationId: correlationId,
-    description: `cancel a payment request`
+    description: `cancel a payment request when user not eligible for setting up a Direct Debit`
   })
 }
