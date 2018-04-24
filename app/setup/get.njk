@@ -74,7 +74,7 @@
               <div class="panel panel-border-narrow js-hidden" id="unauthorised-message" aria-hidden="true">
                 <p>If more than one person is required to authorise Direct Debits on this bank account, you can’t proceed
                   with this online payment method.</p>
-                <p><a href="#">Go back and try a different payment method</a></p>
+                <p><a href="{{ returnUrl }}" id="return-url">Go back and try a different payment method</a></p>
               </div>
             </fieldset>
           </div>
@@ -109,11 +109,8 @@
       </aside>
     </div>
 
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <img src="/public/images/directdebit.png" class="direct-debit-logo" />
-        <p class="direct-debit-guarantee">Your payments are protected by the <a href="/direct-debit-guarantee/{{paymentRequestExternalId}}">Direct Debit guarantee</a>.</p>
-      </div>
-    </div>
+    {% block dd_guarantee_anchor %}
+      {% include "app/direct-debit-guarantee/anchor.njk" %}
+    {% endblock %}
   </main>
 {% endblock %}

@@ -8,7 +8,6 @@ const expect = chai.expect
 
 // Local dependencies
 const getApp = require('../../server').getApp
-const setup = require('../setup')
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 
@@ -51,11 +50,6 @@ describe('confirmation get controller', function () {
     expect(response.statusCode).to.equal(200)
   })
 
-  it('should display the confirmation page with a back link to the setup page', () => {
-    const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
-    expect($('.link-back').attr('href')).to.equal(url)
-  })
-
   it('should display the confirmation page with the payer details', () => {
     expect($('#account-holder-name').text()).to.equal(accountName)
     expect($('#sort-code').text()).to.equal(formattedSortCode)
@@ -73,5 +67,9 @@ describe('confirmation get controller', function () {
 
   it('should display the enter direct debit page with a link to cancel the payment', () => {
     expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
+  })
+
+  it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
+    expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/${paymentRequestExternalId}`)
   })
 })

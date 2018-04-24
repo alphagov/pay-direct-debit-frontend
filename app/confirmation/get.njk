@@ -6,9 +6,6 @@
 
 {% block content %}
   <main id="content" role="main">
-    <div>
-      <a href="/setup/{{paymentRequestExternalId}}" class="link-back">Back</a>
-    </div>
     <div class="grid-row relative">
       <div class="column-two-thirds">
         <h1 class="heading-large">Check your details are correct</h1>
@@ -53,12 +50,9 @@
         </div>
       </aside>
     </div>
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <img src="/public/images/directdebit.png" class="direct-debit-logo" />
-        <p class="direct-debit-guarantee">Your payments are protected by the <a href="/direct-debit-guarantee">Direct Debit guarantee</a>.</p>
-      </div>
-    </div>
+    {% block dd_guarantee_anchor %}
+      {% include "app/direct-debit-guarantee/anchor.njk" %}
+    {% endblock %}
     </div>
   </main>
 {% endblock %}
