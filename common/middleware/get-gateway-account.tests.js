@@ -30,7 +30,7 @@ const setup = () => {
 
 describe('Get gateway account middleware', () => {
   describe('when the payment request is not found in res.locals', () => {
-    let {req, res, next, renderErrorView, getGatewayAccount} = setup()
+    const {req, res, next, renderErrorView, getGatewayAccount} = setup()
 
     before(() => {
       getGatewayAccount.middleware(req, res, next)
@@ -42,7 +42,7 @@ describe('Get gateway account middleware', () => {
   })
 
   describe('when the gateway account is cached', () => {
-    let {req, res, next, cache, getGatewayAccount} = setup()
+    const {req, res, next, cache, getGatewayAccount} = setup()
 
     before(() => {
       req.res.locals = {paymentRequest: PAYMENT_REQUEST}
@@ -61,7 +61,7 @@ describe('Get gateway account middleware', () => {
 
   describe('when the gateway account is not cached', () => {
     describe('and the gateway account can be retrieved from connector', () => {
-      let {req, res, next, cache, connectorClient, getGatewayAccount} = setup()
+      const {req, res, next, cache, connectorClient, getGatewayAccount} = setup()
 
       before(() => {
         req.res.locals = {paymentRequest: PAYMENT_REQUEST}

@@ -190,7 +190,7 @@ describe('setup post controller', () => {
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     const paymentRequestExternalId = 'wsfihsdufh2g'
     let $
-    let paymentRequest = paymentFixtures.validPaymentRequest({
+    const paymentRequest = paymentFixtures.validPaymentRequest({
       external_id: paymentRequestExternalId
     })
     const gatewayAccount = paymentFixtures.validGatewayAccount({
