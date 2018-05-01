@@ -1,6 +1,7 @@
 'use strict'
 const Payer = require('../../common/classes/Payer.class')
 const PaymentRequest = require('../../common/classes/PaymentRequest.class')
+const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 // Create random values if none provided
 const randomExternalId = () => Math.random().toString(36).substring(7)
 const randomNumber = () => Math.round(Math.random() * 10000) + 1
@@ -77,6 +78,20 @@ module.exports = {
       state: opts.state || 'NEW'
     }
     return new PaymentRequest(data)
-  }
+  },
 
+  validGatewayAccount: (opts = {}) => {
+    const data = {
+      gateway_account_id: opts.gateway_account_id || randomExternalId(),
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
+      payment_method: opts.payment_method || 'DIRECT_DEBIT',
+      service_name: opts.service_name || 'GOV.UK Direct Cake service',
+      payment_provider: opts.payment_provider || 'SANDBOX',
+      description: opts.description || 'Gateway account description',
+      type: opts.type || 'TEST',
+      analytics_id: opts.analytics_id || randomExternalId()
+    }
+
+    return new GatewayAccount(data)
+  }
 }

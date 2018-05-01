@@ -5,8 +5,10 @@ const chai = require('chai')
 const supertest = require('supertest')
 const cheerio = require('cheerio')
 const expect = chai.expect
+const nock = require('nock')
 
 // Local dependencies
+const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
@@ -27,6 +29,10 @@ describe('confirmation get controller', function () {
       description: description,
       amount: amount
     })
+    const gatewayAccount = paymentFixtures.validGatewayAccount({
+      gateway_account_id: paymentRequest.gatewayAccountId,
+      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+    })
     const payer = paymentFixtures.validPayer({
       account_holder_name: accountName,
       sort_code: sortCode,
@@ -36,6 +42,7 @@ describe('confirmation get controller', function () {
       .withCsrfSecret('123')
       .withConfirmationDetails(payer)
       .build()
+    nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
     supertest(getApp())
       .get(`/confirmation/${paymentRequestExternalId}`)
       .set('cookie', cookieHeader)

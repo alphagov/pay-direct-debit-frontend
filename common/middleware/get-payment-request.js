@@ -23,9 +23,10 @@ function ensureSessionHasPaymentRequest (req, res, next) {
   }
   logger.info(`[${req.correlationId}] Retrieved payment request from session: ${paymentRequestExternalId}`)
   res.locals.paymentRequestExternalId = paymentRequestExternalId
+  res.locals.paymentRequest = paymentRequest
   return next()
 }
 // Exports
 module.exports = {
-  ensureSessionHasPaymentRequest: ensureSessionHasPaymentRequest
+  ensureSessionHasPaymentRequest
 }

@@ -18,6 +18,10 @@ const paymentRequest = paymentFixtures.validPaymentRequest({
   external_id: paymentRequestExternalId,
   return_url: '/change-payment-method'
 })
+const gatewayAccount = paymentFixtures.validGatewayAccount({
+  gateway_account_id: paymentRequest.gatewayAccountId,
+  gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+})
 
 describe('change-payment-method GET controller', () => {
   const csrfSecret = '123'
@@ -32,6 +36,7 @@ describe('change-payment-method GET controller', () => {
   describe('when switching payment options', () => {
     before(done => {
       nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}/change-payment-method`).reply(200)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
       supertest(getApp())
         .get(`/change-payment-method/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })

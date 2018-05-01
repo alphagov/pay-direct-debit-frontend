@@ -42,13 +42,8 @@ describe('Get payment request middleware', function () {
     getPaymentRequest(req, res, next)
     const paymentRequestInSession = _.get(req, `direct_debit_frontend_state.${paymentRequestExternalId}`).paymentRequest
     assert.equal(res.locals.paymentRequestExternalId, paymentRequestExternalId)
-    assert.equal(paymentRequestInSession.externalId, paymentRequestExternalId)
-    assert.equal(paymentRequestInSession.returnUrl, returnUrl)
-    assert.equal(paymentRequestInSession.gatewayAccountId, gatewayAccountId)
-    assert.equal(paymentRequestInSession.description, description)
-    assert.equal(paymentRequestInSession.amount, '1.24')
-    assert.equal(paymentRequestInSession.type, type)
-    assert.equal(paymentRequestInSession.state, state)
+    assert.deepEqual(res.locals.paymentRequest, paymentRequest)
+    assert.deepEqual(paymentRequestInSession, paymentRequest)
     assert(next.calledOnce)
   })
 
