@@ -11,6 +11,12 @@
   {% include "common/templates/includes/analytics.njk" %}
 {% endblock %}
 
+{% block proposition_header %}
+  {% include "common/templates/includes/propositional_navigation.njk" %}
+{% endblock %}
+
+{% block header_class %}with-proposition{% endblock %}
+
 {% block cookie_message %}
   {% include "common/templates/includes/cookies.njk" %}
 {% endblock %}

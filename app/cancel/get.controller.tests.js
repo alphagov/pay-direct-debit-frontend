@@ -19,6 +19,10 @@ const paymentRequest = paymentFixtures.validPaymentRequest({
   external_id: paymentRequestExternalId,
   return_url: 'https://returnurl.test'
 })
+const gatewayAccount = paymentFixtures.validGatewayAccount({
+  gateway_account_id: paymentRequest.gatewayAccountId,
+  gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+})
 
 describe('cancel GET controller', () => {
   const csrfSecret = '123'
@@ -33,6 +37,7 @@ describe('cancel GET controller', () => {
   describe('when cancelling a payment journey', () => {
     before(done => {
       nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}/cancel`).reply(200)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
       supertest(getApp())
         .get(`/cancel/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })

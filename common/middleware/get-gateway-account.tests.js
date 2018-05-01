@@ -1,12 +1,10 @@
-const _ = require('lodash')
 const sinon = require('sinon')
 const {expect} = require('chai')
 const proxyquire = require('proxyquire')
-const path = require('path')
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 
 const PAYMENT_REQUEST = paymentFixtures.validPaymentRequest()
-const GATEWAY_ACCOUNT = paymentFixtures.validGatewawyAccount({
+const GATEWAY_ACCOUNT = paymentFixtures.validGatewayAccount({
   gateway_account_id: PAYMENT_REQUEST.gatewayAccountId,
   gateway_account_external_id: PAYMENT_REQUEST.gatewayAccountExternalId
 })
@@ -16,21 +14,21 @@ const setup = () => {
     req: {res: {locals: {}}, correlationId: 'correlation-id'},
     res: {locals: {}},
     next: sinon.spy(),
-    cache: { get: sinon.stub(), put: sinon.spy() }, 
+    cache: { get: sinon.stub(), put: sinon.spy() },
     connectorClient: {retrieveGatewayAccount: sinon.stub()},
     renderErrorView: sinon.spy()
   }
 
   const getGatewayAccount = proxyquire('./get-gateway-account', {
     '../response': {renderErrorView: fixtures.renderErrorView},
-    'memory-cache': { Cache: function() { return fixtures.cache } },
+    'memory-cache': { Cache: function () { return fixtures.cache } },
     '../clients/connector-client': fixtures.connectorClient
   })
 
   return Object.assign(fixtures, {getGatewayAccount})
 }
 
-describe.only('Get gateway account middleware', () => {
+describe('Get gateway account middleware', () => {
   describe('when the payment request is not found in res.locals', () => {
     let {req, res, next, renderErrorView, getGatewayAccount} = setup()
 
@@ -93,7 +91,7 @@ describe.only('Get gateway account middleware', () => {
         req.res.locals = {paymentRequest: PAYMENT_REQUEST}
         connectorClient.retrieveGatewayAccount
           .withArgs(PAYMENT_REQUEST.gatewayAccountExternalId, req.correlationId)
-          .returns(Promise.reject())
+          .returns(Promise.reject(new Error()))
         getGatewayAccount.middleware(req, res, next)
       })
 

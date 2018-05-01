@@ -80,16 +80,16 @@ module.exports = {
     return new PaymentRequest(data)
   },
 
-  validGatewawyAccount: (opts = {}) => {
+  validGatewayAccount: (opts = {}) => {
     const data = {
-      gateway_account_id : opts.gateway_account_id || randomExternalId(),
-      gateway_account_external_id : opts.gateway_account_external_id || randomExternalId(),
-      payment_method : opts.payment_method || 'DIRECT_DEBIT',
-      service_name : opts.service_name || 'GOV.UK Direct Cake service',
-      payment_provider : opts.payment_provider || 'SANDBOX',
-      description : opts.description || 'Gateway account description',
-      type : opts.type || 'TEST',
-      analytics_id : opts.analytics_id || randomExternalId()
+      gateway_account_id: opts.gateway_account_id || randomExternalId(),
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
+      payment_method: opts.payment_method || 'DIRECT_DEBIT',
+      service_name: opts.service_name || 'GOV.UK Direct Cake service',
+      payment_provider: opts.payment_provider || 'SANDBOX',
+      description: opts.description || 'Gateway account description',
+      type: opts.type || 'TEST',
+      analytics_id: opts.analytics_id || randomExternalId()
     }
 
     return new GatewayAccount(data)

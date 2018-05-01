@@ -18,6 +18,10 @@ const paymentRequestExternalId = 'sdfihsdufh2e'
 const paymentRequest = paymentFixtures.validPaymentRequest({
   external_id: paymentRequestExternalId
 })
+const gatewayAccount = paymentFixtures.validGatewayAccount({
+  gateway_account_id: paymentRequest.gatewayAccountId,
+  gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+})
 
 describe('confirmation POST controller', () => {
   const csrfSecret = '123'
@@ -32,6 +36,7 @@ describe('confirmation POST controller', () => {
   describe('when a payment is successfully confirmed', () => {
     before(done => {
       nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(201)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })
@@ -55,6 +60,8 @@ describe('confirmation POST controller', () => {
   describe('when failing to confirm a payment', () => {
     before(done => {
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/confirm`).reply(409)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })

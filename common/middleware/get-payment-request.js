@@ -28,5 +28,5 @@ function ensureSessionHasPaymentRequest (req, res, next) {
 }
 // Exports
 module.exports = {
-  ensureSessionHasPaymentRequest: ensureSessionHasPaymentRequest
+  ensureSessionHasPaymentRequest
 }

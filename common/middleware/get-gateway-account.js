@@ -13,7 +13,7 @@ const connectorClient = require('../clients/connector-client')
 const CACHE_MAX_AGE = parseInt(process.env.CACHE_MAX_AGE || 15 * 60 * 1000) // default to 15 mins
 const cache = new Cache()
 
-function middleware(req, res, next) {
+function middleware (req, res, next) {
   const paymentRequest = _.get(req, 'res.locals.paymentRequest')
   if (!paymentRequest) {
     logger.error(`[${req.correlationId}] Could not retrieve payment request from res.locals`)
@@ -39,7 +39,7 @@ function middleware(req, res, next) {
   }
 }
 
-module.exports = { 
-  CACHE_MAX_AGE, 
-  middleware 
+module.exports = {
+  CACHE_MAX_AGE,
+  middleware
 }
