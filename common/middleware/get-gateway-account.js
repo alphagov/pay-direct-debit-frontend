@@ -16,7 +16,7 @@ const cache = new Cache()
 function middleware (req, res, next) {
   const paymentRequest = _.get(req, 'res.locals.paymentRequest')
   if (!paymentRequest) {
-    logger.error(`[${req.correlationId}] Could not retrieve payment request from res.locals`)
+    logger.error(`[${req.correlationId}] Failed to retrieve payment request from res.locals`)
     return renderErrorView(req, res)
   }
 
@@ -33,7 +33,7 @@ function middleware (req, res, next) {
         next()
       })
       .catch(() => {
-        logger.error(`[${req.correlationId}] Could not load gateway account from connector: ${gatewayAccountExternalId}`)
+        logger.error(`[${req.correlationId}] Failed to load gateway account from connector: ${gatewayAccountExternalId}`)
         renderErrorView(req, res)
       })
   }
