@@ -13,7 +13,8 @@ module.exports = (req, res) => {
     sortCode: confirmationDetails.sortCode.match(/.{2}/g).join(' '),
     returnUrl: paymentRequest.returnUrl,
     description: paymentRequest.description,
-    amount: paymentRequest.amount
+    amount: paymentRequest.amount,
+    paymentAction: 'confirmation'
   }
   res.render('app/confirmation/get', params)
 }
