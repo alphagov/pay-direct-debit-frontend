@@ -33,7 +33,7 @@
           method="POST"
           action="/confirmation/{{paymentRequestExternalId}}"
           data-virtual-pageview="/success/{{paymentRequestExternalId}}"
-          data-parameters="dimension2:test dimension3:GoCardless metric1:{{amount}}"
+          data-parameters="dimension2:{{gatewayAccount.type}} dimension3:GoCardless metric1:{{amount}}"
         >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           <div class="form-group">
