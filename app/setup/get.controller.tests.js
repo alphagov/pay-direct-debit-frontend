@@ -16,26 +16,31 @@ const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 describe('setup get controller', () => {
   let response, $
   const paymentRequestExternalId = 'sdfihsdufh2e'
+  const gatewayAccoutExternalId = '1234567890'
   const amount = 100
   const description = 'please buy Silvia a coffee'
   const csrfSecret = '123'
   describe('when a charge is valid', () => {
-    const paymentRequest = paymentFixtures.validPaymentRequest({
+    const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId,
       amount: amount,
       description: description,
       return_url: `/change-payment-method/${paymentRequestExternalId}`
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
     })
-    const gatewayAccount = paymentFixtures.validGatewayAccount({
-      gateway_account_id: paymentRequest.gatewayAccountId,
-      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
-    })
-    const cookieHeader = new CookieBuilder(paymentRequest)
+    const cookieHeader = new CookieBuilder(
+      gatewayAccoutExternalId,
+      paymentRequestExternalId
+    )
       .withCsrfSecret(csrfSecret)
       .build()
 
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`).reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`).reply(200, gatewayAccountResponse)
       supertest(getApp())
         .get(`/setup/${paymentRequestExternalId}`)
         .set('cookie', cookieHeader)

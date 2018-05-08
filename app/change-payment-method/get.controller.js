@@ -2,14 +2,14 @@
 
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
-const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
-  const paymentRequest = getSessionVariable(req, paymentRequestExternalId).paymentRequest
+  const paymentRequest = res.locals.paymentRequest
+  const paymentRequestExternalId = paymentRequest.externalId
+  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
   const returnUrl = paymentRequest.returnUrl
 
-  connectorClient.payment.changePaymentMethod(paymentRequest.gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
+  connectorClient.payment.changePaymentMethod(gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
     .then(() => {
       return res.redirect(303, returnUrl)
     })

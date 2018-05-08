@@ -1,5 +1,6 @@
 'use strict'
 const logger = require('pino')()
+const _ = require('lodash')
 
 // local dependencies
 const {renderErrorView} = require('../response')
@@ -7,8 +8,8 @@ const {getSessionVariable} = require('../config/cookies')
 
 function middleware (req, res, next) {
   const paymentRequestExternalId = req.params.paymentRequestExternalId
-
-  const found = getSessionVariable(req, paymentRequestExternalId) === paymentRequestExternalId
+  const session = getSessionVariable(req, paymentRequestExternalId)
+  const found = _.get(session, 'paymentRequestExternalId') === paymentRequestExternalId
 
   if (!found) {
     logger.error(`[${req.correlationId}] Session is not defined for ${paymentRequestExternalId}`)
@@ -16,7 +17,8 @@ function middleware (req, res, next) {
   }
 
   logger.info(`[${req.correlationId}] Valid session defined for ${paymentRequestExternalId}`)
-  res.locals.paymentRequestExternalId = paymentRequestExternalId
+  res.locals.paymentRequestExternalId = session.paymentRequestExternalId
+  res.locals.gatewayAccountExternalId = session.gatewayAccountExternalId
   return next()
 }
 

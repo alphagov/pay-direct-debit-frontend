@@ -14,20 +14,25 @@ const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 let response, $
-const paymentRequestExternalId = 'sdfihsdufh2e'
-const paymentRequest = paymentFixtures.validPaymentRequest({
+const paymentRequestExternalId = 'sdfihsdufh2e123'
+const gatewayAccoutExternalId = '1234567890'
+const returnUrl = '/change-payment-method'
+const paymentResponse = paymentFixtures.validPaymentResponse({
   external_id: paymentRequestExternalId,
-  return_url: 'https://returnurl.test'
-})
-const gatewayAccount = paymentFixtures.validGatewayAccount({
-  gateway_account_id: paymentRequest.gatewayAccountId,
-  gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+  gateway_account_external_id: gatewayAccoutExternalId,
+  return_url: returnUrl
+}).getPlain()
+const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+  gateway_account_external_id: gatewayAccoutExternalId
 })
 
 describe('cancel GET controller', () => {
   const csrfSecret = '123'
   const csrfToken = csrf().create(csrfSecret)
-  const cookieHeader = new CookieBuilder(paymentRequest)
+  const cookieHeader = new CookieBuilder(
+    gatewayAccoutExternalId,
+    paymentRequestExternalId
+  )
     .withCsrfSecret(csrfSecret)
     .build()
   afterEach(() => {
@@ -36,8 +41,15 @@ describe('cancel GET controller', () => {
 
   describe('when cancelling a payment journey', () => {
     before(done => {
-      nock(config.CONNECTOR_URL).post(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}/cancel`).reply(200)
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+        .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/cancel`)
+        .reply(200)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
       supertest(getApp())
         .get(`/cancel/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })
@@ -54,7 +66,7 @@ describe('cancel GET controller', () => {
     })
 
     it('should display the user cancel page with a back link to the service', () => {
-      expect($('#return-url').attr('href')).to.equal('https://returnurl.test')
+      expect($('#return-url').attr('href')).to.equal(returnUrl)
     })
   })
 })

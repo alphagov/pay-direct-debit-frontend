@@ -27,12 +27,13 @@ describe('setup post controller', () => {
 
   describe('when CSRF is not valid', () => {
     let response
-    const paymentRequestExternalId = 'sdfihsdufh2ff'
-    const paymentRequest = paymentFixtures.validPaymentRequest({
-      external_id: paymentRequestExternalId
-    })
+    const paymentRequestExternalId = 'sdfihsdufh2e'
+    const gatewayAccoutExternalId = '1234567890'
     before(done => {
-      const cookieHeader = new CookieBuilder(paymentRequest)
+      const cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        paymentRequestExternalId
+      )
         .withCsrfSecret('123')
         .build()
       supertest(getApp())
@@ -52,24 +53,33 @@ describe('setup post controller', () => {
   })
   describe('when submitting the form for a valid payment request', () => {
     const paymentRequestExternalId = 'sdfihsdufh2e'
-    const paymentRequest = paymentFixtures.validPaymentRequest({
-      external_id: paymentRequestExternalId
-    })
-    const gatewayAccount = paymentFixtures.validGatewayAccount({
-      gateway_account_id: paymentRequest.gatewayAccountId,
-      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+    const gatewayAccoutExternalId = '1234567890'
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
     })
     const formValues = paymentFixtures.validPayer()
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     before(done => {
-      const cookieHeader = new CookieBuilder(paymentRequest)
+      const cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        paymentRequestExternalId
+      )
         .withCsrfSecret(csrfSecret)
         .build()
       const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${paymentRequest.gatewayAccountId}/payment-requests/${paymentRequestExternalId}/payers`, {
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+        .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers`, {
           account_holder_name: formValues.accountHolderName,
           sort_code: normalise.sortCode(formValues.sortCode),
           account_number: normalise.accountNumber(formValues.accountNumber),
@@ -106,13 +116,14 @@ describe('setup post controller', () => {
   })
 
   describe('should keep the field values when submitting the form with validation errors', () => {
-    const paymentRequestExternalId = 'wsfihsdufh2f'
-    const paymentRequest = paymentFixtures.validPaymentRequest({
-      external_id: paymentRequestExternalId
-    })
-    const gatewayAccount = paymentFixtures.validGatewayAccount({
-      gateway_account_id: paymentRequest.gatewayAccountId,
-      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+    const paymentRequestExternalId = 'sdfihsdufh2e'
+    const gatewayAccoutExternalId = '1234567890'
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
     })
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
@@ -126,10 +137,18 @@ describe('setup post controller', () => {
     }
 
     before(done => {
-      cookieHeader = new CookieBuilder(paymentRequest)
+      cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        paymentRequestExternalId
+      )
         .withCsrfSecret(csrfSecret)
         .build()
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+        .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,
@@ -146,6 +165,9 @@ describe('setup post controller', () => {
           responseRedirect = res
         })
         .then(() => {
+          nock(config.CONNECTOR_URL)
+            .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+            .reply(200, paymentResponse)
           supertest(getApp())
             .get(responseRedirect.header['location'])
             .set('cookie', responseRedirect.header['set-cookie'][1])
@@ -188,14 +210,15 @@ describe('setup post controller', () => {
   })
 
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
-    const paymentRequestExternalId = 'wsfihsdufh2g'
     let $
-    const paymentRequest = paymentFixtures.validPaymentRequest({
-      external_id: paymentRequestExternalId
-    })
-    const gatewayAccount = paymentFixtures.validGatewayAccount({
-      gateway_account_id: paymentRequest.gatewayAccountId,
-      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+    const paymentRequestExternalId = 'sdfihsdufh2e'
+    const gatewayAccoutExternalId = '1234567890'
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
     })
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
@@ -209,10 +232,18 @@ describe('setup post controller', () => {
     }
 
     before(done => {
-      cookieHeader = new CookieBuilder(paymentRequest)
+      cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        paymentRequestExternalId
+      )
         .withCsrfSecret(csrfSecret)
         .build()
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+        .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,
@@ -226,6 +257,9 @@ describe('setup post controller', () => {
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .then((response) => {
+          nock(config.CONNECTOR_URL)
+            .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+            .reply(200, paymentResponse)
           supertest(getApp())
             .get(response.header['location'])
             .set('cookie', response.header['set-cookie'][1])

@@ -2,15 +2,17 @@
 
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
-const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
-  const paymentRequest = getSessionVariable(req, paymentRequestExternalId).paymentRequest
+  const paymentRequest = res.locals.paymentRequest
+  const paymentRequestExternalId = paymentRequest.externalId
+  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
+  const returnUrl = paymentRequest.returnUrl
+
   const params = {
-    returnUrl: paymentRequest.returnUrl
+    returnUrl: returnUrl
   }
-  connectorClient.payment.cancelPaymentRequest(paymentRequest.gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
+  connectorClient.payment.cancelPaymentRequest(gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
     .then(() => {
       return res.render('app/cancel/get', params)
     })

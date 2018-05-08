@@ -1,9 +1,7 @@
-const path = require('path')
 const sinon = require('sinon')
 const {expect} = require('chai')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
-const _ = require('lodash')
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 
 const setupFixtures = () => {
@@ -27,7 +25,10 @@ describe('Check secure coookie middleware', function () {
         paymentRequestExternalId: paymentRequest.externalId
       },
       direct_debit_frontend_state: {
-        [paymentRequest.externalId]: paymentRequest.externalId
+        [paymentRequest.externalId]: {
+          'paymentRequestExternalId': paymentRequest.externalId,
+          'gatewayAccountExternalId': paymentRequest.gatewayAccountExternalId
+        }
       }
     }
 
@@ -37,7 +38,11 @@ describe('Check secure coookie middleware', function () {
 
     it('should set the payment request externalId in res.locals', function () {
       expect(res.locals.paymentRequestExternalId).to.be.equal(paymentRequest.externalId)
-    })  
+    })
+
+    it('should set the gateway account externalId in res.locals', function () {
+      expect(res.locals.gatewayAccountExternalId).to.be.equal(paymentRequest.gatewayAccountExternalId)
+    })
 
     it('should call the next callback method', () => {
       assert(next.calledOnce)
