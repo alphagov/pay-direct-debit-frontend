@@ -5,14 +5,11 @@ const connectorClient = require('../../common/clients/connector-client')
 
 module.exports = (req, res) => {
   const paymentRequest = res.locals.paymentRequest
-  const paymentRequestExternalId = paymentRequest.externalId
-  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
-  const returnUrl = paymentRequest.returnUrl
 
   const params = {
-    returnUrl: returnUrl
+    returnUrl: paymentRequest.returnUrl
   }
-  connectorClient.payment.cancelPaymentRequest(gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
+  connectorClient.payment.cancelPaymentRequest(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, req.correlationId)
     .then(() => {
       return res.render('app/cancel/get', params)
     })

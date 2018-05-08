@@ -5,10 +5,8 @@ const connectorClient = require('../../common/clients/connector-client')
 
 module.exports = (req, res) => {
   const paymentRequest = res.locals.paymentRequest
-  const paymentRequestExternalId = paymentRequest.externalId
-  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
 
-  connectorClient.payment.confirmDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
+  connectorClient.payment.confirmDirectDebitDetails(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, req.correlationId)
     .then(() => {
       return res.redirect(303, paymentRequest.returnUrl)
     })
