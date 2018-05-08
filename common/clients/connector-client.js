@@ -42,7 +42,7 @@ function retrievePaymentRequestByExternalId (gatewayAccountExternalId, paymentRe
   return baseClient.get({
     headers,
     baseUrl,
-    url: `/api/accounts/${gatewayAccountExternalId}/charges/${paymentRequestExternalId}`,
+    url: `/accounts/${gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}`,
     service: service,
     correlationId: correlationId,
     description: `retrieve a payment request by external id`

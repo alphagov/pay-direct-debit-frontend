@@ -42,7 +42,7 @@ describe('cancel GET controller', () => {
   describe('when cancelling a payment journey', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
-        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
         .reply(200, paymentResponse)
       nock(config.CONNECTOR_URL)
         .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/cancel`)

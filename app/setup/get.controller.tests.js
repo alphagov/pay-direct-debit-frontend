@@ -39,7 +39,7 @@ describe('setup get controller', () => {
       .build()
 
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}/charges/${paymentRequestExternalId}`).reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`).reply(200, paymentResponse)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`).reply(200, gatewayAccountResponse)
       supertest(getApp())
         .get(`/setup/${paymentRequestExternalId}`)
