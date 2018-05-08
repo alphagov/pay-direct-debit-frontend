@@ -15,7 +15,8 @@ const headers = {
 module.exports = {
   retrieveGatewayAccount,
   secure: {
-    retrievePaymentRequest: retrievePaymentRequest,
+    retrievePaymentRequestByToken: retrievePaymentRequestByToken,
+    retrievePaymentRequestByExternalId: retrievePaymentRequestByExternalId,
     deleteToken: deleteToken
   },
   payment: {
@@ -37,7 +38,18 @@ function retrieveGatewayAccount (gatewayAccountId, correlationId) {
   }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
-function retrievePaymentRequest (token, correlationId) {
+function retrievePaymentRequestByExternalId (gatewayAccountExternalId, paymentRequestExternalId, correlationId) {
+  return baseClient.get({
+    headers,
+    baseUrl,
+    url: `/accounts/${gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}`,
+    service: service,
+    correlationId: correlationId,
+    description: `retrieve a payment request by external id`
+  }).then(paymentRequest => new PaymentRequest(paymentRequest))
+}
+
+function retrievePaymentRequestByToken (token, correlationId) {
   return baseClient.get({
     headers,
     baseUrl,

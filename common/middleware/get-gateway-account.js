@@ -14,13 +14,12 @@ const CACHE_MAX_AGE = parseInt(process.env.CACHE_MAX_AGE || 15 * 60 * 1000) // d
 const cache = new Cache()
 
 function middleware (req, res, next) {
-  const paymentRequest = _.get(req, 'res.locals.paymentRequest')
-  if (!paymentRequest) {
-    logger.error(`[${req.correlationId}] Could not retrieve payment request from res.locals`)
+  const gatewayAccountExternalId = _.get(res, 'locals.gatewayAccountExternalId')
+  if (!gatewayAccountExternalId) {
+    logger.error(`[${req.correlationId}] Failed to retrieve gateway account external id from res.locals`)
     return renderErrorView(req, res)
   }
 
-  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
   const cachedGatewayAccount = cache.get(gatewayAccountExternalId)
   if (cachedGatewayAccount) {
     res.locals.gatewayAccount = cachedGatewayAccount
@@ -33,7 +32,7 @@ function middleware (req, res, next) {
         next()
       })
       .catch(() => {
-        logger.error(`[${req.correlationId}] Could not load gateway account from connector: ${gatewayAccountExternalId}`)
+        logger.error(`[${req.correlationId}] Failed to load gateway account from connector: ${gatewayAccountExternalId}`)
         renderErrorView(req, res)
       })
   }

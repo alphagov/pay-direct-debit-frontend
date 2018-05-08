@@ -16,6 +16,7 @@ const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 describe('confirmation get controller', function () {
   let response, $
   const paymentRequestExternalId = 'sdfihsdufh2e'
+  const gatewayAccoutExternalId = '1234567890'
   const accountName = 'bla'
   const sortCode = '123456'
   const formattedSortCode = '12 34 56'
@@ -24,25 +25,33 @@ describe('confirmation get controller', function () {
   const amount = 1000
 
   before(done => {
-    const paymentRequest = paymentFixtures.validPaymentRequest({
+    const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
-      description: description,
-      amount: amount
-    })
-    const gatewayAccount = paymentFixtures.validGatewayAccount({
-      gateway_account_id: paymentRequest.gatewayAccountId,
-      gateway_account_external_id: paymentRequest.gatewayAccountExternalId
+      gateway_account_external_id: gatewayAccoutExternalId,
+      amount: amount,
+      description: description
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
     })
     const payer = paymentFixtures.validPayer({
       account_holder_name: accountName,
       sort_code: sortCode,
       account_number: accountNumber
     })
-    const cookieHeader = new CookieBuilder(paymentRequest)
+    const cookieHeader = new CookieBuilder(
+      gatewayAccoutExternalId,
+      paymentRequestExternalId
+    )
       .withCsrfSecret('123')
       .withConfirmationDetails(payer)
       .build()
-    nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${paymentRequest.gatewayAccountExternalId}`).reply(200, gatewayAccount)
+    nock(config.CONNECTOR_URL)
+      .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
+      .reply(200, paymentResponse)
+    nock(config.CONNECTOR_URL)
+      .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+      .reply(200, gatewayAccountResponse)
     supertest(getApp())
       .get(`/confirmation/${paymentRequestExternalId}`)
       .set('cookie', cookieHeader)

@@ -8,12 +8,14 @@ const _ = require('lodash')
 const cookieConfig = require('../../common/config/cookies')
 
 exports.CookieBuilder = class CookieBuilder {
-  constructor (paymentRequestFixture) {
+  constructor (gatewayAccountExternalId, paymentRequestExternalId) {
     this._cookies = {}
     this.cookieName = 'direct_debit_frontend_state'
-    this.paymentRequest = paymentRequestFixture
+    this.gatewayAccountExternalId = gatewayAccountExternalId
+    this.paymentRequestExternalId = paymentRequestExternalId
     this.withCookie(this.cookieName, {
-      paymentRequest: paymentRequestFixture
+      'gatewayAccountExternalId': gatewayAccountExternalId,
+      'paymentRequestExternalId': paymentRequestExternalId
     })
   }
   withCookieName (cookieName) {
@@ -35,7 +37,7 @@ exports.CookieBuilder = class CookieBuilder {
   withCookie (cookieName, value) {
     _.merge(this._cookies, {
       [cookieName]: {
-        [this.paymentRequest.externalId]: value
+        [this.paymentRequestExternalId]: value
       }
     })
     return this

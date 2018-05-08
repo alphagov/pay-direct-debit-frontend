@@ -29,7 +29,7 @@ const setup = () => {
 }
 
 describe('Get gateway account middleware', () => {
-  describe('when the payment request is not found in res.locals', () => {
+  describe('when the payment request external id is not found in res.locals', () => {
     const {req, res, next, renderErrorView, getGatewayAccount} = setup()
 
     before(() => {
@@ -45,7 +45,7 @@ describe('Get gateway account middleware', () => {
     const {req, res, next, cache, getGatewayAccount} = setup()
 
     before(() => {
-      req.res.locals = {paymentRequest: PAYMENT_REQUEST}
+      res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
       cache.get.withArgs(PAYMENT_REQUEST.gatewayAccountExternalId).returns(GATEWAY_ACCOUNT)
       getGatewayAccount.middleware(req, res, next)
     })
@@ -64,7 +64,7 @@ describe('Get gateway account middleware', () => {
       const {req, res, next, cache, connectorClient, getGatewayAccount} = setup()
 
       before(() => {
-        req.res.locals = {paymentRequest: PAYMENT_REQUEST}
+        res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
         connectorClient.retrieveGatewayAccount
           .withArgs(PAYMENT_REQUEST.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.resolve(GATEWAY_ACCOUNT))
@@ -88,7 +88,7 @@ describe('Get gateway account middleware', () => {
       let {req, res, next, connectorClient, renderErrorView, getGatewayAccount} = setup()
 
       before(() => {
-        req.res.locals = {paymentRequest: PAYMENT_REQUEST}
+        res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
         connectorClient.retrieveGatewayAccount
           .withArgs(PAYMENT_REQUEST.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.reject(new Error()))

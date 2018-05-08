@@ -2,16 +2,13 @@
 
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
-const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
-  const paymentRequest = getSessionVariable(req, paymentRequestExternalId).paymentRequest
-  const returnUrl = paymentRequest.returnUrl
+  const paymentRequest = res.locals.paymentRequest
 
-  connectorClient.payment.changePaymentMethod(paymentRequest.gatewayAccountExternalId, paymentRequestExternalId, req.correlationId)
+  connectorClient.payment.changePaymentMethod(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, req.correlationId)
     .then(() => {
-      return res.redirect(303, returnUrl)
+      return res.redirect(303, paymentRequest.returnUrl)
     })
     .catch(() => {
       renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500)

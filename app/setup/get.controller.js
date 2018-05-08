@@ -7,17 +7,17 @@ const _ = require('lodash')
 const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
-  const session = getSessionVariable(req, paymentRequestExternalId)
-  const paymentRequest = session.paymentRequest
+  const paymentRequest = res.locals.paymentRequest
+  const session = getSessionVariable(req, paymentRequest.externalId)
   const params = {
-    paymentRequestExternalId: paymentRequestExternalId,
+    paymentRequestExternalId: paymentRequest.externalId,
     description: paymentRequest.description,
     amount: paymentRequest.amount,
-    returnUrl: `/change-payment-method/${paymentRequestExternalId}`,
+    returnUrl: `/change-payment-method/${paymentRequest.externalId}`,
     paymentAction: 'setup'
   }
   const formValues = session.formValues
+
   if (!_.isEmpty(formValues)) {
     // set values to current view
     params.formValues = formValues

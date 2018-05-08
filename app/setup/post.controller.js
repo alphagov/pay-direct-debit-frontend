@@ -11,11 +11,13 @@ const Payer = require('../../common/classes/Payer.class')
 const payerValidator = require('../../common/utils/payer-validator')
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
-const {getSessionVariable, setSessionVariable} = require('../../common/config/cookies')
+const {setSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
-  const paymentRequest = getSessionVariable(req, paymentRequestExternalId).paymentRequest
+  const paymentRequest = res.locals.paymentRequest
+  const paymentRequestExternalId = paymentRequest.externalId
+  const gatewayAccountExternalId = paymentRequest.gatewayAccountExternalId
+
   const requestBody = req.body
   const formValues = {
     account_holder_name: lodash.get(requestBody, 'account-holder-name'),
@@ -37,7 +39,7 @@ module.exports = (req, res) => {
   const payerValidatorErrors = payerValidator(payer)
   if (lodash.isEmpty(payerValidatorErrors)) {
     // Process request
-    connectorClient.payment.submitDirectDebitDetails(paymentRequest.gatewayAccountId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
+    connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
       .then(payerExternalId => {
         logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
         req.body.payer_external_id = payerExternalId
