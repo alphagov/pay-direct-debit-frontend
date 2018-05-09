@@ -18,7 +18,14 @@ module.exports = (req, res) => {
   }
   const formValues = session.formValues
 
-  if (!_.isEmpty(formValues)) {
+  if (_.isEmpty(formValues) && paymentRequest.payer) {
+    params.formValues = {
+      account_holder_name: paymentRequest.payer.accountHolderName,
+      email: paymentRequest.payer.email,
+      requires_authorisation: paymentRequest.payer.requiresAuthorisation.toString()
+    }
+    params.validationErrors = null
+  } else if (!_.isEmpty(formValues)) {
     // set values to current view
     params.formValues = formValues
     params.validationErrors = session.validationErrors

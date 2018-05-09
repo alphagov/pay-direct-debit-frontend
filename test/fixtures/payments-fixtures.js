@@ -52,7 +52,8 @@ module.exports = {
       description: opts.description || 'buy Silvia a coffee',
       amount: opts.amount || randomNumber(),
       type: opts.type || 'CHARGE',
-      state: opts.state || 'NEW'
+      state: opts.state || 'NEW',
+      payer: opts.payer || null
     }
     return {
       getPlain: () => {
@@ -93,7 +94,8 @@ module.exports = {
       description: opts.description || 'buy Silvia a coffee',
       amount: opts.amount || randomNumber(),
       type: opts.type || 'CHARGE',
-      state: opts.state || 'NEW'
+      state: opts.state || 'NEW',
+      payer: opts.payer || null
     }
     return new PaymentRequest(data)
   },

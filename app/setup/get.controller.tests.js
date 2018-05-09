@@ -71,4 +71,51 @@ describe('setup get controller', () => {
       expect($(`#return-url`).attr('href')).to.equal(`/change-payment-method/${paymentRequestExternalId}`)
     })
   })
+
+  describe('when a charge is valid and it has a payer', () => {
+    const payer = { payer_external_id: 'eg042u',
+      account_holder_name: 'mr. payment',
+      email: 'user@example.test',
+      requires_authorisation: 'false'}
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId,
+      amount: amount,
+      description: description,
+      return_url: `/change-payment-method/${paymentRequestExternalId}`,
+      payer: payer
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
+    })
+    const cookieHeader = new CookieBuilder(
+      gatewayAccoutExternalId,
+      paymentRequestExternalId
+    )
+      .withCsrfSecret(csrfSecret)
+      .build()
+
+    before(done => {
+      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`).reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`).reply(200, gatewayAccountResponse)
+      supertest(getApp())
+        .get(`/setup/${paymentRequestExternalId}`)
+        .set('cookie', cookieHeader)
+        .end((err, res) => {
+          response = res
+          $ = cheerio.load(res.text)
+          done(err)
+        })
+    })
+
+    it('should return a 200 status code', () => {
+      expect(response.statusCode).to.equal(200)
+    })
+    it('should display the enter direct debit page with prefilled form', () => {
+      expect($('#account-holder-name').val()).to.equal(payer.account_holder_name)
+      expect($('#email').val()).to.equal(payer.email)
+      expect($('#authorise-no').is(':checked')).to.equal(payer.requires_authorisation === 'true')
+      expect($('#authorise-yes').is(':checked')).to.equal(payer.requires_authorisation === 'false')
+    })
+  })
 })
