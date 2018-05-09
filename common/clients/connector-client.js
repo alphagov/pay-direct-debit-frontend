@@ -72,7 +72,7 @@ function deleteToken (token, correlationId) {
 }
 
 function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, correlationId) {
-  return baseClient.post({
+  return baseClient.put({
     headers,
     baseUrl,
     json: true,
