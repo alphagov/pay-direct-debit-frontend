@@ -27,11 +27,19 @@ const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
 describe('confirmation POST controller', () => {
   const csrfSecret = '123'
   const csrfToken = csrf().create(csrfSecret)
+  const sortCode = '123456'
+  const accountNumber = '12345678'
+  const payer = paymentFixtures.validPayer({
+    account_holder_name: 'payer',
+    sort_code: sortCode,
+    account_number: accountNumber
+  })
   const cookieHeader = new CookieBuilder(
     gatewayAccoutExternalId,
     paymentRequestExternalId
   )
     .withCsrfSecret(csrfSecret)
+    .withConfirmationDetails(payer)
     .build()
   afterEach(() => {
     nock.cleanAll()
@@ -43,7 +51,10 @@ describe('confirmation POST controller', () => {
         .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
         .reply(200, paymentResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/confirm`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/confirm`, {
+          sort_code: sortCode,
+          account_number: accountNumber
+        })
         .reply(201)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
@@ -73,7 +84,10 @@ describe('confirmation POST controller', () => {
         .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
         .reply(200, paymentResponse)
       nock(config.CONNECTOR_URL)
-        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/confirm`)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/confirm`, {
+          sort_code: sortCode,
+          account_number: accountNumber
+        })
         .reply(409)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)

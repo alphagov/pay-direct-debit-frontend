@@ -2,11 +2,15 @@
 
 const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
+const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
   const paymentRequest = res.locals.paymentRequest
-
-  connectorClient.payment.confirmDirectDebitDetails(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, req.correlationId)
+  const session = getSessionVariable(req, paymentRequest.externalId)
+  connectorClient.payment.confirmDirectDebitDetails(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, {
+    account_number: session.confirmationDetails.accountNumber,
+    sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join('')
+  }, req.correlationId)
     .then(() => {
       return res.redirect(303, paymentRequest.returnUrl)
     })

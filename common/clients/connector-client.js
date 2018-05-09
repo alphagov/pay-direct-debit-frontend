@@ -86,13 +86,14 @@ function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, co
   })
 }
 
-function confirmDirectDebitDetails (accountId, paymentRequestExternalId, correlationId) {
+function confirmDirectDebitDetails (accountId, paymentRequestExternalId, body, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
     json: true,
     url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/confirm`,
     service: service,
+    body: body,
     correlationId: correlationId,
     description: `confirm a payment`
   })
