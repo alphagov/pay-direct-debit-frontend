@@ -8,6 +8,7 @@ const expect = chai.expect
 const nock = require('nock')
 
 // Local dependencies
+const setup = require('../setup')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
@@ -85,6 +86,10 @@ describe('confirmation get controller', function () {
     expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
   })
 
+  it('should display the confirmation page with a back link to the setup page', () => {
+    const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+    expect($('.link-back').attr('href')).to.equal(url)
+  })
   it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
     expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/confirmation/${paymentRequestExternalId}`)
   })
