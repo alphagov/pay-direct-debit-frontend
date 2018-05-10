@@ -79,7 +79,7 @@ describe('setup post controller', () => {
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers`, {
+        .put(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers`, {
           account_holder_name: formValues.accountHolderName,
           sort_code: normalise.sortCode(formValues.sortCode),
           account_number: normalise.accountNumber(formValues.accountNumber),
