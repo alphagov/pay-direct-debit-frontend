@@ -23,7 +23,8 @@ module.exports = {
     submitDirectDebitDetails: submitDirectDebitDetails,
     confirmDirectDebitDetails: confirmDirectDebitDetails,
     cancelPaymentRequest: cancelPaymentRequest,
-    changePaymentMethod: changePaymentMethod
+    changePaymentMethod: changePaymentMethod,
+    validateBankAccountDetails: validateBankAccountDetails
   }
 }
 
@@ -98,6 +99,20 @@ function confirmDirectDebitDetails (accountId, paymentRequestExternalId, body, c
     description: `confirm a payment`
   })
 }
+
+function validateBankAccountDetails (accountId, paymentRequestExternalId, body, correlationId) {
+  return baseClient.post({
+    headers,
+    baseUrl,
+    json: true,
+    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`,
+    service: service,
+    body: body,
+    correlationId: correlationId,
+    description: `validate bank account details`
+  })
+}
+
 function cancelPaymentRequest (accountId, paymentRequestExternalId, correlationId) {
   return baseClient.post({
     headers,

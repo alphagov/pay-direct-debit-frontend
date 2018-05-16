@@ -37,23 +37,46 @@ module.exports = (req, res) => {
   // Validation
   const payer = new Payer(normalisedFormValues)
   const payerValidatorErrors = payerValidator(payer)
+  const redirectWithValidationErrors = prepareValidationErrors(res, req, paymentRequestExternalId, formValues)
   if (lodash.isEmpty(payerValidatorErrors)) {
-    // Process request
-    connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
-      .then(payerExternalId => {
-        logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
-        req.body.payer_external_id = payerExternalId
-        setSessionVariable(req, `${paymentRequestExternalId}.confirmationDetails`, payer)
-        const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
-        return res.redirect(303, url)
-      })
-      .catch(() => {
-        renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
+    connectorClient.payment.validateBankAccountDetails(gatewayAccountExternalId, paymentRequestExternalId, {
+      account_number: normalisedFormValues.account_number,
+      sort_code: normalisedFormValues.sort_code
+    }, req.correlationId)
+      .then(bankAccount => {
+        if (bankAccount.is_valid) {
+          normalisedFormValues.bank_name = bankAccount.bank_name
+          connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
+            .then(payerExternalId => {
+              logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
+              req.body.payer_external_id = payerExternalId
+              setSessionVariable(req, `${paymentRequestExternalId}.confirmationDetails`, payer)
+              const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+              return res.redirect(303, url)
+            })
+            .catch(() => {
+              renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
+            })
+        } else {
+          redirectWithValidationErrors([
+            {
+              id: 'sort-code',
+              label: 'Sort code'
+            },
+            {
+              id: 'account-number',
+              label: 'Account number'
+            }
+          ])
+        }
       })
   } else {
-    setSessionVariable(req, `${paymentRequestExternalId}.formValues`, formValues)
-    setSessionVariable(req, `${paymentRequestExternalId}.validationErrors`, payerValidatorErrors)
-    const url = '/setup/:paymentRequestExternalId'.replace(':paymentRequestExternalId', paymentRequestExternalId)
-    return res.redirect(303, url)
+    redirectWithValidationErrors(payerValidatorErrors)
   }
+}
+const prepareValidationErrors = (res, req, paymentRequestExternalId, formValues) => (validationErrors) => {
+  setSessionVariable(req, `${paymentRequestExternalId}.formValues`, formValues)
+  setSessionVariable(req, `${paymentRequestExternalId}.validationErrors`, validationErrors)
+  const url = '/setup/:paymentRequestExternalId'.replace(':paymentRequestExternalId', paymentRequestExternalId)
+  return res.redirect(303, url)
 }

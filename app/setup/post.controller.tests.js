@@ -61,6 +61,10 @@ describe('setup post controller', () => {
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
+    const validateBankAccountResponse = {
+      is_valid: true,
+      bank_name: 'bank name'
+    }
     const formValues = paymentFixtures.validPayer()
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
@@ -76,6 +80,9 @@ describe('setup post controller', () => {
         .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
         .reply(200, paymentResponse)
       nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .reply(200, validateBankAccountResponse)
+      nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.CONNECTOR_URL)
@@ -83,6 +90,7 @@ describe('setup post controller', () => {
           account_holder_name: formValues.accountHolderName,
           sort_code: normalise.sortCode(formValues.sortCode),
           account_number: normalise.accountNumber(formValues.accountNumber),
+          bank_name: 'bank name',
           requires_authorisation: (lodash.isNil(formValues.requiresAuthorisation) || normalise.toBoolean(formValues.requiresAuthorisation)),
           email: formValues.email
         })
@@ -122,6 +130,10 @@ describe('setup post controller', () => {
       external_id: paymentRequestExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
     }).getPlain()
+    const validateBankAccountResponse = {
+      is_valid: true,
+      bank_name: 'bank name'
+    }
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
@@ -146,6 +158,9 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
         .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .reply(200, validateBankAccountResponse)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
@@ -220,6 +235,10 @@ describe('setup post controller', () => {
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
+    const validateBankAccountResponse = {
+      is_valid: true,
+      bank_name: 'bank name'
+    }
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     let cookieHeader
@@ -230,7 +249,6 @@ describe('setup post controller', () => {
       requiresAuthorisation: 'true',
       email: ''
     }
-
     before(done => {
       cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
@@ -244,6 +262,9 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .reply(200, validateBankAccountResponse)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,
@@ -299,6 +320,98 @@ describe('setup post controller', () => {
       const errorField = $('.error-requires-authorisation')
       expect(errorField.length).to.equal(1)
       expect(errorField.find('a[href="#requires-authorisation"]').length).to.equal(1)
+    })
+  })
+  describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
+    let $
+    const paymentRequestExternalId = 'sdfihsdufh2e'
+    const gatewayAccoutExternalId = '1234567890'
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
+    })
+    const validateBankAccountResponse = {
+      is_valid: false
+    }
+    const csrfSecret = '123'
+    const csrfToken = csrf().create(csrfSecret)
+    let cookieHeader
+    const formValues = {
+      accountHolderName: '',
+      sortCode: '',
+      accountNumber: '',
+      requiresAuthorisation: 'false',
+      email: ''
+    }
+    before(done => {
+      cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        paymentRequestExternalId
+      )
+        .withCsrfSecret(csrfSecret)
+        .build()
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
+        .reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .reply(200, validateBankAccountResponse)
+      supertest(getApp())
+        .post(`/setup/${paymentRequestExternalId}`)
+        .send({ 'csrfToken': csrfToken,
+          'account-holder-name': formValues.accountHolderName,
+          'sort-code': formValues.sortCode,
+          'account-number': formValues.accountNumber,
+          'requires-authorisation': formValues.requiresAuthorisation,
+          'email': formValues.email
+        })
+        .set('Cookie', cookieHeader)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .then((response) => {
+          nock(config.CONNECTOR_URL)
+            .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
+            .reply(200, paymentResponse)
+          supertest(getApp())
+            .get(response.header['location'])
+            .set('cookie', response.header['set-cookie'][1])
+            .end((err, res) => {
+              $ = cheerio.load(res.text)
+              done(err)
+            })
+        })
+        .catch((err) => done(err))
+    })
+
+    it('should contain account holder name pre-filled after redirect', () => {
+      expect($('#account-holder-name').val()).to.equal(formValues.accountHolderName)
+    })
+
+    it('should contain expected sort code field as error', () => {
+      const errorField = $('.error-sort-code')
+      expect(errorField.length).to.equal(1)
+      expect(errorField.find('a[href="#sort-code"]').length).to.equal(1)
+    })
+
+    it('should contain expected account number field as error', () => {
+      const errorField = $('.error-account-number')
+      expect(errorField.length).to.equal(1)
+      expect(errorField.find('a[href="#account-number"]').length).to.equal(1)
+    })
+
+    it('should contain email pre-filled after redirect', () => {
+      expect($('#email').val()).to.equal(formValues.email)
+    })
+
+    it('should contain requires authorisation pre-filled after redirect', () => {
+      expect($('#authorise-no').is(':checked')).to.equal(false)
+      expect($('#authorise-yes').is(':checked')).to.equal(true)
     })
   })
 })
