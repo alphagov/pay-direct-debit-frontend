@@ -1,11 +1,14 @@
 'use strict'
 const {getSessionVariable} = require('../../common/config/cookies')
-const {renderErrorView} = require('../../common/response')
+const {renderErrorView, renderPaymentCompletedSummary} = require('../../common/response')
 
 module.exports = (req, res) => {
   const paymentRequest = res.locals.paymentRequest
   const session = getSessionVariable(req, paymentRequest.externalId)
-  if (session.confirmationDetails) {
+  if (paymentRequest.state.status === 'pending') {
+    renderPaymentCompletedSummary(req, res, {'status': 'successful', 'returnUrl': paymentRequest.returnUrl}
+    )
+  } else if (session.confirmationDetails) {
     const params = {
       paymentRequestExternalId: paymentRequest.externalId,
       accountHolderName: session.confirmationDetails.accountHolderName,
