@@ -90,7 +90,57 @@ describe('confirmation get controller', function () {
     const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
     expect($('.link-back').attr('href')).to.equal(url)
   })
+
   it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
     expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/confirmation/${paymentRequestExternalId}`)
+  })
+})
+
+describe('confirmation get controller with no confirmationDetails', function () {
+  let response, $
+  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const gatewayAccoutExternalId = '1234567890'
+  const description = 'this is a description'
+  const amount = 1000
+
+  before(done => {
+    const paymentResponse = paymentFixtures.validPaymentResponse({
+      external_id: paymentRequestExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId,
+      amount: amount,
+      description: description
+    }).getPlain()
+    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
+    })
+    const cookieHeader = new CookieBuilder(
+      gatewayAccoutExternalId,
+      paymentRequestExternalId
+    )
+      .withCsrfSecret('123')
+      .build()
+    nock(config.CONNECTOR_URL)
+      .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
+      .reply(200, paymentResponse)
+    nock(config.CONNECTOR_URL)
+      .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+      .reply(200, gatewayAccountResponse)
+    supertest(getApp())
+      .get(`/confirmation/${paymentRequestExternalId}`)
+      .set('cookie', cookieHeader)
+      .end((err, res) => {
+        response = res
+        $ = cheerio.load(res.text)
+        done(err)
+      })
+  })
+
+  it('should return HTTP 500 status', () => {
+    expect(response.statusCode).to.equal(500)
+  })
+
+  it('should render error page', () => {
+    expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
+    expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
   })
 })
