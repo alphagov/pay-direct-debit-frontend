@@ -9,6 +9,7 @@ const {validateAndRefreshCsrf} = require('../../common/middleware/csrf')
 const checkSecureCookie = require('../../common/middleware/check-secure-cookie').middleware
 const getPaymentRequest = require('../../common/middleware/get-payment-request').middleware
 const getGatewayAccount = require('../../common/middleware/get-gateway-account').middleware
+const getService = require('../../common/middleware/get-service').middleware
 
 // Initialisation
 const router = express.Router()
@@ -18,7 +19,7 @@ const paths = {
 }
 
 // Routing
-router.get(paths.index, checkSecureCookie, validateAndRefreshCsrf, getPaymentRequest, getGatewayAccount, getController)
+router.get(paths.index, checkSecureCookie, validateAndRefreshCsrf, getPaymentRequest, getGatewayAccount, getService, getController)
 
 // Export
 module.exports = {

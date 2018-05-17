@@ -14,7 +14,8 @@ module.exports = (req, res) => {
     description: paymentRequest.description,
     amount: paymentRequest.amount,
     returnUrl: `/change-payment-method/${paymentRequest.externalId}`,
-    paymentAction: 'setup'
+    paymentAction: 'setup',
+    service: res.locals.service
   }
   const formValues = session.formValues
 

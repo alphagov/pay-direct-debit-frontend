@@ -20,15 +20,28 @@ const normalise = require('../../common/utils/normalise')
 
 describe('setup post controller', () => {
   let responseRedirect
-
+  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const gatewayAccoutExternalId = '1234567890'
+  const service = { external_id: 'eisuodfkf',
+    name: 'GOV.UK Direct Cake service',
+    gateway_account_ids: [gatewayAccoutExternalId],
+    merchant_details: {
+      name: 'Silvia needs coffee',
+      address_line1: 'Anywhere',
+      address_line2: 'Anyhow',
+      address_city: 'London',
+      address_postcode: 'AW1H 9UX',
+      address_country: 'GB',
+      telephone_number: '28398203',
+      email: 'bla@bla.test'
+    }
+  }
   afterEach(() => {
     nock.cleanAll()
   })
 
   describe('when CSRF is not valid', () => {
     let response
-    const paymentRequestExternalId = 'sdfihsdufh2e'
-    const gatewayAccoutExternalId = '1234567890'
     before(done => {
       const cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
@@ -52,8 +65,6 @@ describe('setup post controller', () => {
     })
   })
   describe('when submitting the form for a valid payment request', () => {
-    const paymentRequestExternalId = 'sdfihsdufh2e'
-    const gatewayAccoutExternalId = '1234567890'
     const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
@@ -85,6 +96,7 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       nock(config.CONNECTOR_URL)
         .put(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers`, {
           account_holder_name: formValues.accountHolderName,
@@ -124,8 +136,6 @@ describe('setup post controller', () => {
   })
 
   describe('should keep the field values when submitting the form with validation errors', () => {
-    const paymentRequestExternalId = 'sdfihsdufh2e'
-    const gatewayAccoutExternalId = '1234567890'
     const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
@@ -164,6 +174,7 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,
@@ -222,12 +233,16 @@ describe('setup post controller', () => {
       expect($('#authorise-no').is(':checked')).to.equal(false)
       expect($('#authorise-yes').is(':checked')).to.equal(true)
     })
+    it('should display merchant details in the footer after redirect', () => {
+      expect($(`.merchant-details-line-1`).text()).to.equal(`Service provided by ${service.merchant_details.name}`)
+      expect($(`.merchant-details-line-2`).text()).to.equal(`${service.merchant_details.address_line1}, ${service.merchant_details.address_line2}, ${service.merchant_details.address_city} ${service.merchant_details.address_postcode} United Kingdom`)
+      expect($(`.merchant-details-phone-number`).text()).to.equal(`Phone: ${service.merchant_details.telephone_number}`)
+      expect($(`.merchant-details-email`).text()).to.equal(`Email: ${service.merchant_details.email}`)
+    })
   })
 
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     let $
-    const paymentRequestExternalId = 'sdfihsdufh2e'
-    const gatewayAccoutExternalId = '1234567890'
     const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
@@ -265,6 +280,7 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,
@@ -324,8 +340,6 @@ describe('setup post controller', () => {
   })
   describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
     let $
-    const paymentRequestExternalId = 'sdfihsdufh2e'
-    const gatewayAccoutExternalId = '1234567890'
     const paymentResponse = paymentFixtures.validPaymentResponse({
       external_id: paymentRequestExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
@@ -362,6 +376,7 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken,

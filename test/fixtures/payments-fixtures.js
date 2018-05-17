@@ -2,6 +2,7 @@
 const Payer = require('../../common/classes/Payer.class')
 const PaymentRequest = require('../../common/classes/PaymentRequest.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
+const Service = require('../../common/classes/Service.class')
 // Create random values if none provided
 const randomExternalId = () => Math.random().toString(36).substring(7)
 const randomNumber = () => Math.round(Math.random() * 10000) + 1
@@ -113,5 +114,25 @@ module.exports = {
     }
 
     return new GatewayAccount(data)
+  },
+
+  validService: (opts = {}) => {
+    const data = {
+      external_id: opts.external_id || randomExternalId(),
+      name: opts.name || 'GOV.UK Direct Cake service',
+      gateway_account_ids: opts.gateway_account_ids || [randomExternalId()],
+      merchant_details: opts.merchant_details || {
+        name: 'Silvia needs coffee',
+        address_line1: 'Anywhere',
+        address_line2: 'Anyhow',
+        address_city: 'London',
+        address_postcode: 'AW1H 9UX',
+        address_country: 'GB',
+        phone_number: '28398203',
+        email: 'bla@bla.test'
+      }
+    }
+
+    return new Service(data)
   }
 }

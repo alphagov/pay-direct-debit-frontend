@@ -29,6 +29,20 @@ describe('confirmation POST controller', () => {
   const csrfToken = csrf().create(csrfSecret)
   const sortCode = '123456'
   const accountNumber = '12345678'
+  const service = { external_id: 'eisuodfkf',
+    name: 'GOV.UK Direct Cake service',
+    gateway_account_ids: [gatewayAccoutExternalId],
+    merchant_details: {
+      name: 'Silvia needs coffee',
+      address_line1: 'Anywhere',
+      address_line2: 'Anyhow',
+      address_city: 'London',
+      address_postcode: 'AW1H 9UX',
+      address_country: 'GB',
+      telephone_number: '28398203',
+      email: 'bla@bla.test'
+    }
+  }
   const payer = paymentFixtures.validPayer({
     account_holder_name: 'payer',
     sort_code: sortCode,
@@ -58,6 +72,7 @@ describe('confirmation POST controller', () => {
         .reply(201)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })
@@ -92,7 +107,7 @@ describe('confirmation POST controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
-
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/confirmation/${paymentRequestExternalId}`)
         .send({ 'csrfToken': csrfToken })
@@ -111,6 +126,12 @@ describe('confirmation POST controller', () => {
     it('should render error page', () => {
       expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
       expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
+    })
+    it('should display merchant details in the footer of the error page', () => {
+      expect($(`.merchant-details-line-1`).text()).to.equal(`Service provided by ${service.merchant_details.name}`)
+      expect($(`.merchant-details-line-2`).text()).to.equal(`${service.merchant_details.address_line1}, ${service.merchant_details.address_line2}, ${service.merchant_details.address_city} ${service.merchant_details.address_postcode} United Kingdom`)
+      expect($(`.merchant-details-phone-number`).text()).to.equal(`Phone: ${service.merchant_details.telephone_number}`)
+      expect($(`.merchant-details-email`).text()).to.equal(`Email: ${service.merchant_details.email}`)
     })
   })
 })
