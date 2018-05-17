@@ -58,7 +58,6 @@
                 <h1 id="requires-authorisation" class="heading-small">
                   Are you allowed to authorise Direct Debits on this account?
                 </h1>
-                <span class="form-hint">If it’s a joint account but you can authorise payments on your own, click “Yes”</span>
                 {% if errors['requires-authorisation'] %}
                   <span class="error-message">If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below</span>
                 {% endif %}
@@ -72,8 +71,8 @@
                 <label for="authorise-no">No</label>
               </div>
               <div class="panel panel-border-narrow js-hidden" id="unauthorised-message" aria-hidden="true">
-                <p>If more than one person is required to authorise Direct Debits on this bank account, you can’t proceed
-                  with this online payment method.</p>
+                <p>If more than one person is required to authorise Direct Debits on this bank account, you can't proceed with this online payment method.</p>
+                <p>If it’s a joint account but you can authorise payments on your own, click ‘Yes’.</p>
                 <p><a href="{{ returnUrl }}" id="return-url">Go back and try a different payment method</a></p>
               </div>
             </fieldset>
