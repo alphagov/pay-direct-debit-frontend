@@ -2,6 +2,7 @@
 
 // Local dependencies
 const healthcheck = require('./healthcheck')
+const naxsiRequestDenied = require('./request-denied')
 const secure = require('./secure')
 const setup = require('./setup')
 const cancel = require('./cancel')
@@ -12,6 +13,7 @@ const changePaymentMethod = require('./change-payment-method')
 // Export
 module.exports.bind = app => {
   app.use(healthcheck.router)
+  app.use(naxsiRequestDenied.router)
   app.use(secure.router)
   app.use(setup.router)
   app.use(cancel.router)
