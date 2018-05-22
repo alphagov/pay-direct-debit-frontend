@@ -27,7 +27,7 @@ function initValidation (e) {
   let validatedFields = findFields(form)
     .map(field => validateField(form, field))
 
-  if (every(validatedFields)) {
+  if (every(validatedFields, 'valid')) {
     form.submit()
   } else {
     populateErrorSummary(form)
@@ -53,36 +53,36 @@ function findFields (form) {
 }
 
 function validateField (form, field) {
-  let isValid = true
+  let result = {}
   let validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
     switch (validationType) {
       case 'sort-code' :
-        isValid = checks.isSortCode(field.value)
+        result = checks.isSortCode(field.value)
         break
       case 'account-number' :
-        isValid = checks.isAccountNumber(field.value)
+        result = checks.isAccountNumber(field.value)
         break
       case 'email' :
-        isValid = checks.isValidEmail(field.value)
+        result = checks.isValidEmail(field.value)
         break
       case 'is-checked' :
-        isValid = checks.isChecked(field)
+        result = checks.isChecked(field)
         break
       default :
-        isValid = !checks.isEmpty(field.value)
+        result = checks.isNotEmpty(field.value)
         break
     }
-    if (!isValid) {
-      applyErrorMessaging(form, field)
+    if (!result.valid) {
+      applyErrorMessaging(form, field, result)
     }
   })
 
-  return isValid
+  return result
 }
 
-function applyErrorMessaging (form, field) {
+function applyErrorMessaging (form, field, result) {
   // Modify the field
   if (!field.classList.contains('form-control-error')) {
     field.classList.add('form-control-error')
@@ -94,7 +94,7 @@ function applyErrorMessaging (form, field) {
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
       const errorElement = document.querySelector('label[for="' + field.name + '"]')
-      const errorLabel = errorElement.getAttribute('data-error-label')
+      const errorLabel = result.message || errorElement.getAttribute('data-error-label')
       errorElement.appendChild(generateErrorMessageElement(errorLabel))
     } else {
       errorLegendElement.appendChild(generateErrorMessageElement(errorLegendElement.getAttribute('data-error-label')))
