@@ -6,21 +6,21 @@ const fieldValidationChecks = require('../../browsered/field-validation-checks')
 module.exports = (payer) => {
   const errors = []
 
-  if (fieldValidationChecks.isEmpty(payer.accountHolderName) === true) {
+  if (!fieldValidationChecks.isNotEmpty(payer.accountHolderName).valid) {
     errors.push({
       id: 'account-holder-name',
       label: 'Name on the account'
     })
   }
 
-  if (fieldValidationChecks.isSortCode(payer.sortCode) === false) {
+  if (!fieldValidationChecks.isSortCode(payer.sortCode).valid) {
     errors.push({
       id: 'sort-code',
       label: 'Sort code'
     })
   }
 
-  if (fieldValidationChecks.isAccountNumber(payer.accountNumber) === false) {
+  if (!fieldValidationChecks.isAccountNumber(payer.accountNumber).valid) {
     errors.push({
       id: 'account-number',
       label: 'Account number'
@@ -34,7 +34,7 @@ module.exports = (payer) => {
     })
   }
 
-  if (fieldValidationChecks.isValidEmail(payer.email) === false) {
+  if (!fieldValidationChecks.isValidEmail(payer.email).valid) {
     errors.push({
       id: 'email',
       label: 'Email address'
