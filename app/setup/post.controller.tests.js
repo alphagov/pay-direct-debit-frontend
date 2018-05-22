@@ -420,6 +420,14 @@ describe('setup post controller', () => {
       expect(errorField.find('a[href="#account-number"]').length).to.equal(1)
     })
 
+    it('should contain an inline error for sort code', () => {
+      expect($('label[for=sort-code]').attr('data-error-label')).to.equal('Either your sort code or account number is not right')
+    })
+
+    it('should contain an inline error for account number', () => {
+      expect($('label[for=account-number]').attr('data-error-label')).to.equal('Either your sort code or account number is not right')
+    })
+
     it('should contain email pre-filled after redirect', () => {
       expect($('#email').val()).to.equal(formValues.email)
     })

@@ -9,8 +9,8 @@ const errorMessages = {
   required: 'This field cannot be blank',
   validEmail: 'Please use a valid email address',
   checked: 'Please choose an option',
-  sortCode: 'Sort code must contain 6 digits',
-  accountNumber: 'Account number must contain 6-8 digits'
+  sortCode: 'Enter a real sort code with 6 digits',
+  accountNumber: 'Enter a real account number between 8 and 10 digits long'
 }
 
 // Exports

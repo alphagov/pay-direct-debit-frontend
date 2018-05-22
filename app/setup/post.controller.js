@@ -44,20 +44,20 @@ module.exports = (req, res) => {
       sort_code: normalisedFormValues.sort_code
     }, req.correlationId)
       .then(bankAccount => {
-        // if (bankAccount.is_valid) {
-        //   normalisedFormValues.bank_name = bankAccount.bank_name
-        //   connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
-        //     .then(payerExternalId => {
-        //       logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
-        //       req.body.payer_external_id = payerExternalId
-        //       setSessionVariable(req, `${paymentRequestExternalId}.confirmationDetails`, payer)
-        //       const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
-        //       return res.redirect(303, url)
-        //     })
-        //     .catch(() => {
-        //       renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
-        //     })
-        // } else {
+        if (bankAccount.is_valid) {
+          normalisedFormValues.bank_name = bankAccount.bank_name
+          connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, paymentRequestExternalId, normalisedFormValues, req.correlationId)
+            .then(payerExternalId => {
+              logger.info(`[${req.correlationId}] Submitted payment details for request: ${paymentRequestExternalId}, payer: ${payerExternalId}`)
+              req.body.payer_external_id = payerExternalId
+              setSessionVariable(req, `${paymentRequestExternalId}.confirmationDetails`, payer)
+              const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+              return res.redirect(303, url)
+            })
+            .catch(() => {
+              renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
+            })
+        } else {
           redirectWithValidationErrors([
             {
               id: 'sort-code',
@@ -68,7 +68,7 @@ module.exports = (req, res) => {
               label: 'Account number'
             }
           ])
-        // }
+        }
       })
   } else {
     redirectWithValidationErrors(payerValidatorErrors)
