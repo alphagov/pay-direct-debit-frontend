@@ -8,7 +8,7 @@
   <main id="content" role="main">
   {% if paymentAction %}
     <div class="back">
-      <a href="/{{paymentAction}}/{{ paymentRequestExternalId }}" class="link-back">Back to payment</a>
+      <a href="/{{paymentAction}}/{{ mandateExternalId }}" class="link-back">Back to payment</a>
     </div>
   {% endif %}
     <div class="grid-row">
@@ -22,7 +22,7 @@
         <p>You can cancel a Direct Debit at any time by simply contacting your bank or building society. Written confirmation may be required. Please also notify GOV.UK Pay.</p>
       {% if paymentAction %}
         <div class="form-group">
-          <a href="/{{paymentAction}}/{{paymentRequestExternalId}}" class="button-link-back"><button class="button">Back to payment</button></a>
+          <a href="/{{paymentAction}}/{{mandateExternalId}}" class="button-link-back"><button class="button">Back to payment</button></a>
         </div>
       {% endif %}
       </div>

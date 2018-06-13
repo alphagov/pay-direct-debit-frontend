@@ -7,7 +7,7 @@
 {% block content %}
   <main id="content" role="main">
    <div>
-      <a href="/setup/{{paymentRequestExternalId}}" class="link-back">Back</a>
+      <a href="/setup/{{mandateExternalId}}" class="link-back">Back</a>
    </div>
     <div class="grid-row relative">
       <div class="column-two-thirds">
@@ -34,14 +34,14 @@
         <form
           class="form"
           method="POST"
-          action="/confirmation/{{paymentRequestExternalId}}"
-          data-virtual-pageview="/success/{{paymentRequestExternalId}}"
+          action="/confirmation/{{mandateExternalId}}"
+          data-virtual-pageview="/success/{{mandateExternalId}}"
           data-parameters="dimension2:{{gatewayAccount.type}} dimension3:GoCardless metric1:{{amount}}"
         >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           <div class="form-group">
             <button type="submit" id="submit-direct-debit" class="button">Confirm payment</button>
-            <a class="cancel-link" href="/cancel/{{paymentRequestExternalId}}">Cancel payment</a>
+            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel payment</a>
           </div>
         </form>
       </div>

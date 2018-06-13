@@ -16,7 +16,7 @@ const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 
 describe('confirmation get controller', function () {
   let response, $
-  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
   const service = { external_id: 'eisuodfkf',
     name: 'GOV.UK Direct Cake service',
@@ -40,11 +40,13 @@ describe('confirmation get controller', function () {
   const amount = 1000
 
   before(done => {
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
-      amount: amount,
-      description: description
+      transaction: {
+        amount: amount,
+        description: description
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -56,20 +58,20 @@ describe('confirmation get controller', function () {
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccoutExternalId,
-      paymentRequestExternalId
+      mandateExternalId
     )
       .withCsrfSecret('123')
       .withConfirmationDetails(payer)
       .build()
     nock(config.CONNECTOR_URL)
-      .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-      .reply(200, paymentResponse)
+      .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+      .reply(200, mandateResponse)
     nock(config.CONNECTOR_URL)
       .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
       .reply(200, gatewayAccountResponse)
     nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
     supertest(getApp())
-      .get(`/confirmation/${paymentRequestExternalId}`)
+      .get(`/confirmation/${mandateExternalId}`)
       .set('cookie', cookieHeader)
       .end((err, res) => {
         response = res
@@ -98,16 +100,16 @@ describe('confirmation get controller', function () {
   })
 
   it('should display the enter direct debit page with a link to cancel the payment', () => {
-    expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
+    expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
   })
 
   it('should display the confirmation page with a back link to the setup page', () => {
-    const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+    const url = setup.paths.index.replace(':mandateExternalId', mandateExternalId)
     expect($('.link-back').attr('href')).to.equal(url)
   })
 
   it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
-    expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/confirmation/${paymentRequestExternalId}`)
+    expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/confirmation/${mandateExternalId}`)
   })
   it('should display merchant details in the footer', () => {
     expect($(`.merchant-details-line-1`).text()).to.equal(`Service provided by ${service.merchant_details.name}`)
@@ -119,35 +121,37 @@ describe('confirmation get controller', function () {
 
 describe('confirmation get controller with no confirmationDetails', function () {
   let response, $
-  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
   const description = 'this is a description'
   const amount = 1000
 
   before(done => {
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
-      amount: amount,
-      description: description
+      transaction: {
+        amount: amount,
+        description: description
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccoutExternalId,
-      paymentRequestExternalId
+      mandateExternalId
     )
       .withCsrfSecret('123')
       .build()
     nock(config.CONNECTOR_URL)
-      .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-      .reply(200, paymentResponse)
+      .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+      .reply(200, mandateResponse)
     nock(config.CONNECTOR_URL)
       .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
       .reply(200, gatewayAccountResponse)
     supertest(getApp())
-      .get(`/confirmation/${paymentRequestExternalId}`)
+      .get(`/confirmation/${mandateExternalId}`)
       .set('cookie', cookieHeader)
       .end((err, res) => {
         response = res
@@ -168,10 +172,10 @@ describe('confirmation get controller with no confirmationDetails', function () 
 
 describe('confirmation get controller after successful payment', function () {
   let response, $
-  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
-  const paymentResponse = paymentFixtures.validPaymentResponse({
-    external_id: paymentRequestExternalId,
+  const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+    external_id: mandateExternalId,
     gateway_account_external_id: gatewayAccoutExternalId,
     state: {status: 'pending'}
   }).getPlain()
@@ -189,7 +193,7 @@ describe('confirmation get controller after successful payment', function () {
   })
   const cookieHeader = new CookieBuilder(
     gatewayAccoutExternalId,
-    paymentRequestExternalId
+    mandateExternalId
   )
     .withCsrfSecret(csrfSecret)
     .withConfirmationDetails(payer)
@@ -200,13 +204,13 @@ describe('confirmation get controller after successful payment', function () {
 
   before(done => {
     nock(config.CONNECTOR_URL)
-      .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-      .reply(200, paymentResponse)
+      .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+      .reply(200, mandateResponse)
     nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
       .reply(200, gatewayAccountResponse)
 
     supertest(getApp())
-      .get(`/confirmation/${paymentRequestExternalId}`)
+      .get(`/confirmation/${mandateExternalId}`)
       .set('cookie', cookieHeader)
       .end((err, res) => {
         response = res
@@ -221,6 +225,6 @@ describe('confirmation get controller after successful payment', function () {
 
   it('should display the payment completed summary page', () => {
     expect($('.heading-large').text().trim()).to.equal('Your payment was successful')
-    expect($('#return-url').attr('href')).to.equal(paymentResponse.return_url)
+    expect($('#return-url').attr('href')).to.equal(mandateResponse.return_url)
   })
 })

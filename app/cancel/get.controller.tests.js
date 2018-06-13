@@ -14,11 +14,11 @@ const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 let response, $
-const paymentRequestExternalId = 'sdfihsdufh2e123'
+const mandateExternalId = 'sdfihsdufh2e123'
 const gatewayAccoutExternalId = '1234567890'
 const returnUrl = '/change-payment-method'
-const paymentResponse = paymentFixtures.validPaymentResponse({
-  external_id: paymentRequestExternalId,
+const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+  external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   return_url: returnUrl
 }).getPlain()
@@ -45,7 +45,7 @@ describe('cancel GET controller', () => {
   const csrfToken = csrf().create(csrfSecret)
   const cookieHeader = new CookieBuilder(
     gatewayAccoutExternalId,
-    paymentRequestExternalId
+    mandateExternalId
   )
     .withCsrfSecret(csrfSecret)
     .build()
@@ -56,10 +56,10 @@ describe('cancel GET controller', () => {
   describe('when cancelling a payment journey', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/cancel`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/cancel`)
         .reply(200)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
@@ -67,7 +67,7 @@ describe('cancel GET controller', () => {
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
 
       supertest(getApp())
-        .get(`/cancel/${paymentRequestExternalId}`)
+        .get(`/cancel/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken })
         .set('cookie', cookieHeader)
         .end((err, res) => {

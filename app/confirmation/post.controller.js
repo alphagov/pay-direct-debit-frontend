@@ -5,14 +5,18 @@ const connectorClient = require('../../common/clients/connector-client')
 const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  const paymentRequest = res.locals.paymentRequest
-  const session = getSessionVariable(req, paymentRequest.externalId)
-  connectorClient.payment.confirmDirectDebitDetails(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, {
+  const mandate = res.locals.mandate
+  const session = getSessionVariable(req, mandate.externalId)
+  const params = {
     account_number: session.confirmationDetails.accountNumber,
-    sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join('')
-  }, req.correlationId)
+    sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join(''),
+  }
+  if (mandate.transaction) {
+    params.transaction_external_id = mandate.transaction.externalId
+  }
+  connectorClient.payment.confirmDirectDebitDetails(mandate.gatewayAccountExternalId, mandate.externalId, params, req.correlationId)
     .then(() => {
-      return res.redirect(303, paymentRequest.returnUrl)
+      return res.redirect(303, mandate.returnUrl)
     })
     .catch(() => {
       renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500)

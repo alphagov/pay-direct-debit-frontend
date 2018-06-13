@@ -3,20 +3,20 @@ const {getSessionVariable} = require('../../common/config/cookies')
 const {renderErrorView, renderPaymentCompletedSummary} = require('../../common/response')
 
 module.exports = (req, res) => {
-  const paymentRequest = res.locals.paymentRequest
-  const session = getSessionVariable(req, paymentRequest.externalId)
-  if (paymentRequest.state.status === 'pending') {
-    renderPaymentCompletedSummary(req, res, {'status': 'successful', 'returnUrl': paymentRequest.returnUrl}
+  const mandate = res.locals.mandate
+  const session = getSessionVariable(req, mandate.externalId)
+  if (mandate.state.status === 'pending') {
+    renderPaymentCompletedSummary(req, res, {'status': 'successful', 'returnUrl': mandate.returnUrl}
     )
   } else if (session.confirmationDetails) {
     const params = {
-      paymentRequestExternalId: paymentRequest.externalId,
+      mandateExternalId: mandate.externalId,
       accountHolderName: session.confirmationDetails.accountHolderName,
       accountNumber: session.confirmationDetails.accountNumber,
       sortCode: session.confirmationDetails.sortCode.match(/.{2}/g).join(' '),
-      returnUrl: paymentRequest.returnUrl,
-      description: paymentRequest.description,
-      amount: paymentRequest.amount,
+      returnUrl: mandate.returnUrl,
+      description: mandate.transaction.description,
+      amount: mandate.transaction.amount,
       paymentAction: 'confirmation'
     }
     res.render('app/confirmation/get', params)

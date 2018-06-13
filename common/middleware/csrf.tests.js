@@ -22,11 +22,11 @@ describe('CSRF', function () {
       }
       }).validateAndRefreshCsrf
 
-    const paymentRequestExternalId = 'aaaaa'
+    const mandateExternalId = 'aaaaa'
     const req = {
       route: {methods: {post: {}}},
       direct_debit_frontend_state: {
-        [paymentRequestExternalId]: {
+        [mandateExternalId]: {
           csrfSecret: "it's a secret"
         }
       },
@@ -34,7 +34,7 @@ describe('CSRF', function () {
     }
 
     const res = {locals: {
-      paymentRequestExternalId: paymentRequestExternalId
+        mandateExternalId: mandateExternalId
     }}
 
     const next = sinon.spy()
@@ -139,11 +139,11 @@ describe('CSRF', function () {
       }
       }).validateAndRefreshCsrf
 
-    const paymentRequestExternalId = 'aaaaa'
+    const mandateExternalId = 'aaaaa'
     const req = {
       method: 'GET',
       direct_debit_frontend_state: {
-        [paymentRequestExternalId]: {
+        [mandateExternalId]: {
           csrfSecret: "it's a secret"
         }
       },
@@ -151,7 +151,7 @@ describe('CSRF', function () {
     }
 
     const res = {locals: {
-      paymentRequestExternalId: paymentRequestExternalId
+      mandateExternalId: mandateExternalId
     }}
 
     const next = sinon.spy()

@@ -1,10 +1,10 @@
 'use strict'
 
 module.exports = (req, res) => {
-  const paymentRequestExternalId = req.params.paymentRequestExternalId
+  const mandateExternalId = req.params.mandateExternalId
   const paymentAction = req.params.paymentAction
   const params = {
-    paymentRequestExternalId,
+    mandateExternalId,
     paymentAction
   }
   res.render('app/direct-debit-guarantee/get', params)

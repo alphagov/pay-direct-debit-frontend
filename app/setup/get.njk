@@ -20,7 +20,7 @@
         <h1 class="heading-large">Set up a Direct Debit</h1>
         <p>We’ll take a one-off payment from your bank account</p>
 
-        <form class="form" method="POST" action="/setup/{{paymentRequestExternalId}}" class="direct-debit-form" data-validate>
+        <form class="form" method="POST" action="/setup/{{mandateExternalId}}" class="direct-debit-form" data-validate>
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           {{ form.input(
             name='account-holder-name',
@@ -98,7 +98,7 @@
 
           <div class="form-group">
             <button type="submit" id="submit-direct-debit-data" class="button">Continue</button>
-            <a class="cancel-link" href="/cancel/{{paymentRequestExternalId}}">Cancel payment</a>
+            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel payment</a>
           </div>
         </div>
       <aside class="payment-summary">

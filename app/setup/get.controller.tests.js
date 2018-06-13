@@ -15,8 +15,9 @@ const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 
 describe('setup get controller', () => {
   let response, $
-  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
+  const transactionExternalId = 'osdhfsdkgjyfffsdj'
   const amount = 100
   const description = 'please buy Silvia a coffee'
   const csrfSecret = '123'
@@ -35,30 +36,35 @@ describe('setup get controller', () => {
     }
   }
 
-  describe('when a charge is valid', () => {
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+  describe('when a one-off mandate is valid', () => {
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
-      amount: amount,
-      description: description,
-      return_url: `/change-payment-method/${paymentRequestExternalId}`
+      transaction_external_id: transactionExternalId,
+      transaction: {
+        external_id: transactionExternalId,
+        amount: amount,
+        description: description
+      },
+      return_url: `/change-payment-method/${mandateExternalId}`
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccoutExternalId,
-      paymentRequestExternalId
+      mandateExternalId,
+      transactionExternalId
     )
       .withCsrfSecret(csrfSecret)
       .build()
 
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`).reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payments/${transactionExternalId}`).reply(200, mandateResponse)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`).reply(200, gatewayAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
-        .get(`/setup/${paymentRequestExternalId}`)
+        .get(`/setup/${mandateExternalId}`)
         .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res
@@ -76,15 +82,15 @@ describe('setup get controller', () => {
     })
 
     it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
-      expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/setup/${paymentRequestExternalId}`)
+      expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/setup/${mandateExternalId}`)
     })
 
     it('should display the enter direct debit page with a link to cancel the payment', () => {
-      expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${paymentRequestExternalId}`)
+      expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
     })
 
     it('should display the enter direct debit page with a link to go back to a different payment option', () => {
-      expect($(`#return-url`).attr('href')).to.equal(`/change-payment-method/${paymentRequestExternalId}`)
+      expect($(`#return-url`).attr('href')).to.equal(`/change-payment-method/${mandateExternalId}`)
     })
 
     it('should display merchant details in the footer', () => {
@@ -95,17 +101,21 @@ describe('setup get controller', () => {
     })
   })
 
-  describe('when a charge is valid and it has a payer', () => {
+  describe('when a one-off mandate is valid and it has a payer', () => {
     const payer = { payer_external_id: 'eg042u',
       account_holder_name: 'mr. payment',
       email: 'user@example.test',
       requires_authorisation: 'false'}
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
-      amount: amount,
-      description: description,
-      return_url: `/change-payment-method/${paymentRequestExternalId}`,
+      transaction_external_id: transactionExternalId,
+      transaction: {
+        external_id: transactionExternalId,
+        amount: amount,
+        description: description
+      },
+      return_url: `/change-payment-method/${mandateExternalId}`,
       payer: payer
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -113,17 +123,17 @@ describe('setup get controller', () => {
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccoutExternalId,
-      paymentRequestExternalId
+      mandateExternalId
     )
       .withCsrfSecret(csrfSecret)
       .build()
 
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`).reply(200, paymentResponse)
+      nock(config.CONNECTOR_URL).get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`).reply(200, mandateResponse)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`).reply(200, gatewayAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
-        .get(`/setup/${paymentRequestExternalId}`)
+        .get(`/setup/${mandateExternalId}`)
         .set('cookie', cookieHeader)
         .end((err, res) => {
           response = res

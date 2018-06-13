@@ -3,10 +3,10 @@ const {expect} = require('chai')
 const proxyquire = require('proxyquire')
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 
-const PAYMENT_REQUEST = paymentFixtures.validPaymentRequest()
+const MANDATE = paymentFixtures.validMandate()
 const GATEWAY_ACCOUNT = paymentFixtures.validGatewayAccount({
-  gateway_account_id: PAYMENT_REQUEST.gatewayAccountId,
-  gateway_account_external_id: PAYMENT_REQUEST.gatewayAccountExternalId
+  gateway_account_id: MANDATE.gatewayAccountId,
+  gateway_account_external_id: MANDATE.gatewayAccountExternalId
 })
 
 const setup = () => {
@@ -45,8 +45,8 @@ describe('Get gateway account middleware', () => {
     const {req, res, next, cache, getGatewayAccount} = setup()
 
     before(() => {
-      res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
-      cache.get.withArgs(PAYMENT_REQUEST.gatewayAccountExternalId).returns(GATEWAY_ACCOUNT)
+      res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
+      cache.get.withArgs(MANDATE.gatewayAccountExternalId).returns(GATEWAY_ACCOUNT)
       getGatewayAccount.middleware(req, res, next)
     })
 
@@ -64,15 +64,15 @@ describe('Get gateway account middleware', () => {
       const {req, res, next, cache, connectorClient, getGatewayAccount} = setup()
 
       before(() => {
-        res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
+        res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
         connectorClient.retrieveGatewayAccount
-          .withArgs(PAYMENT_REQUEST.gatewayAccountExternalId, req.correlationId)
+          .withArgs(MANDATE.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.resolve(GATEWAY_ACCOUNT))
         getGatewayAccount.middleware(req, res, next)
       })
 
       it('should cache the gateway account', () => {
-        sinon.assert.calledWith(cache.put, PAYMENT_REQUEST.gatewayAccountExternalId, GATEWAY_ACCOUNT, getGatewayAccount.CACHE_MAX_AGE)
+        sinon.assert.calledWith(cache.put, MANDATE.gatewayAccountExternalId, GATEWAY_ACCOUNT, getGatewayAccount.CACHE_MAX_AGE)
       })
 
       it('should set the gateway account that has been retrieved in res.locals', () => {
@@ -88,9 +88,9 @@ describe('Get gateway account middleware', () => {
       let {req, res, next, connectorClient, renderErrorView, getGatewayAccount} = setup()
 
       before(() => {
-        res.locals = {gatewayAccountExternalId: PAYMENT_REQUEST.gatewayAccountExternalId}
+        res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
         connectorClient.retrieveGatewayAccount
-          .withArgs(PAYMENT_REQUEST.gatewayAccountExternalId, req.correlationId)
+          .withArgs(MANDATE.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.reject(new Error()))
         getGatewayAccount.middleware(req, res, next)
       })

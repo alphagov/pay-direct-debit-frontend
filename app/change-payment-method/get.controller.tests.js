@@ -13,11 +13,11 @@ const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
 let response
-const paymentRequestExternalId = 'sdfihsdufh2e123'
+const mandateExternalId = 'sdfihsdufh2e123'
 const gatewayAccoutExternalId = '1234567890'
 const returnUrl = '/change-payment-method'
-const paymentResponse = paymentFixtures.validPaymentResponse({
-  external_id: paymentRequestExternalId,
+const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+  external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   return_url: returnUrl
 }).getPlain()
@@ -30,7 +30,7 @@ describe('change-payment-method GET controller', () => {
   const csrfToken = csrf().create(csrfSecret)
   const cookieHeader = new CookieBuilder(
     gatewayAccoutExternalId,
-    paymentRequestExternalId
+    mandateExternalId
   )
     .withCsrfSecret(csrfSecret)
     .build()
@@ -41,15 +41,15 @@ describe('change-payment-method GET controller', () => {
   describe('when switching payment options', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/change-payment-method`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/change-payment-method`)
         .reply(200)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       supertest(getApp())
-        .get(`/change-payment-method/${paymentRequestExternalId}`)
+        .get(`/change-payment-method/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken })
         .set('cookie', cookieHeader)
         .end((err, res) => {

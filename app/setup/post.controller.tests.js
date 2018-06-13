@@ -20,8 +20,9 @@ const normalise = require('../../common/utils/normalise')
 
 describe('setup post controller', () => {
   let responseRedirect
-  const paymentRequestExternalId = 'sdfihsdufh2e'
+  const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
+  const transactionExternalId = 'jhgdsfbkjsdhk'
   const service = { external_id: 'eisuodfkf',
     name: 'GOV.UK Direct Cake service',
     gateway_account_ids: [gatewayAccoutExternalId],
@@ -45,12 +46,13 @@ describe('setup post controller', () => {
     before(done => {
       const cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        paymentRequestExternalId
+        mandateExternalId,
+        transactionExternalId
       )
         .withCsrfSecret('123')
         .build()
       supertest(getApp())
-        .post(`/setup/${paymentRequestExternalId}`)
+        .post(`/setup/${mandateExternalId}`)
         .send({ 'csrfToken': 'whatever' })
         .set('Cookie', cookieHeader)
         .set('Content-Type', 'application/json')
@@ -64,9 +66,9 @@ describe('setup post controller', () => {
       expect(response.statusCode).to.equal(400)
     })
   })
-  describe('when submitting the form for a valid payment request', () => {
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+  describe('when submitting the form for a valid mandate request', () => {
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -82,23 +84,24 @@ describe('setup post controller', () => {
     before(done => {
       const cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        paymentRequestExternalId
+        mandateExternalId,
+        transactionExternalId
       )
         .withCsrfSecret(csrfSecret)
         .build()
       const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payments/${transactionExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       nock(config.CONNECTOR_URL)
-        .put(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers`, {
+        .put(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers`, {
           account_holder_name: formValues.accountHolderName,
           sort_code: normalise.sortCode(formValues.sortCode),
           account_number: normalise.accountNumber(formValues.accountNumber),
@@ -108,7 +111,7 @@ describe('setup post controller', () => {
         })
         .reply(201, createPayerResponse)
       supertest(getApp())
-        .post(`/setup/${paymentRequestExternalId}`)
+        .post(`/setup/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
@@ -130,14 +133,14 @@ describe('setup post controller', () => {
     })
 
     it('should redirect to the insert direct debit details page', () => {
-      const url = confirmation.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+      const url = confirmation.paths.index.replace(':mandateExternalId', mandateExternalId)
       expect(responseRedirect.header).property('location').to.equal(url)
     })
   })
 
   describe('should keep the field values when submitting the form with validation errors', () => {
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
     }).getPlain()
     const validateBankAccountResponse = {
@@ -161,22 +164,22 @@ describe('setup post controller', () => {
     before(done => {
       cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        paymentRequestExternalId
+        mandateExternalId
       )
         .withCsrfSecret(csrfSecret)
         .build()
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
-        .post(`/setup/${paymentRequestExternalId}`)
+        .post(`/setup/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
@@ -192,8 +195,8 @@ describe('setup post controller', () => {
         })
         .then(() => {
           nock(config.CONNECTOR_URL)
-            .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-            .reply(200, paymentResponse)
+            .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+            .reply(200, mandateResponse)
           supertest(getApp())
             .get(responseRedirect.header['location'])
             .set('cookie', responseRedirect.header['set-cookie'][1])
@@ -209,7 +212,7 @@ describe('setup post controller', () => {
     })
 
     it('should redirect to the set up direct debit page', () => {
-      const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequestExternalId)
+      const url = setup.paths.index.replace(':mandateExternalId', mandateExternalId)
       expect(responseRedirect.header).property('location').to.equal(url)
     })
 
@@ -243,8 +246,8 @@ describe('setup post controller', () => {
 
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     let $
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -267,22 +270,22 @@ describe('setup post controller', () => {
     before(done => {
       cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        paymentRequestExternalId
+        mandateExternalId
       )
         .withCsrfSecret(csrfSecret)
         .build()
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
-        .post(`/setup/${paymentRequestExternalId}`)
+        .post(`/setup/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
@@ -295,8 +298,8 @@ describe('setup post controller', () => {
         .set('Accept', 'application/json')
         .then((response) => {
           nock(config.CONNECTOR_URL)
-            .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-            .reply(200, paymentResponse)
+            .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+            .reply(200, mandateResponse)
           supertest(getApp())
             .get(response.header['location'])
             .set('cookie', response.header['set-cookie'][1])
@@ -340,8 +343,8 @@ describe('setup post controller', () => {
   })
   describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
     let $
-    const paymentResponse = paymentFixtures.validPaymentResponse({
-      external_id: paymentRequestExternalId,
+    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+      external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -363,22 +366,22 @@ describe('setup post controller', () => {
     before(done => {
       cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        paymentRequestExternalId
+        mandateExternalId
       )
         .withCsrfSecret(csrfSecret)
         .build()
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-        .reply(200, paymentResponse)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
       nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
         .reply(200, validateBankAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
-        .post(`/setup/${paymentRequestExternalId}`)
+        .post(`/setup/${mandateExternalId}`)
         .send({ 'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
@@ -391,8 +394,8 @@ describe('setup post controller', () => {
         .set('Accept', 'application/json')
         .then((response) => {
           nock(config.CONNECTOR_URL)
-            .get(`/v1/accounts/${gatewayAccoutExternalId}/payment-requests/${paymentRequestExternalId}`)
-            .reply(200, paymentResponse)
+            .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+            .reply(200, mandateResponse)
           supertest(getApp())
             .get(response.header['location'])
             .set('cookie', response.header['set-cookie'][1])
