@@ -27,3 +27,5 @@ staging-2.alpha_staging-2-27.date=2018-06-13:14:19:37
 staging-2.alpha_staging-2-27.status=success
 
 production-2.tag=FAILED-27
+
+production-2.FAILED-27.date=
