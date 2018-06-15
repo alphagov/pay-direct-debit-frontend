@@ -3,6 +3,10 @@
 pipeline {
   agent any
 
+  parameters {
+    booleanParam(defaultValue: true, description: '', name: 'runEndToEndOnPR')
+  }
+
   options {
     ansiColor('xterm')
     timestamps()
@@ -10,6 +14,10 @@ pipeline {
 
   libraries {
     lib("pay-jenkins-library@master")
+  }
+
+  environment {
+    RUN_END_TO_END_ON_PR = "${params.runEndToEndOnPR}"
   }
 
   stages {
@@ -28,6 +36,12 @@ pipeline {
       }
     }
     stage('Direct-Debit End-to-End') {
+      when {
+        anyOf {
+          branch 'master'
+          environment name: 'RUN_END_TO_END_ON_PR', value: 'true'
+        }
+      }
       steps {
         runDirectDebitE2E("directdebit-frontend")
       }
