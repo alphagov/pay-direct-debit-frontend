@@ -9,7 +9,7 @@ module.exports = (req, res) => {
   const session = getSessionVariable(req, mandate.externalId)
   const params = {
     account_number: session.confirmationDetails.accountNumber,
-    sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join(''),
+    sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join('')
   }
   if (mandate.transaction) {
     params.transaction_external_id = mandate.transaction.externalId

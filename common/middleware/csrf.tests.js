@@ -34,7 +34,7 @@ describe('CSRF', function () {
     }
 
     const res = {locals: {
-        mandateExternalId: mandateExternalId
+      mandateExternalId: mandateExternalId
     }}
 
     const next = sinon.spy()

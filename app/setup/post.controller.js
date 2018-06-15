@@ -13,7 +13,7 @@ const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
 const {setSessionVariable} = require('../../common/config/cookies')
 
-//todo check if transaction_external_id in token response is actually useful
+// todo check if transaction_external_id in token response is actually useful
 module.exports = (req, res) => {
   const mandate = res.locals.mandate
   const mandateExternalId = mandate.externalId
