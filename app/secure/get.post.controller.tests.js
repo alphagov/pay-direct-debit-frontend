@@ -14,7 +14,7 @@ const paymentFixtures = require('../../test/fixtures/payments-fixtures')
 const setup = require('../setup')
 let response, $
 
-const PAYMENT_REQUEST = paymentFixtures.validTokenExchangeResponse().getPlain()
+const MANDATE = paymentFixtures.validTokenExchangeResponse().getPlain()
 const TOKEN = 'sdfihsdufh2e'
 
 describe('secure controller', () => {
@@ -24,7 +24,7 @@ describe('secure controller', () => {
 
   describe('when getting /secure with a valid one-time token', () => {
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/payment-request`).reply(200, PAYMENT_REQUEST)
+      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/mandate`).reply(200, MANDATE)
       nock(config.CONNECTOR_URL).delete(`/v1/tokens/${TOKEN}`).reply(200)
       supertest(getApp())
         .get(`/secure/${TOKEN}`)
@@ -39,14 +39,14 @@ describe('secure controller', () => {
     })
 
     it('should redirect to the insert direct debit details page', () => {
-      const url = setup.paths.index.replace(':paymentRequestExternalId', PAYMENT_REQUEST.external_id)
+      const url = setup.paths.index.replace(':mandateExternalId', MANDATE.external_id)
       expect(response.header).property('location').to.equal(url)
     })
   })
 
   describe('when getting /secure with an invalid one-time token', () => {
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/payment-request`).reply(404)
+      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/mandate`).reply(404)
       supertest(getApp())
         .get(`/secure/${TOKEN}`)
         .end((err, res) => {
@@ -68,7 +68,7 @@ describe('secure controller', () => {
 
   describe('when posting to /secure with a valid one-time token', () => {
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/payment-request`).reply(200, PAYMENT_REQUEST)
+      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/mandate`).reply(200, MANDATE)
       nock(config.CONNECTOR_URL).delete(`/v1/tokens/${TOKEN}`).reply(200)
       supertest(getApp())
         .post(`/secure`)
@@ -86,14 +86,14 @@ describe('secure controller', () => {
     })
 
     it('should redirect to the insert direct debit details page', () => {
-      const url = setup.paths.index.replace(':paymentRequestExternalId', PAYMENT_REQUEST.external_id)
+      const url = setup.paths.index.replace(':mandateExternalId', MANDATE.external_id)
       expect(response.header).property('location').to.equal(url)
     })
   })
 
   describe('when posting to /secure with an invalid one-time token', () => {
     before(done => {
-      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/payment-request`).reply(404)
+      nock(config.CONNECTOR_URL).get(`/v1/tokens/${TOKEN}/mandate`).reply(404)
       nock(config.CONNECTOR_URL).delete(`/v1/tokens/${TOKEN}`).reply(200)
       supertest(getApp())
         .post(`/secure`)

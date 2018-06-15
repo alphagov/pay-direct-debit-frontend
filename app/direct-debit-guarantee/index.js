@@ -9,7 +9,7 @@ const getController = require('./get.controller')
 // Initialisation
 const router = express.Router()
 const indexPath = '/direct-debit-guarantee'
-const paymentJourneyPath = '/direct-debit-guarantee/:paymentAction/:paymentRequestExternalId'
+const paymentJourneyPath = '/direct-debit-guarantee/:paymentAction/:mandateExternalId'
 const paths = {
   index: indexPath,
   paymentJourney: paymentJourneyPath

@@ -4,12 +4,12 @@ const {renderErrorView} = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
 
 module.exports = (req, res) => {
-  const paymentRequest = res.locals.paymentRequest
+  const mandate = res.locals.mandate
 
   const params = {
-    returnUrl: paymentRequest.returnUrl
+    returnUrl: mandate.returnUrl
   }
-  connectorClient.payment.cancelPaymentRequest(paymentRequest.gatewayAccountExternalId, paymentRequest.externalId, req.correlationId)
+  connectorClient.payment.cancelPaymentRequest(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)
     .then(() => {
       return res.render('app/cancel/get', params)
     })

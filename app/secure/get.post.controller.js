@@ -8,17 +8,18 @@ const {setSessionVariable} = require('../../common/config/cookies')
 module.exports = (req, res) => {
   const token = req.body.chargeTokenId || req.params.chargeTokenId
 
-  connectorClient.secure.retrievePaymentRequestByToken(token, req.correlationId)
-    .then(paymentRequest => {
+  connectorClient.secure.retrieveMandateByToken(token, req.correlationId)
+    .then(mandate => {
       return connectorClient.secure.deleteToken(token, req.correlationId).then(() => {
-        return Promise.resolve(paymentRequest)
+        return Promise.resolve(mandate)
       })
     })
-    .then((paymentRequest) => {
-      const url = setup.paths.index.replace(':paymentRequestExternalId', paymentRequest.externalId)
-      setSessionVariable(req, paymentRequest.externalId, {
-        paymentRequestExternalId: paymentRequest.externalId,
-        gatewayAccountExternalId: paymentRequest.gatewayAccountExternalId
+    .then(mandate => {
+      const url = setup.paths.index.replace(':mandateExternalId', mandate.externalId)
+      setSessionVariable(req, mandate.externalId, {
+        mandateExternalId: mandate.externalId,
+        gatewayAccountExternalId: mandate.gatewayAccountExternalId,
+        transactionExternalId: mandate.transactionExternalId
       })
       return res.redirect(303, url)
     })

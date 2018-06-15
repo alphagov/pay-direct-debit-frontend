@@ -10,7 +10,7 @@ const expect = chai.expect
 const getApp = require('../../server').getApp
 
 describe('direct debit guarantee controller', () => {
-  describe('when requesting guarantee without a charge id', () => {
+  describe('when requesting guarantee without a mandate id', () => {
     let response, $
 
     before(done => {
@@ -31,14 +31,14 @@ describe('direct debit guarantee controller', () => {
       expect($(`.form-group`).find('a').attr('href')).to.not.exist // eslint-disable-line no-unused-expressions
     })
   })
-  describe('when requesting direct debit guarantee from setup page with a charge id', () => {
-    const paymentRequestExternalId = 'sdfihsdufh2e'
+  describe('when requesting direct debit guarantee from setup page with a mandate id', () => {
+    const mandateExternalId = 'sdfihsdufh2e'
     const paymentAction = 'setup'
     let response, $
 
     before(done => {
       supertest(getApp())
-        .get(`/direct-debit-guarantee/${paymentAction}/${paymentRequestExternalId}`)
+        .get(`/direct-debit-guarantee/${paymentAction}/${mandateExternalId}`)
         .end((err, res) => {
           response = res
           $ = cheerio.load(res.text)
@@ -50,19 +50,19 @@ describe('direct debit guarantee controller', () => {
       expect(response.statusCode).to.equal(200)
     })
     it('should display back links to the payment journey', () => {
-      expect($(`.back`).find('a').attr('href')).to.equal(`/setup/${paymentRequestExternalId}`)
-      expect($(`.form-group`).find('a').attr('href')).to.equal(`/setup/${paymentRequestExternalId}`)
+      expect($(`.back`).find('a').attr('href')).to.equal(`/setup/${mandateExternalId}`)
+      expect($(`.form-group`).find('a').attr('href')).to.equal(`/setup/${mandateExternalId}`)
     })
   })
 
-  describe('when requesting direct debit guarantee from confirmation page with a charge id', () => {
-    const paymentRequestExternalId = 'sdfihsdufh2e'
+  describe('when requesting direct debit guarantee from confirmation page with a mandate id', () => {
+    const mandateExternalId = 'sdfihsdufh2e'
     const paymentAction = 'confirmation'
     let response, $
 
     before(done => {
       supertest(getApp())
-        .get(`/direct-debit-guarantee/${paymentAction}/${paymentRequestExternalId}`)
+        .get(`/direct-debit-guarantee/${paymentAction}/${mandateExternalId}`)
         .end((err, res) => {
           response = res
           $ = cheerio.load(res.text)
@@ -74,8 +74,8 @@ describe('direct debit guarantee controller', () => {
       expect(response.statusCode).to.equal(200)
     })
     it('should display back links to the payment journey', () => {
-      expect($(`.back`).find('a').attr('href')).to.equal(`/confirmation/${paymentRequestExternalId}`)
-      expect($(`.form-group`).find('a').attr('href')).to.equal(`/confirmation/${paymentRequestExternalId}`)
+      expect($(`.back`).find('a').attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
+      expect($(`.form-group`).find('a').attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
     })
   })
 })

@@ -18,8 +18,8 @@ module.exports = {
 
 // Middleware methods
 function validateAndRefreshCsrf (req, res, next) {
-  const paymentRequestExternalId = res.locals.paymentRequestExternalId
-  const session = getSessionVariable(req, paymentRequestExternalId)
+  const mandateExternalId = res.locals.mandateExternalId
+  const session = getSessionVariable(req, mandateExternalId)
 
   if (!session) {
     logger.warn(`[${req.correlationId}] Session is not defined`)
@@ -42,18 +42,18 @@ function validateAndRefreshCsrf (req, res, next) {
 }
 
 function ensureSessionHasCsrfSecret (req, res, next) {
-  const paymentRequestExternalId = res.locals.paymentRequestExternalId
-  const csrfSecret = getSessionVariable(req, paymentRequestExternalId).csrfSecret
+  const mandateExternalId = res.locals.mandateExternalId
+  const csrfSecret = getSessionVariable(req, mandateExternalId).csrfSecret
   if (csrfSecret) return next()
-  setSessionVariable(req, `${paymentRequestExternalId}.csrfSecret`, csrf().secretSync())
-  logger.info(`[${req.correlationId}] Saved csrfSecret: ${getSessionVariable(req, paymentRequestExternalId).csrfSecret}`)
+  setSessionVariable(req, `${mandateExternalId}.csrfSecret`, csrf().secretSync())
+  logger.info(`[${req.correlationId}] Saved csrfSecret: ${getSessionVariable(req, mandateExternalId).csrfSecret}`)
 
   return next()
 }
 
 // Other Methods
 function isValidCsrf (req, res) {
-  const paymentRequestExternalId = res.locals.paymentRequestExternalId
-  const csrfSecret = getSessionVariable(req, paymentRequestExternalId).csrfSecret
+  const mandateExternalId = res.locals.mandateExternalId
+  const csrfSecret = getSessionVariable(req, mandateExternalId).csrfSecret
   return csrf().verify(csrfSecret, req.body.csrfToken)
 }

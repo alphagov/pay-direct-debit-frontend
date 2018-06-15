@@ -1,5 +1,6 @@
 'use strict'
 const Payer = require('../../common/classes/Payer.class')
+const Mandate = require('../../common/classes/Mandate.class')
 const PaymentRequest = require('../../common/classes/PaymentRequest.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
@@ -13,8 +14,7 @@ module.exports = {
   validTokenExchangeResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
-      amount: opts.amount || randomNumber(),
-      description: opts.description || 'buy Silvia a coffee',
+      reference: opts.reference || 'buy Silvia a coffee',
       type: opts.type || 'CHARGE',
       state: opts.state || randomNumber(),
       return_url: opts.return_url || randomUrl(),
@@ -27,7 +27,6 @@ module.exports = {
       }
     }
   },
-
   validGatewayAccountResponse: (opts = {}) => {
     const data = {
       gatewayAccountId: opts.gatewayAccountId || randomNumber(),
@@ -62,7 +61,29 @@ module.exports = {
       }
     }
   },
-
+  validOneOffMandateResponse: (opts = {}) => {
+    const data = {
+      external_id: opts.external_id || randomExternalId(),
+      return_url: opts.return_url || randomUrl(),
+      gateway_account_id: 23 || opts.gateway_account_id,
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
+      reference: opts.reference || 'buy Silvia a coffee',
+      state: opts.state || 'CREATED',
+      payer: opts.payer || null,
+      transaction: opts.transaction || {
+        external_id: randomExternalId(),
+        amount: 300,
+        description: 'transaction desc',
+        reference: 'transaction ref',
+        state: 'NEW'
+      }
+    }
+    return {
+      getPlain: () => {
+        return data
+      }
+    }
+  },
   validCreatePayerResponse: (opts = {}) => {
     const data = {
       payer_external_id: opts.payer_external_id || randomExternalId()
@@ -94,13 +115,25 @@ module.exports = {
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       description: opts.description || 'buy Silvia a coffee',
       amount: opts.amount || randomNumber(),
-      type: opts.type || 'CHARGE',
       state: opts.state || 'NEW',
       payer: opts.payer || null
     }
     return new PaymentRequest(data)
   },
-
+  validMandate: (opts = {}) => {
+    const data = {
+      external_id: opts.external_id || randomExternalId(),
+      return_url: opts.return_url || randomUrl(),
+      gateway_account_id: 23 || opts.gateway_account_id,
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
+      reference: opts.reference || 'buy Silvia a coffee',
+      state: opts.state || 'CREATED',
+      type: opts.type || 'ONE_OFF',
+      payer: opts.payer || null,
+      transaction: opts.transaction || null
+    }
+    return new Mandate(data)
+  },
   validGatewayAccount: (opts = {}) => {
     const data = {
       gateway_account_id: opts.gateway_account_id || randomExternalId(),

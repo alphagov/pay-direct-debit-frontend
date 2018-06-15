@@ -3,7 +3,7 @@
 // Local Dependencies
 const baseClient = require('./base-client/base-client')
 const {CONNECTOR_URL} = require('../config')
-const PaymentRequest = require('../../common/classes/PaymentRequest.class')
+const Mandate = require('../../common/classes/Mandate.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 
 const service = 'connector'
@@ -15,8 +15,8 @@ const headers = {
 module.exports = {
   retrieveGatewayAccount,
   secure: {
-    retrievePaymentRequestByToken: retrievePaymentRequestByToken,
-    retrievePaymentRequestByExternalId: retrievePaymentRequestByExternalId,
+    retrieveMandateByToken: retrieveMandateByToken,
+    retrievePaymentInformationByExternalId: retrievePaymentInformationByExternalId,
     deleteToken: deleteToken
   },
   payment: {
@@ -39,26 +39,27 @@ function retrieveGatewayAccount (gatewayAccountId, correlationId) {
   }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
-function retrievePaymentRequestByExternalId (gatewayAccountExternalId, paymentRequestExternalId, correlationId) {
+function retrievePaymentInformationByExternalId (gatewayAccountExternalId, mandateExternalId, paymentExternalId, correlationId) {
+  const url = `/accounts/${gatewayAccountExternalId}/mandates/${mandateExternalId}` + (paymentExternalId ? `/payments/${paymentExternalId}` : '')
   return baseClient.get({
     headers,
     baseUrl,
-    url: `/accounts/${gatewayAccountExternalId}/payment-requests/${paymentRequestExternalId}`,
+    url,
     service: service,
     correlationId: correlationId,
-    description: `retrieve a payment request by external id`
-  }).then(paymentRequest => new PaymentRequest(paymentRequest))
+    description: `retrieve mandate information by external id`
+  }).then(mandate => new Mandate(mandate))
 }
 
-function retrievePaymentRequestByToken (token, correlationId) {
+function retrieveMandateByToken (token, correlationId) {
   return baseClient.get({
     headers,
     baseUrl,
-    url: `/tokens/${token}/payment-request`,
+    url: `/tokens/${token}/mandate`,
     service: service,
     correlationId: correlationId,
-    description: `retrieve a payment request by its one-time token`
-  }).then(paymentRequest => new PaymentRequest(paymentRequest))
+    description: `retrieve information about a mandate by its one-time token`
+  }).then(mandate => new Mandate(mandate))
 }
 
 function deleteToken (token, correlationId) {
@@ -72,12 +73,12 @@ function deleteToken (token, correlationId) {
   })
 }
 
-function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, correlationId) {
+function submitDirectDebitDetails (accountId, mandateExternalId, body, correlationId) {
   return baseClient.put({
     headers,
     baseUrl,
     json: true,
-    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/payers`,
+    url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/payers`,
     service: service,
     body: body,
     correlationId: correlationId,
@@ -87,12 +88,12 @@ function submitDirectDebitDetails (accountId, paymentRequestExternalId, body, co
   })
 }
 
-function confirmDirectDebitDetails (accountId, paymentRequestExternalId, body, correlationId) {
+function confirmDirectDebitDetails (accountId, mandateExternalId, body, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
     json: true,
-    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/confirm`,
+    url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/confirm`,
     service: service,
     body: body,
     correlationId: correlationId,
@@ -100,12 +101,12 @@ function confirmDirectDebitDetails (accountId, paymentRequestExternalId, body, c
   })
 }
 
-function validateBankAccountDetails (accountId, paymentRequestExternalId, body, correlationId) {
+function validateBankAccountDetails (accountId, mandateExternalId, body, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
     json: true,
-    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/payers/bank-account/validate`,
+    url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/payers/bank-account/validate`,
     service: service,
     body: body,
     correlationId: correlationId,
@@ -113,21 +114,21 @@ function validateBankAccountDetails (accountId, paymentRequestExternalId, body, 
   })
 }
 
-function cancelPaymentRequest (accountId, paymentRequestExternalId, correlationId) {
+function cancelPaymentRequest (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
-    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/cancel`,
+    url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/cancel`,
     service: service,
     correlationId: correlationId,
     description: `cancel a payment request`
   })
 }
-function changePaymentMethod (accountId, paymentRequestExternalId, correlationId) {
+function changePaymentMethod (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
-    url: `/api/accounts/${accountId}/payment-requests/${paymentRequestExternalId}/change-payment-method`,
+    url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/change-payment-method`,
     service: service,
     correlationId: correlationId,
     description: `cancel a payment request when user not eligible for setting up a Direct Debit`
