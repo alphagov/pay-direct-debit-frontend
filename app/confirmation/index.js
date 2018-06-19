@@ -6,11 +6,11 @@ const express = require('express')
 // Local dependencies
 const getController = require('./get.controller')
 const postController = require('./post.controller')
-const {validateAndRefreshCsrf} = require('../../common/middleware/csrf')
-const checkSecureCookie = require('../../common/middleware/check-secure-cookie').middleware
-const getMandate = require('../../common/middleware/get-mandate').middleware
-const getGatewayAccount = require('../../common/middleware/get-gateway-account').middleware
-const getService = require('../../common/middleware/get-service').middleware
+const {validateAndRefreshCsrf} = require('../../common/middleware/csrf/csrf')
+const checkSecureCookie = require('../../common/middleware/check-secure-cookie/check-secure-cookie').middleware
+const getMandate = require('../../common/middleware/get-mandate/get-mandate').middleware
+const getGatewayAccount = require('../../common/middleware/get-gateway-account/get-gateway-account').middleware
+const getService = require('../../common/middleware/get-service/get-service').middleware
 
 // Initialisation
 const router = express.Router()

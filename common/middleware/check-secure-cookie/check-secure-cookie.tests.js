@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const {expect} = require('chai')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
 const setupFixtures = () => {
   const mandate = paymentFixtures.validMandate()
@@ -11,7 +11,7 @@ const setupFixtures = () => {
   const renderErrorView = sinon.spy()
 
   const checkSecureCookie = proxyquire('./check-secure-cookie', {
-    '../response': {renderErrorView}
+    '../../response': {renderErrorView}
   }).middleware
 
   return {res, next, renderErrorView, mandate, checkSecureCookie}

@@ -19,7 +19,7 @@ const nunjucks = require('nunjucks')
 // Local dependencies
 const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
-const correlationHeader = require('./common/middleware/correlation-header')
+const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
 const cookieConfig = require('./common/config/cookies')
 
 // Global constants

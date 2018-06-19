@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const {expect} = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
 const GATEWAY_ACCOUNT_ID = 'DIRECT_DEBIT:23823o2iousda'
 const SERVICE = paymentFixtures.validService({
@@ -16,8 +16,8 @@ const setupFixtures = () => {
   const renderErrorView = sinon.spy()
 
   const getService = proxyquire('./get-service', {
-    '../response': {renderErrorView: renderErrorView},
-    '../clients/adminusers-client': adminusersClient
+    '../../response': {renderErrorView: renderErrorView},
+    '../../clients/adminusers-client': adminusersClient
   })
 
   return {req, res, next, renderErrorView, adminusersClient, getService}

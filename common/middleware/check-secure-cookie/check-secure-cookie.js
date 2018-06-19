@@ -3,8 +3,8 @@ const logger = require('pino')()
 const _ = require('lodash')
 
 // local dependencies
-const {renderErrorView} = require('../response')
-const {getSessionVariable} = require('../config/cookies')
+const {renderErrorView} = require('../../response')
+const {getSessionVariable} = require('../../config/cookies')
 
 function middleware (req, res, next) {
   const mandateExternalId = req.params.mandateExternalId
