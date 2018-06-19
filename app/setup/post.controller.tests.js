@@ -69,7 +69,10 @@ describe('setup post controller', () => {
   describe('when submitting the form for a valid mandate request', () => {
     const mandateResponse = paymentFixtures.validOneOffMandateResponse({
       external_id: mandateExternalId,
-      gateway_account_external_id: gatewayAccoutExternalId
+      gateway_account_external_id: gatewayAccoutExternalId,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -141,7 +144,10 @@ describe('setup post controller', () => {
   describe('should keep the field values when submitting the form with validation errors', () => {
     const mandateResponse = paymentFixtures.validOneOffMandateResponse({
       external_id: mandateExternalId,
-      gateway_account_external_id: gatewayAccoutExternalId
+      gateway_account_external_id: gatewayAccoutExternalId,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const validateBankAccountResponse = {
       is_valid: true,
@@ -248,7 +254,10 @@ describe('setup post controller', () => {
     let $
     const mandateResponse = paymentFixtures.validOneOffMandateResponse({
       external_id: mandateExternalId,
-      gateway_account_external_id: gatewayAccoutExternalId
+      gateway_account_external_id: gatewayAccoutExternalId,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -345,7 +354,10 @@ describe('setup post controller', () => {
     let $
     const mandateResponse = paymentFixtures.validOneOffMandateResponse({
       external_id: mandateExternalId,
-      gateway_account_external_id: gatewayAccoutExternalId
+      gateway_account_external_id: gatewayAccoutExternalId,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId

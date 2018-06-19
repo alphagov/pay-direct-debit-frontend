@@ -8,11 +8,14 @@ function response (req, res, template, data) {
   return res.render(template, data)
 }
 
-function errorResponse (req, res, msg = ERROR_MESSAGE, status = 500) {
+function errorResponse (req, res, msg = ERROR_MESSAGE, status = 500, heading = 'Sorry, we’re experiencing technical problems') {
   logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, {errorMessage: msg})
   res.setHeader('Content-Type', 'text/html')
   res.status(status)
-  res.render('common/templates/error', {'message': msg})
+  res.render('common/templates/error', {
+    'message': msg,
+    'heading': heading
+  })
 }
 
 function renderPaymentCompletedSummary (req, res, params) {

@@ -1,4 +1,3 @@
-const path = require('path')
 const sinon = require('sinon')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
