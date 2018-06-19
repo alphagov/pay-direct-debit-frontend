@@ -7,7 +7,8 @@ const {renderErrorView} = require('../../response')
 
 const pageStateMap = {
   'setup': ['started'],
-  'confirmation': ['started']
+  'confirmation': ['started', 'pending'],
+  'cancel': ['cancelled', 'inactive']
 }
 
 const stateToErrorMessageMap = {
@@ -16,7 +17,8 @@ const stateToErrorMessageMap = {
   'failed': 'No longer in process. Start again',
   'active': 'Your mandate has been setup. Refer to your email for contact details',
   'created': 'Technical error',
-  'submitted': 'Technical error'
+  'submitted': 'Technical error',
+  'inactive': 'You cancelled your request. Start again'
 }
 
 function middlewareWrapper (page) {
