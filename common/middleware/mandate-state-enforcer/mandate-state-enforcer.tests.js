@@ -59,7 +59,7 @@ describe('Mandate state enforcer', () => {
       })
       mandateStateEnforcer.middlewareWrapper('setup')(req, res, next, renderErrorView)
       expect(next.called).to.equal(false)
-      sinon.assert.calledWith(renderErrorView, req, res, 'You cancelled your request. Start again')
+      sinon.assert.calledWith(renderErrorView, req, res, 'You cancelled your request. Start again', 500, 'aghhhhhhhhhhhhhh!', true)
     })
   })
 })

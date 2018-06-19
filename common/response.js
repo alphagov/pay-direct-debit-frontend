@@ -1,6 +1,7 @@
 'use strict'
 
 const logger = require('pino')()
+const _ = require('lodash')
 
 const ERROR_MESSAGE = 'There is a problem with the payments platform'
 
@@ -8,14 +9,21 @@ function response (req, res, template, data) {
   return res.render(template, data)
 }
 
-function errorResponse (req, res, msg = ERROR_MESSAGE, status = 500, heading = 'Sorry, we’re experiencing technical problems') {
+function errorResponse (req, res, msg = ERROR_MESSAGE, status = 500, heading = 'Sorry, we’re experiencing technical problems', setReturnUrl = false) {
   logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, {errorMessage: msg})
   res.setHeader('Content-Type', 'text/html')
   res.status(status)
-  res.render('common/templates/error', {
+  const returnUrl = setReturnUrl && _.get(res, 'locals.mandate.returnUrl')
+  let options = {
     'message': msg,
     'heading': heading
-  })
+  }
+
+  if (returnUrl) {
+    options.returnUrl = returnUrl
+  }
+
+  res.render('common/templates/error', options)
 }
 
 function renderPaymentCompletedSummary (req, res, params) {

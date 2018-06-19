@@ -8,6 +8,9 @@
       <div class="column-two-thirds">
         <h1 class="heading-large">{{heading}}</h1>
           <p id="errorMsg">{{message}}</p>
+          {% if returnUrl %}
+          <a href={{returnUrl}}> Go back to service </a>
+          {% endif %}
       </div>
     </div>
   </main>

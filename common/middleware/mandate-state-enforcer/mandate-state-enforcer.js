@@ -11,7 +11,6 @@ const pageStateMap = {
 }
 
 const stateToErrorMessageMap = {
-  'started': 'msg',
   'cancelled': 'You cancelled your request. Start again',
   'pending': 'Being processed. Refer to your email for contact details',
   'failed': 'No longer in process. Start again',
@@ -32,7 +31,7 @@ function middlewareWrapper (page) {
       } else {
         const errorMessage = _.get(stateToErrorMessageMap, mandateState, 'An error has occurred')
         logger.info(`[${req.correlationId}] Mandate ${mandate.externalId} is in state ${mandateState} and not valid for page ${page}`)
-        renderErrorView(req, res, errorMessage, 500, 'aghhhhhhhhhhhhhh!')
+        renderErrorView(req, res, errorMessage, 500, 'Error', true)
       }
     } else {
       next()
