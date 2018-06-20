@@ -230,7 +230,8 @@ describe('confirmation get controller after successful payment', function () {
   })
 
   it('should display the payment completed summary page', () => {
-    expect($('.heading-large').text().trim()).to.equal('Your payment was successful')
+    expect($('form').length).to.equal(0)
+    expect($('.heading-large.pending').length).to.equal(1)
     expect($('#return-url').attr('href')).to.equal(mandateResponse.return_url)
   })
 })

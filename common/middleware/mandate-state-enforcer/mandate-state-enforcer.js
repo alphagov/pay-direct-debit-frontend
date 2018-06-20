@@ -7,7 +7,7 @@ const {response} = require('../../response')
 
 const pageToValidMandateStateMap = {
   'setup': ['started'],
-  'confirmation': ['started', 'pending'],
+  'confirmation': ['started'],
   'cancel': ['cancelled', 'inactive']
 }
 
@@ -36,7 +36,8 @@ function middlewareWrapper (page) {
         response(req, res, 'common/templates/mandate_state_page', {
           message,
           heading: 'Heading',
-          returnUrl: mandate.returnUrl
+          returnUrl: mandate.returnUrl,
+          status: mandateState
         })
       }
     } else {

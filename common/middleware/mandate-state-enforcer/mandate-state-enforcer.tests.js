@@ -65,6 +65,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'You cancelled your request. Start again',
         heading: 'Heading',
+        status: 'cancelled',
         returnUrl
       })
     })
@@ -101,6 +102,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'You cancelled your request. Start again',
         heading: 'Heading',
+        status: 'cancelled',
         returnUrl
       })
     })
