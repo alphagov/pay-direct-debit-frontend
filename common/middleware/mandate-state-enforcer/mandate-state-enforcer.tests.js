@@ -63,10 +63,11 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middlewareWrapper('setup')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'You cancelled your request. Start again',
-        heading: 'Heading',
+        message: 'Your mandate has not been set up.',
+        heading: 'You have cancelled the Direct Debit mandate setup',
         status: 'cancelled',
-        returnUrl
+        returnUrl,
+        includeReturnUrl: true
       })
     })
   })
@@ -100,10 +101,11 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middlewareWrapper('confirmation')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'You cancelled your request. Start again',
-        heading: 'Heading',
+        message: 'Your mandate has not been set up.',
+        heading: 'You have cancelled the Direct Debit mandate setup',
         status: 'cancelled',
-        returnUrl
+        returnUrl,
+        includeReturnUrl: true
       })
     })
   })

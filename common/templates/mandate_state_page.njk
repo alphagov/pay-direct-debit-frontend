@@ -9,8 +9,8 @@
     <div class="column-two-thirds">
       <h1 class="heading-large {{ status }}"> {{ heading }} </h1>
       <p class="lede">{{ message }}</p>
-      {% if returnUrl %}
-      <a href="{{ returnUrl }}" id="return-url" class="lede"> View your payment summary </a>
+      {% if includeReturnUrl %}
+      <p class="lede">You can <a href="{{ returnUrl }}" id="return-url" class="lede">  go back and try again</a>.</p>
       {% endif %}
     </div>
   </main>
