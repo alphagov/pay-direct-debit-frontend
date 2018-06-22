@@ -8,7 +8,7 @@ const {response} = require('../../response')
 const pageToValidMandateStateMap = {
   'setup': ['started'],
   'confirmation': ['started'],
-  'cancel': ['cancelled', 'inactive']
+  'cancel': ['started']
 }
 
 const mandateStateToMessageMap = {

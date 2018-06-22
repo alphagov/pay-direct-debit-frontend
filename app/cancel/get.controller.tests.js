@@ -20,7 +20,10 @@ const returnUrl = '/change-payment-method'
 const mandateResponse = paymentFixtures.validOneOffMandateResponse({
   external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
-  return_url: returnUrl
+  return_url: returnUrl,
+  state: {
+    status: 'started'
+  }
 }).getPlain()
 const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
   gateway_account_external_id: gatewayAccoutExternalId
