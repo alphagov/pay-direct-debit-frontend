@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const {expect} = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
 const MANDATE = paymentFixtures.validMandate()
 const GATEWAY_ACCOUNT = paymentFixtures.validGatewayAccount({
@@ -20,9 +20,9 @@ const setup = () => {
   }
 
   const getGatewayAccount = proxyquire('./get-gateway-account', {
-    '../response': {renderErrorView: fixtures.renderErrorView},
+    '../../response': {renderErrorView: fixtures.renderErrorView},
     'memory-cache': { Cache: function () { return fixtures.cache } },
-    '../clients/connector-client': fixtures.connectorClient
+    '../../clients/connector-client': fixtures.connectorClient
   })
 
   return Object.assign(fixtures, {getGatewayAccount})

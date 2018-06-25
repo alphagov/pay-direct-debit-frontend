@@ -46,6 +46,9 @@ describe('confirmation get controller', function () {
       transaction: {
         amount: amount,
         description: description
+      },
+      state: {
+        status: 'started'
       }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -133,6 +136,9 @@ describe('confirmation get controller with no confirmationDetails', function () 
       transaction: {
         amount: amount,
         description: description
+      },
+      state: {
+        status: 'started'
       }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
@@ -224,7 +230,7 @@ describe('confirmation get controller after successful payment', function () {
   })
 
   it('should display the payment completed summary page', () => {
-    expect($('.heading-large').text().trim()).to.equal('Your payment was successful')
-    expect($('#return-url').attr('href')).to.equal(mandateResponse.return_url)
+    expect($('form').length).to.equal(0)
+    expect($('.heading-large.pending').length).to.equal(1)
   })
 })

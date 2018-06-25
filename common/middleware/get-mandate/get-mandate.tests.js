@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const {expect} = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
 const MANDATE = paymentFixtures.validMandate()
 
@@ -13,8 +13,8 @@ const setupFixtures = () => {
   const renderErrorView = sinon.spy()
 
   const getMandate = proxyquire('./get-mandate', {
-    '../response': {renderErrorView: renderErrorView},
-    '../clients/connector-client': connectorClient
+    '../../response': {renderErrorView: renderErrorView},
+    '../../clients/connector-client': connectorClient
   })
 
   return {req, res, next, renderErrorView, connectorClient, getMandate}

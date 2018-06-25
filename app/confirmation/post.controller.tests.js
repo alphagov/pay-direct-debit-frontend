@@ -18,7 +18,10 @@ const mandateExternalId = 'sdfihsdufh2e'
 const gatewayAccoutExternalId = '1234567890'
 const mandateResponse = paymentFixtures.validOneOffMandateResponse({
   external_id: mandateExternalId,
-  gateway_account_external_id: gatewayAccoutExternalId
+  gateway_account_external_id: gatewayAccoutExternalId,
+  state: {
+    status: 'started'
+  }
 }).getPlain()
 const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
   gateway_account_external_id: gatewayAccoutExternalId

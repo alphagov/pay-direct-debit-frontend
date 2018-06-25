@@ -1,0 +1,17 @@
+{% extends "common/templates/layout.njk" %}
+
+{% block page_title %}
+  {{heading}}
+{% endblock %}
+
+{% block content %}
+  <main id="content" class="content-wrapper error-pages grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-large {{ status }}"> {{ heading }} </h1>
+      <p class="lede">{{ message }}</p>
+      {% if includeReturnUrl %}
+      <p class="lede">You can <a href="{{ returnUrl }}" id="return-url" class="lede">  go back and try again</a>.</p>
+      {% endif %}
+    </div>
+  </main>
+{% endblock %}

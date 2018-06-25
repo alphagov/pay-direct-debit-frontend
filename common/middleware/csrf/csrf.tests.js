@@ -1,4 +1,3 @@
-const path = require('path')
 const sinon = require('sinon')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
@@ -13,7 +12,7 @@ describe('CSRF', function () {
       .withArgs("it's a secret")
       .returns('newly-created token')
 
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'),
+    const csrf = proxyquire('./csrf',
       {'csrf': () => {
         return {
           verify: verify,
@@ -47,8 +46,8 @@ describe('CSRF', function () {
 
   it('should error if session not present', function () {
     const renderErrorView = sinon.spy()
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
-      '../response': {
+    const csrf = proxyquire('./csrf', {
+      '../../response': {
         renderErrorView: renderErrorView
       }
     }).validateAndRefreshCsrf
@@ -69,8 +68,8 @@ describe('CSRF', function () {
 
   it('should error if session has no CSRF secret', function () {
     const renderErrorView = sinon.spy()
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
-      '../response': {
+    const csrf = proxyquire('./csrf', {
+      '../../response': {
         renderErrorView: renderErrorView
       }
     }).validateAndRefreshCsrf
@@ -95,8 +94,8 @@ describe('CSRF', function () {
     const verify = sinon.stub()
       .withArgs("it's a secret", 'forged token - call the police')
       .returns(false)
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'), {
-      '../response': {
+    const csrf = proxyquire('./csrf', {
+      '../../response': {
         renderErrorView: renderErrorView
       },
       'csrf': () => {
@@ -130,7 +129,7 @@ describe('CSRF', function () {
       .withArgs("it's a secret")
       .returns('newly-created token')
 
-    const csrf = proxyquire(path.join(__dirname, '/../../common/middleware/csrf'),
+    const csrf = proxyquire('./csrf',
       {'csrf': () => {
         return {
           verify: verify,

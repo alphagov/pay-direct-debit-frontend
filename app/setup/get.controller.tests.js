@@ -46,7 +46,10 @@ describe('setup get controller', () => {
         amount: amount,
         description: description
       },
-      return_url: `/change-payment-method/${mandateExternalId}`
+      return_url: `/change-payment-method/${mandateExternalId}`,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -116,7 +119,10 @@ describe('setup get controller', () => {
         description: description
       },
       return_url: `/change-payment-method/${mandateExternalId}`,
-      payer: payer
+      payer: payer,
+      state: {
+        status: 'started'
+      }
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId

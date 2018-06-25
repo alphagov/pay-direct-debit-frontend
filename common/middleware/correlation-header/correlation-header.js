@@ -1,5 +1,5 @@
 'use strict'
-const config = require('../config/index')
+const config = require('../../config/index')
 // Constants
 const CORRELATION_HEADER = config.CORRELATION_HEADER
 

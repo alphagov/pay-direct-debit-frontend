@@ -8,13 +8,12 @@ function response (req, res, template, data) {
   return res.render(template, data)
 }
 
-function errorResponse (req, res, msg = ERROR_MESSAGE, status = 500) {
+function renderErrorView (req, res, msg = ERROR_MESSAGE, status = 500) {
   logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, {errorMessage: msg})
   res.setHeader('Content-Type', 'text/html')
   res.status(status)
   res.render('common/templates/error', {'message': msg})
 }
-
 function renderPaymentCompletedSummary (req, res, params) {
   res.setHeader('Content-Type', 'text/html')
   res.status(200)
@@ -22,7 +21,7 @@ function renderPaymentCompletedSummary (req, res, params) {
 }
 
 module.exports = {
-  response: response,
-  renderErrorView: errorResponse,
-  renderPaymentCompletedSummary: renderPaymentCompletedSummary
+  response,
+  renderErrorView,
+  renderPaymentCompletedSummary
 }

@@ -5,8 +5,8 @@ const csrf = require('csrf')
 const logger = require('pino')()
 
 // Local Dependencies
-const {renderErrorView} = require('../response')
-const {getSessionVariable, setSessionVariable} = require('../../common/config/cookies')
+const {renderErrorView} = require('../../response')
+const {getSessionVariable, setSessionVariable} = require('../../config/cookies')
 // Assignments and Variables
 const errorMsg = 'There is a problem with the payments platform'
 

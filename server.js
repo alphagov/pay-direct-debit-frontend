@@ -2,7 +2,9 @@
 const path = require('path')
 
 // Please leave here even though it looks unused - this enables Node.js metrics to be pushed to Hosted Graphite
-require('./common/utils/metrics').metrics()
+if (!process.env.DISABLE_APPMETRICS) {
+  require('./common/utils/metrics').metrics()
+}
 
 // npm dependencies
 const express = require('express')
@@ -19,7 +21,7 @@ const nunjucks = require('nunjucks')
 // Local dependencies
 const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
-const correlationHeader = require('./common/middleware/correlation-header')
+const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
 const cookieConfig = require('./common/config/cookies')
 
 // Global constants

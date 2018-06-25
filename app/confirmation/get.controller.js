@@ -1,14 +1,11 @@
 'use strict'
 const {getSessionVariable} = require('../../common/config/cookies')
-const {renderErrorView, renderPaymentCompletedSummary} = require('../../common/response')
+const {renderErrorView} = require('../../common/response')
 
 module.exports = (req, res) => {
   const mandate = res.locals.mandate
   const session = getSessionVariable(req, mandate.externalId)
-  if (mandate.state.status === 'pending') {
-    renderPaymentCompletedSummary(req, res, {'status': 'successful', 'returnUrl': mandate.returnUrl}
-    )
-  } else if (session.confirmationDetails) {
+  if (session.confirmationDetails) {
     const params = {
       mandateExternalId: mandate.externalId,
       accountHolderName: session.confirmationDetails.accountHolderName,
