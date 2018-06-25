@@ -22,7 +22,7 @@ describe('Mandate state enforcer', () => {
     const {req, res, next, ...rest} = setupFixtures()
 
     before(() => {
-      rest.mandateStateEnforcer.middlewareWrapper('setup')(req, res, next)
+      rest.mandateStateEnforcer.middleware('setup')(req, res, next)
     })
 
     it('should set the service that has been retrieved in res.locals', () => {
@@ -44,7 +44,7 @@ describe('Mandate state enforcer', () => {
           }
         }
       })
-      rest.mandateStateEnforcer.middlewareWrapper('setup')(req, res, next)
+      rest.mandateStateEnforcer.middleware('setup')(req, res, next)
 
       expect(next.called).to.equal(true)
     })
@@ -60,7 +60,7 @@ describe('Mandate state enforcer', () => {
           }
         }
       })
-      mandateStateEnforcer.middlewareWrapper('setup')(req, res, next, response)
+      mandateStateEnforcer.middleware('setup')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Your mandate has not been set up.',
@@ -82,7 +82,7 @@ describe('Mandate state enforcer', () => {
           }
         }
       })
-      rest.mandateStateEnforcer.middlewareWrapper('confirmation')(req, res, next)
+      rest.mandateStateEnforcer.middleware('confirmation')(req, res, next)
 
       expect(next.called).to.equal(true)
     })
@@ -98,7 +98,7 @@ describe('Mandate state enforcer', () => {
           }
         }
       })
-      mandateStateEnforcer.middlewareWrapper('confirmation')(req, res, next, response)
+      mandateStateEnforcer.middleware('confirmation')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Your mandate has not been set up.',

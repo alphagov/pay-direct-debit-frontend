@@ -11,7 +11,7 @@ const checkSecureCookie = require('../../common/middleware/check-secure-cookie/c
 const getMandate = require('../../common/middleware/get-mandate/get-mandate').middleware
 const getGatewayAccount = require('../../common/middleware/get-gateway-account/get-gateway-account').middleware
 const getService = require('../../common/middleware/get-service/get-service').middleware
-const mandateStateEnforcerWrapper = require('../../common/middleware/mandate-state-enforcer/mandate-state-enforcer').middlewareWrapper
+const mandateStateEnforcerWrapper = require('../../common/middleware/mandate-state-enforcer/mandate-state-enforcer').middleware
 
 // Initialisation
 const router = express.Router()

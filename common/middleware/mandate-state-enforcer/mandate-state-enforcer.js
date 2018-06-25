@@ -43,7 +43,7 @@ const mandateStateToMessageMap = {
   }
 }
 
-function middlewareWrapper (page) {
+function middleware (page) {
   return (req, res, next) => {
     const mandate = _.get(res, 'locals.mandate')
     if (mandate) {
@@ -70,5 +70,5 @@ function middlewareWrapper (page) {
 }
 
 module.exports = {
-  middlewareWrapper
+  middleware
 }
