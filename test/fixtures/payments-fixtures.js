@@ -14,7 +14,7 @@ module.exports = {
   validTokenExchangeResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
-      reference: opts.reference || 'buy Silvia a coffee',
+      mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
       type: opts.type || 'CHARGE',
       state: opts.state || randomNumber(),
       return_url: opts.return_url || randomUrl(),
@@ -67,7 +67,7 @@ module.exports = {
       return_url: opts.return_url || randomUrl(),
       gateway_account_id: 23 || opts.gateway_account_id,
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      reference: opts.reference || 'buy Silvia a coffee',
+      mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
       state: opts.state || 'CREATED',
       payer: opts.payer || null,
       transaction: opts.transaction || {
@@ -126,7 +126,7 @@ module.exports = {
       return_url: opts.return_url || randomUrl(),
       gateway_account_id: 23 || opts.gateway_account_id,
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      reference: opts.reference || 'buy Silvia a coffee',
+      mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
       state: opts.state || 'CREATED',
       type: opts.type || 'ONE_OFF',
       payer: opts.payer || null,
