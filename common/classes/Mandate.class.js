@@ -13,7 +13,7 @@ class Mandate {
     this.transaction = opts.transaction ? new PaymentRequest(opts.transaction) : null
     this.type = opts.type
     this.state = opts.state
-    this.reference = opts.reference
+    this.reference = opts.mandate_reference
   }
 }
 
