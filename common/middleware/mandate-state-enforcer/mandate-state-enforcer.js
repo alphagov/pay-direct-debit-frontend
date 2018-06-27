@@ -35,7 +35,11 @@ const mandateStateToMessageMap = {
     heading: 'Your Direct Debit mandate has been set up',
     message: 'We have sent you a confirmation email with your mandate details. '
   },
-
+  expired: {
+    heading: 'Your Direct Debit mandate has expired',
+    message: 'Your mandate has not been set up.',
+    includeReturnUrl: true
+  },
   default: {
     heading: 'Sorry, we are experiencing technical problems',
     message: '',
