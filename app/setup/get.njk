@@ -18,8 +18,9 @@
             {% include "common/templates/includes/validation-errors.njk" %}
         {% endif %}
         <h1 class="heading-large">Set up a Direct Debit</h1>
-        <p>We’ll take a one-off payment from your bank account</p>
-
+        {% if mandateType == 'ONE_OFF' %}
+          <p>We’ll take a one-off payment from your bank account</p>
+        {% endif %}
         <form class="form" method="POST" action="/setup/{{mandateExternalId}}" class="direct-debit-form" data-validate>
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           {{ form.input(
@@ -101,13 +102,15 @@
             <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel payment</a>
           </div>
         </div>
-      <aside class="payment-summary">
-        <div class="payment-summary__inner js-stick-at-top-when-scrolling">
-          <h2 class="heading-medium">Payment summary</h2>
-          <p class="payment-summary__description" id="payment-description">{{description}}</p>
-          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
-        </div>
-      </aside>
+        {% if mandateType == 'ONE_OFF' %}
+          <aside class="payment-summary">
+            <div class="payment-summary__inner js-stick-at-top-when-scrolling">
+              <h2 class="heading-medium">Payment summary</h2>
+              <p class="payment-summary__description" id="payment-description">{{description}}</p>
+              <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
+            </div>
+          </aside>
+        {% endif %}
     </div>
 
     {% block dd_guarantee_anchor %}

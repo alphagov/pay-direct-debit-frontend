@@ -7,13 +7,14 @@ const _ = require('lodash')
 const {getSessionVariable} = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
-  // todo show different page with different params depending on mandate type
   const mandate = res.locals.mandate
+  const transaction = mandate.transaction || {}
   const session = getSessionVariable(req, mandate.externalId)
   const params = {
     mandateExternalId: mandate.externalId,
-    description: mandate.transaction.description,
-    amount: mandate.transaction.amount,
+    mandateType: mandate.type,
+    description: transaction.description,
+    amount: transaction.amount,
     returnUrl: `/change-payment-method/${mandate.externalId}`,
     paymentAction: 'setup',
     service: res.locals.service

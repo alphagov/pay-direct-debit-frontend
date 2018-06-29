@@ -1,7 +1,7 @@
 'use strict'
 const Payer = require('../../common/classes/Payer.class')
 const Mandate = require('../../common/classes/Mandate.class')
-const PaymentRequest = require('../../common/classes/PaymentRequest.class')
+const Transaction = require('../../common/classes/Transaction.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
 // Create random values if none provided
@@ -68,6 +68,7 @@ module.exports = {
       gateway_account_id: 23 || opts.gateway_account_id,
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
+      mandate_type: 'ONE_OFF',
       state: opts.state || 'CREATED',
       payer: opts.payer || null,
       transaction: opts.transaction || {
@@ -77,6 +78,24 @@ module.exports = {
         reference: 'transaction ref',
         state: 'NEW'
       }
+    }
+    return {
+      getPlain: () => {
+        return data
+      }
+    }
+  },
+  validOnDemandMandateResponse: (opts = {}) => {
+    const data = {
+      external_id: opts.external_id || randomExternalId(),
+      return_url: opts.return_url || randomUrl(),
+      gateway_account_id: 23 || opts.gateway_account_id,
+      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
+      mandate_reference: opts.mandate_reference || 'buy Silvia a beer',
+      mandate_type: 'ON_DEMAND',
+      state: opts.state || 'CREATED',
+      payer: opts.payer || null,
+      transaction: null
     }
     return {
       getPlain: () => {
@@ -107,7 +126,7 @@ module.exports = {
     return new Payer(data)
   },
 
-  validPaymentRequest: (opts = {}) => {
+  validTransaction: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
       return_url: opts.return_url || randomUrl(),
@@ -118,7 +137,7 @@ module.exports = {
       state: opts.state || 'NEW',
       payer: opts.payer || null
     }
-    return new PaymentRequest(data)
+    return new Transaction(data)
   },
   validMandate: (opts = {}) => {
     const data = {

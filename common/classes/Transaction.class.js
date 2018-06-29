@@ -1,6 +1,6 @@
 'use strict'
 
-class PaymentRequest {
+class Transaction {
   constructor (opts) {
     this.externalId = opts.external_id
     this.amount = penceToPounds(opts.amount)
@@ -14,4 +14,4 @@ const penceToPounds = (pence) => {
   return (parseInt(pence) / 100).toFixed(2)
 }
 
-module.exports = PaymentRequest
+module.exports = Transaction

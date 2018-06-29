@@ -28,9 +28,13 @@
           </tr>
           </tbody>
         </table>
+        {% if mandateType == 'ON_DEMAND' %}
         <div class="panel panel-border-wide bank-statement-message">
-          <p><span class="bold-small" id="bank-statement-description">'{{description}}'</span> will appear on your bank statement</p>
+          <p>We will notify you by email 3 days before each future payment.</p>
         </div>
+        {% else %}
+          <br />
+        {% endif %}
         <form
           class="form"
           method="POST"
@@ -45,13 +49,15 @@
           </div>
         </form>
       </div>
-      <aside class="payment-summary">
-        <div class="payment-summary__inner js-stick-at-top-when-scrolling">
-          <h2 class="heading-medium">Payment summary</h2>
-          <p class="payment-summary__description" id="payment-description">{{description}}</p>
-          <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
-        </div>
-      </aside>
+      {% if mandateType == 'ONE_OFF' %}
+        <aside class="payment-summary">
+          <div class="payment-summary__inner js-stick-at-top-when-scrolling">
+            <h2 class="heading-medium">Payment summary</h2>
+            <p class="payment-summary__description" id="payment-description">{{description}}</p>
+            <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
+          </div>
+        </aside>
+      {% endif %}
     </div>
     {% block dd_guarantee_anchor %}
       {% include "app/direct-debit-guarantee/anchor.njk" %}
