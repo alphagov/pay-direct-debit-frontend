@@ -1,7 +1,7 @@
 'use strict'
 const Payer = require('../../common/classes/Payer.class')
 const Mandate = require('../../common/classes/Mandate.class')
-const PaymentRequest = require('../../common/classes/PaymentRequest.class')
+const Transaction = require('../../common/classes/Transaction.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
 // Create random values if none provided
@@ -107,7 +107,7 @@ module.exports = {
     return new Payer(data)
   },
 
-  validPaymentRequest: (opts = {}) => {
+  validTransaction: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
       return_url: opts.return_url || randomUrl(),
@@ -118,7 +118,7 @@ module.exports = {
       state: opts.state || 'NEW',
       payer: opts.payer || null
     }
-    return new PaymentRequest(data)
+    return new Transaction(data)
   },
   validMandate: (opts = {}) => {
     const data = {

@@ -8,23 +8,22 @@ const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 
 const service = 'connector'
 const baseUrl = `${CONNECTOR_URL}/v1`
-const headers = {
-}
+const headers = {}
 
 // Exports
 module.exports = {
   retrieveGatewayAccount,
   secure: {
-    retrieveMandateByToken: retrieveMandateByToken,
-    retrievePaymentInformationByExternalId: retrievePaymentInformationByExternalId,
-    deleteToken: deleteToken
+    retrieveMandateByToken,
+    retrievePaymentInformationByExternalId,
+    deleteToken
   },
   payment: {
-    submitDirectDebitDetails: submitDirectDebitDetails,
-    confirmDirectDebitDetails: confirmDirectDebitDetails,
-    cancelPaymentRequest: cancelPaymentRequest,
-    changePaymentMethod: changePaymentMethod,
-    validateBankAccountDetails: validateBankAccountDetails
+    submitDirectDebitDetails,
+    confirmDirectDebitDetails,
+    cancelTransaction,
+    changePaymentMethod,
+    validateBankAccountDetails
   }
 }
 
@@ -114,7 +113,7 @@ function validateBankAccountDetails (accountId, mandateExternalId, body, correla
   })
 }
 
-function cancelPaymentRequest (accountId, mandateExternalId, correlationId) {
+function cancelTransaction (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
@@ -124,6 +123,7 @@ function cancelPaymentRequest (accountId, mandateExternalId, correlationId) {
     description: `cancel a payment request`
   })
 }
+
 function changePaymentMethod (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
