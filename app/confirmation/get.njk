@@ -28,9 +28,13 @@
           </tr>
           </tbody>
         </table>
+        {% if mandateType == 'ON_DEMAND' %}
         <div class="panel panel-border-wide bank-statement-message">
           <p>We will notify you by email 3 days before each future payment.</p>
         </div>
+        {% else %}
+          <br />
+        {% endif %}
         <form
           class="form"
           method="POST"
