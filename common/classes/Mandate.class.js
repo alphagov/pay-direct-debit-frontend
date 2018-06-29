@@ -11,9 +11,9 @@ class Mandate {
     this.transactionExternalId = opts.transaction_external_id
     this.payer = opts.payer ? new Payer(opts.payer) : null
     this.transaction = opts.transaction ? new PaymentRequest(opts.transaction) : null
-    this.type = opts.type
     this.state = opts.state
     this.reference = opts.mandate_reference
+    this.type = opts.mandate_type
   }
 }
 
