@@ -24,8 +24,8 @@ function middleware (req, res, next) {
   const transactionExternalId = _.get(res, 'locals.transactionExternalId')
 
   connectorClient.secure.retrievePaymentInformationByExternalId(gatewayAccountExternalId, mandateExternalId, transactionExternalId, req.correlationId)
-    .then(mandateInfo => {
-      res.locals.mandate = mandateInfo
+    .then(mandate => {
+      res.locals.mandate = mandate
       next()
     })
     .catch(() => {

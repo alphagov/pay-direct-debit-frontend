@@ -8,6 +8,7 @@ module.exports = (req, res) => {
   if (session.confirmationDetails) {
     const params = {
       mandateExternalId: mandate.externalId,
+      mandateType: mandate.type,
       accountHolderName: session.confirmationDetails.accountHolderName,
       accountNumber: session.confirmationDetails.accountNumber,
       sortCode: session.confirmationDetails.sortCode.match(/.{2}/g).join(' '),
