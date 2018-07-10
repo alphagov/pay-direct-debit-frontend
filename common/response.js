@@ -14,14 +14,8 @@ function renderErrorView (req, res, msg = ERROR_MESSAGE, status = 500) {
   res.status(status)
   res.render('common/templates/error', {'message': msg})
 }
-function renderPaymentCompletedSummary (req, res, params) {
-  res.setHeader('Content-Type', 'text/html')
-  res.status(200)
-  res.render('common/templates/payment_completed_summary', params)
-}
 
 module.exports = {
   response,
-  renderErrorView,
-  renderPaymentCompletedSummary
+  renderErrorView
 }
