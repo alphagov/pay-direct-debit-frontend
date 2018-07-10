@@ -143,8 +143,8 @@ function initialise () {
   initialiseI18n(app)
   initialiseGlobalMiddleware(app)
   initialiseTemplateEngine(app)
-  initialiseRoutes(app)
   initialisePublic(app)
+  initialiseRoutes(app) // this needs to be at the bottom otherwise all assets in public 404
   warnIfAnalyticsNotSet()
   return app
 }
