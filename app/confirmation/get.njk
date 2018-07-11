@@ -44,8 +44,8 @@
         >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           <div class="form-group">
-            <button type="submit" id="submit-direct-debit" class="button">Confirm payment</button>
-            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel payment</a>
+            <button type="submit" id="submit-direct-debit" class="button">Confirm {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</button>
+            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
           </div>
         </form>
       </div>

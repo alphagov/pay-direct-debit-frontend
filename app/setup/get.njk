@@ -99,7 +99,7 @@
 
           <div class="form-group">
             <button type="submit" id="submit-direct-debit-data" class="button">Continue</button>
-            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel payment</a>
+            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
           </div>
         </div>
         {% if mandateType == 'ONE_OFF' %}
