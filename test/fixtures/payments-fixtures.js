@@ -69,7 +69,8 @@ module.exports = {
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
       mandate_type: 'ONE_OFF',
-      state: opts.state || 'CREATED',
+      state: opts.state || 'started',
+      internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
       payer: opts.payer || null,
       transaction: opts.transaction || {
         external_id: randomExternalId(),
@@ -93,7 +94,8 @@ module.exports = {
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       mandate_reference: opts.mandate_reference || 'buy Silvia a beer',
       mandate_type: 'ON_DEMAND',
-      state: opts.state || 'CREATED',
+      state: opts.state || 'started',
+      internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
       payer: opts.payer || null,
       transaction: null
     }
@@ -146,7 +148,8 @@ module.exports = {
       gateway_account_id: 23 || opts.gateway_account_id,
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
-      state: opts.state || 'CREATED',
+      state: opts.state || 'started',
+      internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
       type: opts.type || 'ONE_OFF',
       payer: opts.payer || null,
       transaction: opts.transaction || null

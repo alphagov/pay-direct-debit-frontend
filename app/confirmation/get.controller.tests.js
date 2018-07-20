@@ -49,7 +49,8 @@ describe('confirmation one-off payment get controller', function () {
       },
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -147,7 +148,8 @@ describe('confirmation on-demand payment get controller', function () {
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -237,7 +239,8 @@ describe('confirmation get controller with no confirmationDetails', function () 
       },
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -281,7 +284,8 @@ describe('confirmation get controller after successful payment', function () {
   const mandateResponse = paymentFixtures.validOneOffMandateResponse({
     external_id: mandateExternalId,
     gateway_account_external_id: gatewayAccoutExternalId,
-    state: {status: 'pending'}
+    state: {status: 'pending'},
+    internal_state: 'SUBMITTED'
   }).getPlain()
   const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
     gateway_account_external_id: gatewayAccoutExternalId
@@ -329,6 +333,6 @@ describe('confirmation get controller after successful payment', function () {
 
   it('should display the payment completed summary page', () => {
     expect($('form').length).to.equal(0)
-    expect($('.heading-large.pending').length).to.equal(1)
+    expect($('.heading-large.SUBMITTED').length).to.equal(1)
   })
 })

@@ -12,6 +12,7 @@ class Mandate {
     this.payer = opts.payer ? new Payer(opts.payer) : null
     this.transaction = opts.transaction ? new Transaction(opts.transaction) : null
     this.state = opts.state
+    this.internalState = opts.internal_state
     this.reference = opts.mandate_reference
     this.type = opts.mandate_type
   }
