@@ -49,7 +49,8 @@ describe('setup get controller', () => {
       return_url: `/change-payment-method/${mandateExternalId}`,
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -122,7 +123,8 @@ describe('setup get controller', () => {
       payer: payer,
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
@@ -172,7 +174,8 @@ describe('setup get controller', () => {
       return_url: `/change-payment-method/${mandateExternalId}`,
       state: {
         status: 'started'
-      }
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
     const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId

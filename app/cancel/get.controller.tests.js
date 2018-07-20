@@ -23,7 +23,8 @@ const mandateResponse = paymentFixtures.validOneOffMandateResponse({
   return_url: returnUrl,
   state: {
     status: 'started'
-  }
+  },
+  internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
 }).getPlain()
 const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
   gateway_account_external_id: gatewayAccoutExternalId
