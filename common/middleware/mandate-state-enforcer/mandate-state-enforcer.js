@@ -38,8 +38,8 @@ const mandateStateToMessageMap = {
     includeReturnUrl: false
   },
   EXPIRED: {
-    heading: 'Your Direct Debit mandate has expired',
-    message: 'Your mandate has not been set up.',
+    heading: 'Your Direct Debit mandate has not been set up',
+    message: 'You might have entered your details incorrectly or your session may have timed out.',
     includeReturnUrl: true
   },
   default: {
