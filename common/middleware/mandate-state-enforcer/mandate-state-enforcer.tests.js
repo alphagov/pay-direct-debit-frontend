@@ -173,8 +173,8 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middleware('setup')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'Your mandate has not been set up.',
-        heading: 'Your Direct Debit mandate has expired',
+        message: 'You might have entered your details incorrectly or your session may have timed out.',
+        heading: 'Your Direct Debit mandate has not been set up',
         status: 'EXPIRED',
         returnUrl,
         includeReturnUrl: true
@@ -344,8 +344,8 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middleware('confirmation')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'Your mandate has not been set up.',
-        heading: 'Your Direct Debit mandate has expired',
+        message: 'You might have entered your details incorrectly or your session may have timed out.',
+        heading: 'Your Direct Debit mandate has not been set up',
         status: 'EXPIRED',
         returnUrl,
         includeReturnUrl: true
