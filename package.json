@@ -50,7 +50,7 @@
     "minimist": "1.2.x",
     "morgan": "1.9.x",
     "nunjucks": "^3.0.1",
-    "pino": "4.13.x",
+    "pino": "5.8.x",
     "readdir": "0.0.x",
     "requestretry": "^1.12.0",
     "rfc822-validate": "^1.0.0",
