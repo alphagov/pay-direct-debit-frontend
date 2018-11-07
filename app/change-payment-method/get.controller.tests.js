@@ -11,7 +11,7 @@ const csrf = require('csrf')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
-const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
+const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 let response
 const mandateExternalId = 'sdfihsdufh2e123'
 const gatewayAccoutExternalId = '1234567890'

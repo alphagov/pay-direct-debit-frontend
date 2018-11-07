@@ -1,25 +1,25 @@
 const sinon = require('sinon')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const proxyquire = require('proxyquire')
 
 const setupFixtures = (resp) => {
-  const req = {params: {}, correlationId: 'correlation-id'}
-  const res = resp || {locals: {}}
+  const req = { params: {}, correlationId: 'correlation-id' }
+  const res = resp || { locals: {} }
   const next = sinon.spy()
   const response = sinon.spy()
 
   const mandateStateEnforcer = proxyquire('./mandate-state-enforcer', {
-    '../../response': {response}
+    '../../response': { response }
   })
 
-  return {req, res, next, response, mandateStateEnforcer}
+  return { req, res, next, response, mandateStateEnforcer }
 }
 
 const returnUrl = 'https://returnUrl'
 
 describe('Mandate state enforcer', () => {
   describe('when user on set up page and no mandate', () => {
-    const {req, res, next, ...rest} = setupFixtures()
+    const { req, res, next, ...rest } = setupFixtures()
 
     before(() => {
       rest.mandateStateEnforcer.middleware('setup')(req, res, next)
@@ -34,7 +34,7 @@ describe('Mandate state enforcer', () => {
   })
   describe('when user on set up page with mandate', () => {
     it('should call next for mandate status of "AWAITING_DIRECT_DEBIT_DETAILS" on page "setup"', () => {
-      const {req, res, next, ...rest} = setupFixtures({
+      const { req, res, next, ...rest } = setupFixtures({
         locals: {
           mandate: {
             state: {
@@ -49,7 +49,7 @@ describe('Mandate state enforcer', () => {
       expect(next.called).to.equal(true)
     })
     it('should render error page for mandate status of "SUBMITTED" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -71,7 +71,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "PENDING" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -93,7 +93,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "ACTIVE" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -115,7 +115,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "FAILED" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -137,7 +137,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "USER_CANCEL_NOT_ELIGIBLE" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -159,7 +159,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "EXPIRED" on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -181,7 +181,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render a default error page for any other state on page "setup"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -205,7 +205,7 @@ describe('Mandate state enforcer', () => {
   })
   describe('when user on confirmation page with mandate', () => {
     it('should call next for mandate status of "started"', () => {
-      const {req, res, next, ...rest} = setupFixtures({
+      const { req, res, next, ...rest } = setupFixtures({
         locals: {
           mandate: {
             state: {
@@ -220,7 +220,7 @@ describe('Mandate state enforcer', () => {
       expect(next.called).to.equal(true)
     })
     it('should render error page for mandate status of "SUBMITTED"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -242,7 +242,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "PENDING"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -264,7 +264,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "ACTIVE"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -286,7 +286,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "FAILED"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -308,7 +308,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "USER_CANCEL_NOT_ELIGIBLE"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -330,7 +330,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render error page for mandate status of "EXPIRED"', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,
@@ -352,7 +352,7 @@ describe('Mandate state enforcer', () => {
       })
     })
     it('should render a default error page for any other state', () => {
-      const {req, res, next, response, mandateStateEnforcer} = setupFixtures({
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
             returnUrl: returnUrl,

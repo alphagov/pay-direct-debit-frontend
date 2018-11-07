@@ -11,7 +11,7 @@ const nock = require('nock')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
-const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
+const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 
 describe('setup get controller', () => {
   let response, $
@@ -109,7 +109,7 @@ describe('setup get controller', () => {
     const payer = { payer_external_id: 'eg042u',
       account_holder_name: 'mr. payment',
       email: 'user@example.test',
-      requires_authorisation: 'false'}
+      requires_authorisation: 'false' }
     const mandateResponse = paymentFixtures.validOneOffMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,

@@ -4,7 +4,7 @@
 const _ = require('lodash')
 
 // Local dependencies
-const {getSessionVariable} = require('../../common/config/cookies')
+const { getSessionVariable } = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
   const mandate = res.locals.mandate

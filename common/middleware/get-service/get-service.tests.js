@@ -1,5 +1,5 @@
 const sinon = require('sinon')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const proxyquire = require('proxyquire')
 const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
@@ -9,24 +9,24 @@ const SERVICE = paymentFixtures.validService({
 })
 
 const setupFixtures = () => {
-  const req = {params: {}, correlationId: 'correlation-id'}
-  const res = {locals: {}}
+  const req = { params: {}, correlationId: 'correlation-id' }
+  const res = { locals: {} }
   const next = sinon.spy()
-  const adminusersClient = {retrieveService: sinon.stub()}
+  const adminusersClient = { retrieveService: sinon.stub() }
   const renderErrorView = sinon.spy()
 
   const getService = proxyquire('./get-service', {
-    '../../response': {renderErrorView: renderErrorView},
+    '../../response': { renderErrorView: renderErrorView },
     '../../clients/adminusers-client': adminusersClient
   })
 
-  return {req, res, next, renderErrorView, adminusersClient, getService}
+  return { req, res, next, renderErrorView, adminusersClient, getService }
 }
 
 describe('Get service middleware', () => {
   describe('when the gateway account id is specified in res.locals', () => {
     describe('and the service can be retrieved from adminusers', () => {
-      const {req, res, next, adminusersClient, getService} = setupFixtures()
+      const { req, res, next, adminusersClient, getService } = setupFixtures()
 
       before(() => {
         res.locals.gatewayAccountExternalId = GATEWAY_ACCOUNT_ID
@@ -46,7 +46,7 @@ describe('Get service middleware', () => {
     })
 
     describe('and the service can not be retrieved from adminusers', () => {
-      let {req, res, next, adminusersClient, renderErrorView, getService} = setupFixtures()
+      let { req, res, next, adminusersClient, renderErrorView, getService } = setupFixtures()
 
       before(() => {
         res.locals.gatewayAccountExternalId = GATEWAY_ACCOUNT_ID
@@ -62,7 +62,7 @@ describe('Get service middleware', () => {
     })
   })
   describe('when the gateway account id is not specified in res.locals', () => {
-    const {req, res, next, renderErrorView, getService} = setupFixtures()
+    const { req, res, next, renderErrorView, getService } = setupFixtures()
 
     before(() => {
       getService.middleware(req, res, next)

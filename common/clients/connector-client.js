@@ -2,7 +2,7 @@
 
 // Local Dependencies
 const baseClient = require('./base-client/base-client')
-const {CONNECTOR_URL} = require('../config')
+const { CONNECTOR_URL } = require('../config')
 const Mandate = require('../../common/classes/Mandate.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 

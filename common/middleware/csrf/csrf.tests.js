@@ -13,7 +13,7 @@ describe('CSRF', function () {
       .returns('newly-created token')
 
     const csrf = proxyquire('./csrf',
-      {'csrf': () => {
+      { 'csrf': () => {
         return {
           verify: verify,
           create: create
@@ -23,18 +23,18 @@ describe('CSRF', function () {
 
     const mandateExternalId = 'aaaaa'
     const req = {
-      route: {methods: {post: {}}},
+      route: { methods: { post: {} } },
       direct_debit_frontend_state: {
         [mandateExternalId]: {
           csrfSecret: "it's a secret"
         }
       },
-      body: {csrfToken: 'submitted token'}
+      body: { csrfToken: 'submitted token' }
     }
 
-    const res = {locals: {
+    const res = { locals: {
       mandateExternalId: mandateExternalId
-    }}
+    } }
 
     const next = sinon.spy()
 
@@ -53,11 +53,11 @@ describe('CSRF', function () {
     }).validateAndRefreshCsrf
 
     const req = {
-      route: {methods: {post: {}}},
-      body: {csrfToken: 'submitted token'}
+      route: { methods: { post: {} } },
+      body: { csrfToken: 'submitted token' }
     }
 
-    const res = {locals: {}}
+    const res = { locals: {} }
 
     const next = sinon.spy()
 
@@ -75,12 +75,12 @@ describe('CSRF', function () {
     }).validateAndRefreshCsrf
 
     const req = {
-      route: {methods: {post: {}}},
+      route: { methods: { post: {} } },
       session: {},
-      body: {csrfToken: 'submitted token'}
+      body: { csrfToken: 'submitted token' }
     }
 
-    const res = {locals: {}}
+    const res = { locals: {} }
 
     const next = sinon.spy()
 
@@ -106,12 +106,12 @@ describe('CSRF', function () {
     }).validateAndRefreshCsrf
 
     const req = {
-      route: {methods: {post: {}}},
-      session: {csrfSecret: "it's a secret"},
-      body: {csrfToken: 'forged token - call the police'}
+      route: { methods: { post: {} } },
+      session: { csrfSecret: "it's a secret" },
+      body: { csrfToken: 'forged token - call the police' }
     }
 
-    const res = {locals: {}}
+    const res = { locals: {} }
 
     const next = sinon.spy()
 
@@ -130,7 +130,7 @@ describe('CSRF', function () {
       .returns('newly-created token')
 
     const csrf = proxyquire('./csrf',
-      {'csrf': () => {
+      { 'csrf': () => {
         return {
           verify: verify,
           create: create
@@ -146,12 +146,12 @@ describe('CSRF', function () {
           csrfSecret: "it's a secret"
         }
       },
-      body: {csrfToken: "submitted forged token - but we don't really care"}
+      body: { csrfToken: "submitted forged token - but we don't really care" }
     }
 
-    const res = {locals: {
+    const res = { locals: {
       mandateExternalId: mandateExternalId
-    }}
+    } }
 
     const next = sinon.spy()
 

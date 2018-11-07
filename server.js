@@ -27,9 +27,9 @@ const cookieConfig = require('./common/config/cookies')
 // Global constants
 const unconfiguredApp = express()
 const oneYear = 86400000 * 365
-const publicCaching = {maxAge: oneYear}
+const publicCaching = { maxAge: oneYear }
 const PORT = (process.env.PORT || 3000)
-const {NODE_ENV} = process.env
+const { NODE_ENV } = process.env
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css')
 const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js')
 const ANALYTICS_TRACKING_ID = process.env.ANALYTICS_TRACKING_ID || ''
@@ -47,7 +47,7 @@ const APP_VIEWS = [
 ]
 
 function initialiseGlobalMiddleware (app) {
-  app.set('settings', {getVersionedPath: staticify.getVersionedPath})
+  app.set('settings', { getVersionedPath: staticify.getVersionedPath })
   app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets', 'images', 'favicon.ico')))
   app.use(compression())
   app.use(staticify.middleware)

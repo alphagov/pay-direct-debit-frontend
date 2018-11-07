@@ -5,7 +5,7 @@ const _ = require('lodash')
 const logger = require('pino')()
 
 // local dependencies
-const {renderErrorView} = require('../../response')
+const { renderErrorView } = require('../../response')
 const connectorClient = require('../../clients/connector-client')
 
 function middleware (req, res, next) {

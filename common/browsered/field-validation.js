@@ -121,7 +121,7 @@ function populateErrorSummary (form) {
         label = formGroup.querySelector('h1').innerText.trim()
         id = formGroup.querySelector('h1').getAttribute('id')
       }
-      return {label, id}
+      return { label, id }
     })
   }
 

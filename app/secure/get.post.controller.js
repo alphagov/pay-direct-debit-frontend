@@ -1,9 +1,9 @@
 'use strict'
 
-const {renderErrorView} = require('../../common/response')
+const { renderErrorView } = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
 const setup = require('../setup')
-const {setSessionVariable} = require('../../common/config/cookies')
+const { setSessionVariable } = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
   const token = req.body.chargeTokenId || req.params.chargeTokenId

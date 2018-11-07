@@ -3,10 +3,10 @@
 // npm dependencies
 const _ = require('lodash')
 const logger = require('pino')()
-const {Cache} = require('memory-cache')
+const { Cache } = require('memory-cache')
 
 // local dependencies
-const {renderErrorView} = require('../../response')
+const { renderErrorView } = require('../../response')
 const adminusersClient = require('../../clients/adminusers-client')
 
 // constants

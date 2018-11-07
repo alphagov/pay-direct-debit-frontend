@@ -1,12 +1,12 @@
 'use strict'
 
 // npm dependencies
-const {expect} = require('chai')
+const { expect } = require('chai')
 const sinon = require('sinon')
 const proxyquire = require('proxyquire').noPreserveCache()
 
 const getCookiesUtil = clientSessionsStub => {
-  if (clientSessionsStub) return proxyquire('../../common/config/cookies', {'client-sessions': clientSessionsStub})
+  if (clientSessionsStub) return proxyquire('../../common/config/cookies', { 'client-sessions': clientSessionsStub })
   return proxyquire('../../common/config/cookies', {})
 }
 
@@ -37,7 +37,7 @@ describe('cookie configuration', function () {
     })
     it('should configure two cookies if two session keys are set', function () {
       const SESSION_ENCRYPTION_KEY_2 = process.env.SESSION_ENCRYPTION_KEY_2 = 'bobbobbobbob'
-      const app = {use: sinon.spy()}
+      const app = { use: sinon.spy() }
       const clientSessionsStub = sinon.stub()
       const cookies = getCookiesUtil(clientSessionsStub)
 

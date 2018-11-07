@@ -1,25 +1,25 @@
 const sinon = require('sinon')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
 const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
 const setupFixtures = () => {
   const mandate = paymentFixtures.validMandate()
-  const res = {locals: {}}
+  const res = { locals: {} }
   const next = sinon.spy()
   const renderErrorView = sinon.spy()
 
   const checkSecureCookie = proxyquire('./check-secure-cookie', {
-    '../../response': {renderErrorView}
+    '../../response': { renderErrorView }
   }).middleware
 
-  return {res, next, renderErrorView, mandate, checkSecureCookie}
+  return { res, next, renderErrorView, mandate, checkSecureCookie }
 }
 
 describe('Check secure coookie middleware', function () {
   describe('the mandate external id is valid in session with no transaction id', () => {
-    const {res, next, mandate, checkSecureCookie} = setupFixtures()
+    const { res, next, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {
         mandateExternalId: mandate.externalId
@@ -54,7 +54,7 @@ describe('Check secure coookie middleware', function () {
   })
 
   describe('the mandate external id is valid in session with transaction id', () => {
-    const {res, next, mandate, checkSecureCookie} = setupFixtures()
+    const { res, next, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {
         mandateExternalId: mandate.externalId
@@ -89,7 +89,7 @@ describe('Check secure coookie middleware', function () {
     })
   })
   describe('the payment request externalId is not in session', () => {
-    const {res, next, renderErrorView, mandate, checkSecureCookie} = setupFixtures()
+    const { res, next, renderErrorView, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {
         mandateExternalId: mandate.externalId
