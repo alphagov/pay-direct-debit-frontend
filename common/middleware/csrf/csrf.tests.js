@@ -40,7 +40,7 @@ describe('CSRF', function () {
 
     csrf(req, res, next)
 
-    assert.equal(res.locals.csrf, 'newly-created token')
+    assert.strictEqual(res.locals.csrf, 'newly-created token')
     assert(next.calledOnce)
   })
 
@@ -157,7 +157,7 @@ describe('CSRF', function () {
 
     csrf(req, res, next)
 
-    assert.equal(res.locals.csrf, 'newly-created token')
+    assert.strictEqual(res.locals.csrf, 'newly-created token')
     assert(next.calledOnce)
   })
 })
