@@ -15,7 +15,7 @@ const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const confirmation = require('../confirmation')
 const setup = require('../setup')
-const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
+const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 const normalise = require('../../common/utils/normalise')
 
 describe('setup post controller', () => {

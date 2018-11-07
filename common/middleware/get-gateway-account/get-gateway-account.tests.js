@@ -1,5 +1,5 @@
 const sinon = require('sinon')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const proxyquire = require('proxyquire')
 const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
 
@@ -11,26 +11,26 @@ const GATEWAY_ACCOUNT = paymentFixtures.validGatewayAccount({
 
 const setup = () => {
   const fixtures = {
-    req: {res: {locals: {}}, correlationId: 'correlation-id'},
-    res: {locals: {}},
+    req: { res: { locals: {} }, correlationId: 'correlation-id' },
+    res: { locals: {} },
     next: sinon.spy(),
     cache: { get: sinon.stub(), put: sinon.spy() },
-    connectorClient: {retrieveGatewayAccount: sinon.stub()},
+    connectorClient: { retrieveGatewayAccount: sinon.stub() },
     renderErrorView: sinon.spy()
   }
 
   const getGatewayAccount = proxyquire('./get-gateway-account', {
-    '../../response': {renderErrorView: fixtures.renderErrorView},
+    '../../response': { renderErrorView: fixtures.renderErrorView },
     'memory-cache': { Cache: function () { return fixtures.cache } },
     '../../clients/connector-client': fixtures.connectorClient
   })
 
-  return Object.assign(fixtures, {getGatewayAccount})
+  return Object.assign(fixtures, { getGatewayAccount })
 }
 
 describe('Get gateway account middleware', () => {
   describe('when the payment request external id is not found in res.locals', () => {
-    const {req, res, next, renderErrorView, getGatewayAccount} = setup()
+    const { req, res, next, renderErrorView, getGatewayAccount } = setup()
 
     before(() => {
       getGatewayAccount.middleware(req, res, next)
@@ -42,10 +42,10 @@ describe('Get gateway account middleware', () => {
   })
 
   describe('when the gateway account is cached', () => {
-    const {req, res, next, cache, getGatewayAccount} = setup()
+    const { req, res, next, cache, getGatewayAccount } = setup()
 
     before(() => {
-      res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
+      res.locals = { gatewayAccountExternalId: MANDATE.gatewayAccountExternalId }
       cache.get.withArgs(MANDATE.gatewayAccountExternalId).returns(GATEWAY_ACCOUNT)
       getGatewayAccount.middleware(req, res, next)
     })
@@ -61,10 +61,10 @@ describe('Get gateway account middleware', () => {
 
   describe('when the gateway account is not cached', () => {
     describe('and the gateway account can be retrieved from connector', () => {
-      const {req, res, next, cache, connectorClient, getGatewayAccount} = setup()
+      const { req, res, next, cache, connectorClient, getGatewayAccount } = setup()
 
       before(() => {
-        res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
+        res.locals = { gatewayAccountExternalId: MANDATE.gatewayAccountExternalId }
         connectorClient.retrieveGatewayAccount
           .withArgs(MANDATE.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.resolve(GATEWAY_ACCOUNT))
@@ -85,10 +85,10 @@ describe('Get gateway account middleware', () => {
     })
 
     describe('and the gateway account can not be retrieved from connector', () => {
-      let {req, res, next, connectorClient, renderErrorView, getGatewayAccount} = setup()
+      let { req, res, next, connectorClient, renderErrorView, getGatewayAccount } = setup()
 
       before(() => {
-        res.locals = {gatewayAccountExternalId: MANDATE.gatewayAccountExternalId}
+        res.locals = { gatewayAccountExternalId: MANDATE.gatewayAccountExternalId }
         connectorClient.retrieveGatewayAccount
           .withArgs(MANDATE.gatewayAccountExternalId, req.correlationId)
           .returns(Promise.reject(new Error()))

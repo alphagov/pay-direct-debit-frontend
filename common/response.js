@@ -9,10 +9,10 @@ function response (req, res, template, data) {
 }
 
 function renderErrorView (req, res, msg = ERROR_MESSAGE, status = 500) {
-  logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, {errorMessage: msg})
+  logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, { errorMessage: msg })
   res.setHeader('Content-Type', 'text/html')
   res.status(status)
-  res.render('common/templates/error', {'message': msg})
+  res.render('common/templates/error', { 'message': msg })
 }
 
 module.exports = {

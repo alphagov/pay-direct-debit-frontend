@@ -1,6 +1,6 @@
 'use strict'
 
-const {renderErrorView} = require('../../common/response')
+const { renderErrorView } = require('../../common/response')
 const connectorClient = require('../../common/clients/connector-client')
 
 module.exports = (req, res) => {

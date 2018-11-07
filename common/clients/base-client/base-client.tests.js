@@ -3,7 +3,7 @@ const correlator = require('correlation-id')
 const config = require('../../../common/config')
 const http = require('http')
 const nock = require('nock')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const baseClient = require('../../../common/clients/base-client/base-client')
 
 describe('baseClient', () => {
@@ -16,7 +16,7 @@ describe('baseClient', () => {
       correlationID = `${Math.floor(Math.random() * 100000) + 1}`
       nock('http://example.com').get('/').reply(200, 'success')
       correlator.withId(correlationID, () => {
-        baseClient.get({url: 'http://example.com/'}, (err, response) => {
+        baseClient.get({ url: 'http://example.com/' }, (err, response) => {
           request = response.request
           done(err)
         })
@@ -40,8 +40,8 @@ describe('baseClient', () => {
         res.end()
       }).listen()
       baseClient
-        .get({url: `http://localhost:${server.address().port}/alpha`}, captureConnection)
-        .then(() => baseClient.get({url: `http://localhost:${server.address().port}/beta`}, captureConnection))
+        .get({ url: `http://localhost:${server.address().port}/alpha` }, captureConnection)
+        .then(() => baseClient.get({ url: `http://localhost:${server.address().port}/beta` }, captureConnection))
         .then(() => done())
         .catch(done)
 

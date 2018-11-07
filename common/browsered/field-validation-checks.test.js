@@ -1,10 +1,10 @@
 'use strict'
 
 // NPM dependencies
-const {expect} = require('chai')
+const { expect } = require('chai')
 
 // Local dependencies
-const {isSortCode, isAccountNumber, isChecked, isNotEmpty, isValidEmail} = require('./field-validation-checks')
+const { isSortCode, isAccountNumber, isChecked, isNotEmpty, isValidEmail } = require('./field-validation-checks')
 
 describe('field validation checks', () => {
   describe('isSortCode', () => {
@@ -86,11 +86,11 @@ describe('field validation checks', () => {
   })
   describe('isChecked', () => {
     it('should be valid if the field is checked', () => {
-      expect(isChecked({checked: true}).valid).to.equal(true)
+      expect(isChecked({ checked: true }).valid).to.equal(true)
     })
 
     it('should not be valid if the field is not checked', () => {
-      expect(isChecked({checked: false}).valid).to.equal(false)
+      expect(isChecked({ checked: false }).valid).to.equal(false)
     })
   })
 })

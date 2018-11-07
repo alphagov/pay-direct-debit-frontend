@@ -1,6 +1,6 @@
 'use strict'
-const {getSessionVariable} = require('../../common/config/cookies')
-const {renderErrorView} = require('../../common/response')
+const { getSessionVariable } = require('../../common/config/cookies')
+const { renderErrorView } = require('../../common/response')
 
 module.exports = (req, res) => {
   const mandate = res.locals.mandate

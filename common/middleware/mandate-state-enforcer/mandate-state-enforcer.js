@@ -3,7 +3,7 @@ const _ = require('lodash')
 const logger = require('pino')()
 
 // local dependencies
-const {response} = require('../../response')
+const { response } = require('../../response')
 
 const pageToValidMandateStateMap = {
   'setup': ['AWAITING_DIRECT_DEBIT_DETAILS'],

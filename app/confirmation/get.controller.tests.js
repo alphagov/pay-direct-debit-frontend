@@ -12,7 +12,7 @@ const setup = require('../setup')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const paymentFixtures = require('../../test/fixtures/payments-fixtures')
-const {CookieBuilder} = require('../../test/test_helpers/cookie-helper')
+const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 
 describe('confirmation one-off payment get controller', function () {
   let response, $
@@ -284,7 +284,7 @@ describe('confirmation get controller after successful payment', function () {
   const mandateResponse = paymentFixtures.validOneOffMandateResponse({
     external_id: mandateExternalId,
     gateway_account_external_id: gatewayAccoutExternalId,
-    state: {status: 'pending'},
+    state: { status: 'pending' },
     internal_state: 'SUBMITTED'
   }).getPlain()
   const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
