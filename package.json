@@ -57,7 +57,7 @@
     "serve-favicon": "2.4.5",
     "staticify": "2.0.x",
     "throng": "4.0.x",
-    "url-join": "^2.0.2"
+    "url-join": "^4.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
