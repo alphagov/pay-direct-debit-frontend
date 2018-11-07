@@ -89,7 +89,7 @@
     "grunt-sass": "2.1.x",
     "grunt-text-replace": "0.4.x",
     "jquery": "^3.2.1",
-    "mocha": "5.0.x",
+    "mocha": "5.2.x",
     "nock": "^9.0.13",
     "node-sass": "^4.9.2",
     "nunjucksify": "^2.2.0",
