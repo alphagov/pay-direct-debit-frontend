@@ -86,7 +86,7 @@
     "grunt-mocha-test": "^0.13.2",
     "grunt-nodemon": "0.4.x",
     "grunt-rewrite": "1.0.x",
-    "grunt-sass": "2.1.x",
+    "grunt-sass": "3.0.x",
     "grunt-text-replace": "0.4.x",
     "jquery": "^3.2.1",
     "mocha": "5.2.x",
