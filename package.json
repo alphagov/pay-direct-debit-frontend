@@ -52,7 +52,7 @@
     "nunjucks": "^3.1.4",
     "pino": "5.8.x",
     "readdir": "0.1.x",
-    "requestretry": "^1.12.0",
+    "requestretry": "^3.0.2",
     "rfc822-validate": "^1.0.0",
     "serve-favicon": "2.5.0",
     "staticify": "3.1.x",
