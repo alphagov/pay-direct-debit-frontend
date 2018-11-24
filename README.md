@@ -1,5 +1,7 @@
 # pay-direct-debit-frontend
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/alphagov/pay-direct-debit-frontend.svg)](https://greenkeeper.io/)
+
 The [GOV.UK Pay](https://www.payments.service.gov.uk/) Direct Debit Frontend
 
 ## Environment Variables
