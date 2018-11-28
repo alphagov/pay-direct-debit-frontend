@@ -31,7 +31,7 @@ const publicCaching = { maxAge: oneYear }
 const PORT = (process.env.PORT || 3000)
 const { NODE_ENV } = process.env
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css')
-const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js')
+const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.min.js')
 const ANALYTICS_TRACKING_ID = process.env.ANALYTICS_TRACKING_ID || ''
 
 function warnIfAnalyticsNotSet () {

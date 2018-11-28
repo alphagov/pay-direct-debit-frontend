@@ -1,4 +1,3 @@
-const path = require('path')
 const nodeSass = require('node-sass')
 
 module.exports = function (grunt) {
@@ -45,6 +44,14 @@ module.exports = function (grunt) {
         livereload: true
       }
     },
+    js: {
+      files: ['common/browsered/**/*.js'],
+      tasks: ['browserify', 'babel'],
+      options: {
+        spawn: false,
+        livereload: true
+      }
+    },
     assets: {
       files: ['common/assets/**/*', '!common/assets/sass/**'],
       tasks: ['copy:assets'],
@@ -55,16 +62,10 @@ module.exports = function (grunt) {
   }
 
   const browserify = {
-    'public/javascripts/browsered.js': ['common/browsered/index.js'],
+    'public/javascripts/application.js': ['common/browsered/index.js'],
     options: {
       browserifyOptions: { standalone: 'module' },
       transform: [
-        [
-          'babelify',
-          {
-            presets: ['es2015']
-          }
-        ],
         [
           'nunjucksify',
           {
@@ -75,26 +76,22 @@ module.exports = function (grunt) {
     }
   }
 
-  const concat = {
+  const babel = {
     options: {
-      separator: ';'
+      presets: ['@babel/preset-env'],
+      compact: false
     },
     dist: {
-      src: [
-        'public/javascripts/browsered.js',
-        'common/assets/javascripts/base/*.js',
-        'common/assets/javascripts/modules/*.js'
-      ],
-      dest: 'public/javascripts/application.js'
+      files: {
+        'public/javascripts/application.js': 'public/javascripts/application.js'
+      }
     }
   }
 
-  const rewrite = {
-    'application.min.css': {
-      src: 'public/stylesheets/application.min.css',
-      editor: function (contents) {
-        const staticify = require('staticify')(path.join(__dirname, 'public'))
-        return staticify.replacePaths(contents)
+  const uglify = {
+    my_target: {
+      files: {
+        'public/javascripts/application.min.js': ['public/javascripts/application.js']
       }
     }
   }
@@ -115,25 +112,25 @@ module.exports = function (grunt) {
   }
 
   grunt.initConfig({
-    clean: ['public', 'govuk_modules'],
+    clean: ['public'],
     sass,
     copy,
     watch,
     browserify,
-    concat,
-    rewrite,
+    babel,
+    uglify,
     compress
   });
 
   [
-    'grunt-contrib-copy',
-    'grunt-contrib-compress',
-    'grunt-contrib-watch',
-    'grunt-contrib-clean',
-    'grunt-sass',
+    'grunt-babel',
     'grunt-browserify',
-    'grunt-contrib-concat',
-    'grunt-rewrite'
+    'grunt-contrib-clean',
+    'grunt-contrib-compress',
+    'grunt-contrib-copy',
+    'grunt-contrib-uglify',
+    'grunt-contrib-watch',
+    'grunt-sass'
   ].forEach(task => grunt.loadNpmTasks(task))
 
   grunt.registerTask('generate-assets', [
@@ -141,13 +138,13 @@ module.exports = function (grunt) {
     'copy',
     'sass',
     'browserify',
-    'concat',
-    'rewrite',
+    'babel',
+    'uglify',
     'compress'
   ])
 
   grunt.registerTask('default', [
-    'watch'
+    'generate-assets'
   ])
 
   /**
