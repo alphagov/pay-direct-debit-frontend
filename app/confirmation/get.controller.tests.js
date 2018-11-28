@@ -105,7 +105,7 @@ describe('confirmation one-off payment get controller', function () {
 
   it('should display the confirmation page with a back link to the setup page', () => {
     const url = setup.paths.index.replace(':mandateExternalId', mandateExternalId)
-    expect($('.link-back').attr('href')).to.equal(url)
+    expect($('.govuk-back-link').attr('href')).to.equal(url)
   })
 
   it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
@@ -208,7 +208,7 @@ describe('confirmation on-demand payment get controller', function () {
 
   it('should display the confirmation page with a back link to the setup page', () => {
     const url = setup.paths.index.replace(':mandateExternalId', mandateExternalId)
-    expect($('.link-back').attr('href')).to.equal(url)
+    expect($('.govuk-back-link').attr('href')).to.equal(url)
   })
 
   it('should display the enter direct debit page with a link to the direct debit guarantee', () => {
@@ -272,7 +272,7 @@ describe('confirmation get controller with no confirmationDetails', function () 
   })
 
   it('should render error page', () => {
-    expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
+    expect($('.govuk-heading-l').text()).to.equal('Sorry, we’re experiencing technical problems')
     expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
   })
 })
@@ -333,6 +333,6 @@ describe('confirmation get controller after successful payment', function () {
 
   it('should display the payment completed summary page', () => {
     expect($('form').length).to.equal(0)
-    expect($('.heading-large.SUBMITTED').length).to.equal(1)
+    expect($('.govuk-heading-l.SUBMITTED').length).to.equal(1)
   })
 })

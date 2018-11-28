@@ -91,7 +91,7 @@ describe('cancel GET controller', () => {
 
     it('should display merchant details in the footer', () => {
       expect($(`.merchant-details-line-1`).text()).to.equal(`Service provided by ${service.merchant_details.name}`)
-      expect($(`.merchant-details-line-2`).text()).to.equal(`${service.merchant_details.address_line1}, ${service.merchant_details.address_line2}, ${service.merchant_details.address_city} ${service.merchant_details.address_postcode} United Kingdom`)
+      expect($(`.merchant-details-line-2`).text()).to.contain(`${service.merchant_details.address_line1}, ${service.merchant_details.address_line2}, ${service.merchant_details.address_city} ${service.merchant_details.address_postcode} United Kingdom`)
       expect($(`.merchant-details-phone-number`).text()).to.equal(`Phone: ${service.merchant_details.telephone_number}`)
       expect($(`.merchant-details-email`).text()).to.equal(`Email: ${service.merchant_details.email}`)
     })
