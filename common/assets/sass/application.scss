@@ -1,19 +1,8 @@
-// govuk_frontend_toolkit dependencies
-// https://github.com/alphagov/govuk_frontend_toolkit#usage
-@import "_colours";
-@import "_conditionals";
-@import "_css3";
-@import "_grid_layout";
-@import "_shims";
-@import "_measurements";
-@import "_typography";
-@import "design-patterns/_buttons";
-
-@import "govuk-elements";
+@import "govuk-frontend/all";
 
 // Direct Debit Modules
+@import "modules/cookie-message";
 @import "modules/payment-summary";
 @import "modules/charge";
-@import "modules/confirmation";
 @import "modules/input-confirm";
 @import "modules/direct-debit-logo";
