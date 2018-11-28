@@ -1,39 +1,76 @@
 {% extends "common/templates/layout.njk" %}
+{% from "components/back-link/macro.njk" import govukBackLink %}
+{% from "components/table/macro.njk" import govukTable %}
+{% from "components/inset-text/macro.njk" import govukInsetText %}
+{% from "components/button/macro.njk" import govukButton %}
 
-{% block page_title %}
+{% block pageTitle %}
   Check your details are correct
 {% endblock %}
 
 {% block content %}
   <main id="content" role="main">
-   <div>
-      <a href="/setup/{{mandateExternalId}}" class="link-back">Back</a>
-   </div>
-    <div class="grid-row relative">
-      <div class="column-two-thirds">
-        <h1 class="heading-large">Check your details are correct</h1>
-        <table>
-          <tbody>
-          <tr>
-            <td>Name on the account:</td>
-            <td id="account-holder-name">{{accountHolderName}}</td>
-          </tr>
-          <tr>
-            <td>Sort code:</td>
-            <td id="sort-code">{{sortCode}}</td>
-          </tr>
-          <tr>
-            <td>Account number:</td>
-            <td id="account-number">{{accountNumber}}</td>
-          </tr>
-          </tbody>
-        </table>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% set backLinkURL%}/setup/{{mandateExternalId}}{% endset %}
+        {{
+          govukBackLink({
+            text: "Back",
+            href: backLinkURL
+          })
+        }}
+        {{
+          govukTable({
+            caption: "Check your details are correct",
+            captionClasses: "govuk-heading-l",
+            firstCellIsHeader: true,
+            rows: [
+              [
+                {
+                  text: "Name on the account:"
+                },
+                {
+                  text: accountHolderName,
+                  attributes: {
+                    id: "account-holder-name"
+                  }
+                }
+              ],
+              [
+                {
+                  text: "Sort code:"
+                },
+                {
+                  text: sortCode,
+                  attributes: {
+                    id: "sort-code"
+                  }
+                }
+              ],
+              [
+                {
+                  text: "Account number:"
+                },
+                {
+                  text: accountNumber,
+                  attributes: {
+                    id: "account-number"
+                  }
+                }
+              ]
+            ]
+          })
+        }}
+
         {% if mandateType == 'ON_DEMAND' %}
-        <div class="panel panel-border-wide bank-statement-message">
-          <p>We will notify you by email 3 days before each future payment.</p>
-        </div>
-        {% else %}
-          <br />
+        {% set insetHTML %}
+          <p class="govuk-body govuk-!-margin-top-6 govuk-!-margin-bottom-6">We will notify you by email 3 days before each future payment.</p>
+        {% endset %}
+        {{
+          govukInsetText({
+            html: insetHTML
+          })
+        }}
         {% endif %}
         <form
           class="form"
@@ -43,20 +80,31 @@
           data-parameters="dimension2:{{gatewayAccount.type}} dimension3:GoCardless metric1:{{amount}}"
         >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
-          <div class="form-group">
-            <button type="submit" id="submit-direct-debit" class="button">Confirm {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</button>
-            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
-          </div>
+          {% set buttonText%}
+            Confirm {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}
+          {% endset%}
+          {{
+            govukButton({
+              text: buttonText,
+              attributes: {
+                id: "submit-direct-debit"
+              }
+            })
+          }}
+
+          <p class="govuk-body">
+            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
+          </p>
         </form>
       </div>
       {% if mandateType == 'ONE_OFF' %}
+      <div class="govuk-grid-column-one-third payment-summary-wrap">
         <aside class="payment-summary">
-          <div class="payment-summary__inner js-stick-at-top-when-scrolling">
-            <h2 class="heading-medium">Payment summary</h2>
-            <p class="payment-summary__description" id="payment-description">{{description}}</p>
-            <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
-          </div>
+          <h2 class="govuk-heading-m">Payment summary</h2>
+          <p class="govuk-body govuk-!-font-weight-bold" id="payment-description">{{description}}</p>
+          <p class="govuk-body govuk-!-margin-bottom-0">Total amount: <span class="amount govuk-!-font-size-36 govuk-!-font-weight-bold" id="amount">£{{amount}}</span>
         </aside>
+      </div>
       {% endif %}
     </div>
     {% block dd_guarantee_anchor %}

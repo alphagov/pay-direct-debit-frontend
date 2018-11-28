@@ -1,14 +1,12 @@
 .cancel-link {
   display: block;
-  margin-top: $gutter;
+  margin-top: govuk-spacing(6);
 }
 
 .direct-debit-logo {
-  margin-top: $gutter-half;
+  margin-top: govuk-spacing(3);
 }
 
-.direct-debit-guarantee {
-  @include core-16;
-
-  color: $secondary-text-colour;
+.pay-secondary-text-colour {
+  color: $govuk-secondary-text-colour;
 }
