@@ -42,13 +42,13 @@ function warnIfAnalyticsNotSet () {
 
 // Define app views
 const APP_VIEWS = [
-  path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
+  path.join(__dirname, 'node_modules/govuk-frontend/'),
   __dirname
 ]
 
 function initialiseGlobalMiddleware (app) {
   app.set('settings', { getVersionedPath: staticify.getVersionedPath })
-  app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets', 'images', 'favicon.ico')))
+  app.use(favicon(path.join(__dirname, '/node_modules/govuk-frontend/assets/images', 'favicon.ico')))
   app.use(compression())
   app.use(staticify.middleware)
 
@@ -96,7 +96,7 @@ function initialiseTemplateEngine (app) {
     throwOnUndefined: false, // throw errors when outputting a null/undefined value
     trimBlocks: true, // automatically remove trailing newlines from a block/tag
     lstripBlocks: true, // automatically remove leading whitespace from a block/tag
-    watch: false, // reload templates when they are changed (server-side). To use watch, make sure optional dependency chokidar is installed
+    watch: NODE_ENV !== 'production', // reload templates when they are changed (server-side). To use watch, make sure optional dependency chokidar is installed
     noCache: NODE_ENV !== 'production' // never use a cache and recompile templates each time (server-side)
   }
 
@@ -113,12 +113,11 @@ function initialiseTemplateEngine (app) {
 }
 
 function initialisePublic (app) {
+  app.use('/public', express.static(path.join(__dirname, '/public')))
+  app.use('/', express.static(path.join(__dirname, '/node_modules/govuk-frontend/')))
   app.use('/javascripts', express.static(path.join(__dirname, '/public/assets/javascripts'), publicCaching))
   app.use('/images', express.static(path.join(__dirname, '/public/images'), publicCaching))
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/assets/stylesheets'), publicCaching))
-  app.use('/public', express.static(path.join(__dirname, '/public')))
-  app.use('/public', express.static(path.join(__dirname, '/govuk_modules/govuk_frontend_toolkit')))
-  app.use('/public', express.static(path.join(__dirname, '/govuk_modules/govuk_template/assets')))
 }
 
 function initialiseRoutes (app) {

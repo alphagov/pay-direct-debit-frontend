@@ -9,17 +9,16 @@ module.exports = function (grunt) {
         style: 'expanded',
         sourcemap: true,
         includePaths: [
-          'govuk_modules/govuk_frontend_toolkit/stylesheets',
-          'node_modules/govuk-elements-sass/public/sass/'
+          'node_modules'
         ],
-        outputStyle: 'expanded'
+        outputStyle: 'compressed'
       },
       files: [{
         expand: true,
         cwd: 'common/assets/sass',
         src: ['*.scss', 'custom/*.scss'],
         dest: 'public/stylesheets/',
-        ext: '.css'
+        ext: '.min.css'
       }]
     }
   }
@@ -32,58 +31,6 @@ module.exports = function (grunt) {
           cwd: 'common/assets/',
           src: ['**/*', '!sass/**'],
           dest: 'public/'
-        },
-        {
-          expand: true,
-          cwd: 'govuk_modules/govuk_frontend_toolkit/images/',
-          src: ['**/*', '!sass/**'],
-          dest: 'public/images/icons'
-        }
-      ]
-    },
-    govuk: {
-      files: [
-        {
-          expand: true,
-          cwd: 'node_modules/govuk_frontend_toolkit',
-          src: '**',
-          dest: 'govuk_modules/govuk_frontend_toolkit/'
-        },
-        {
-          expand: true,
-          cwd: 'node_modules/govuk-elements-sass',
-          src: '**',
-          dest: 'govuk_modules/govuk-elements-sass/'
-        },
-        {
-          expand: true,
-          cwd: 'node_modules/govuk_template_jinja/',
-          src: '**',
-          dest: 'govuk_modules/govuk_template/',
-          rename: (dest, src) => dest + src.replace('html', 'njk')
-        }
-      ]
-    }
-  }
-
-  const cssmin = {
-    target: {
-      files: {
-        'public/stylesheets/application.min.css': [
-          'public/stylesheets/application.css'
-        ]
-      }
-    }
-  }
-
-  const replace = {
-    fixSass: {
-      src: ['govuk_modules/govuk_frontend_toolkit/**/*.scss'],
-      overwrite: true,
-      replacements: [
-        {
-          from: /filter:chroma(.*);/g,
-          to: 'filter:unquote("chroma$1");'
         }
       ]
     }
@@ -92,7 +39,7 @@ module.exports = function (grunt) {
   const watch = {
     css: {
       files: ['common/assets/sass/**/*.scss'],
-      tasks: ['sass', 'cssmin'],
+      tasks: ['sass'],
       options: {
         spawn: false,
         livereload: true
@@ -125,26 +72,6 @@ module.exports = function (grunt) {
           }
         ]
       ]
-    }
-  }
-
-  const nodemon = {
-    dev: {
-      script: 'server.js',
-      options: {
-        ext: 'js',
-        ignore: ['node_modules/**', 'common/assets/**', 'public/**'],
-        args: ['-i=true']
-      }
-    }
-  }
-
-  const concurrent = {
-    target: {
-      tasks: ['watch', 'nodemon'],
-      options: {
-        logConcurrentOutput: true
-      }
     }
   }
 
@@ -189,49 +116,39 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     clean: ['public', 'govuk_modules'],
-    sass: sass,
-    copy: copy,
-    replace: replace,
-    watch: watch,
-    browserify: browserify,
-    nodemon: nodemon,
-    concurrent: concurrent,
-    cssmin: cssmin,
-    concat: concat,
-    rewrite: rewrite,
-    compress: compress
+    sass,
+    copy,
+    watch,
+    browserify,
+    concat,
+    rewrite,
+    compress
   });
 
   [
     'grunt-contrib-copy',
-    'grunt-contrib-cssmin',
     'grunt-contrib-compress',
     'grunt-contrib-watch',
     'grunt-contrib-clean',
     'grunt-sass',
-    'grunt-nodemon',
-    'grunt-text-replace',
-    'grunt-concurrent',
     'grunt-browserify',
     'grunt-contrib-concat',
     'grunt-rewrite'
-  ].forEach(function (task) {
-    grunt.loadNpmTasks(task)
-  })
+  ].forEach(task => grunt.loadNpmTasks(task))
 
   grunt.registerTask('generate-assets', [
     'clean',
     'copy',
-    'replace',
     'sass',
     'browserify',
     'concat',
     'rewrite',
-    'compress',
-    'cssmin'
+    'compress'
   ])
 
-  grunt.registerTask('default', ['generate-assets', 'concurrent:target'])
+  grunt.registerTask('default', [
+    'watch'
+  ])
 
   /**
    * On watch, copy the asset that was changed, not all of them
