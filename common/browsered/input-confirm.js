@@ -21,12 +21,12 @@ module.exports = () => {
     if (!confirmation) {
       confirmation = document.createElement('div')
       confirmation.innerHTML = `
-      <div id="${confirmationId}" class="form-group panel panel-border-wide input-confirm">
-        <p class="form-hint">
+      <div id="${confirmationId}" class="govuk-inset-text input-confirm">
+        <p class="govuk-body">
           ${input.dataset.confirmationLabel}<span class="input-confirmation"></span>
         </p>
       </div>`
-      const formGroup = input.closest('.form-group')
+      const formGroup = input.closest('.govuk-form-group')
       insertAfter(confirmation, formGroup)
     }
 
