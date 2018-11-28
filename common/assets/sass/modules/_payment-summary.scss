@@ -1,54 +1,20 @@
-.relative {
-  position: relative;
-}
-
 .payment-summary {
-  margin: $gutter 0;
-  clear: both;
+  margin-top: govuk-spacing(6);
+  border: govuk-spacing(2) solid $govuk-border-colour;
+  padding: govuk-spacing(3);
+  background-color: govuk-colour('grey-4');
 
-  &__inner {
-    padding: $gutter-half;
-    border: $gutter-one-third solid $border-colour;
-    background-color: $canvas-colour;
-
-    @include media(tablet) {
-      width: 200px;
-    }
-    @include media(desktop) {
-      width: 250px;
-    }
-
-    h2 {
-      margin-top: 0;
-      padding-bottom: 0;
-    }
-
+  @include govuk-media-query($from: tablet) {
+    margin-top: 0;
   }
 
-  @include media(tablet) {
-    position: absolute;
-    top: $gutter * 1.5;
-    right: $gutter-half;
-    width: 250px;
-    margin: 0;
+  &-wrap {
+    position: -webkit-sticky;
+    position: sticky;
+    top: govuk-spacing(6);
   }
 
-  @include media(desktop) {
-    width: 300px;
-  }
-
-  &__description {
-    @include core-19;
-    font-weight: bold;
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-
-  &__amount {
-    @include bold-36;
+  .amount {
     display: block;
   }
-
 }

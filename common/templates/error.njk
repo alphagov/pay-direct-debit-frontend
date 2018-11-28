@@ -1,13 +1,13 @@
 {% extends "common/templates/layout.njk" %}
 
-{% block page_title %}An error occurred - GOV.UK Pay{% endblock %}
+{% block pageTitle %}An error occurred - GOV.UK Pay{% endblock %}
 
 {% block content %}
   <main id="content" role="main">
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <h1 class="heading-large">Sorry, we’re experiencing technical problems</h1>
-          <p id="errorMsg">{{message}}</p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Sorry, we’re experiencing technical problems</h1>
+          <p class="govuk-body" id="errorMsg">{{message}}</p>
       </div>
     </div>
   </main>

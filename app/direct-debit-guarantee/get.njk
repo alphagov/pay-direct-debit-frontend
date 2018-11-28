@@ -1,29 +1,38 @@
 {% extends "common/templates/layout.njk" %}
+{% from "components/back-link/macro.njk" import govukBackLink %}
+{% from "components/button/macro.njk" import govukButton %}
 
-{% block page_title %}
+{% block pageTitle %}
   Direct Debit Guarantee
 {% endblock %}
 
 {% block content %}
   <main id="content" role="main">
-  {% if paymentAction %}
-    <div class="back">
-      <a href="/{{paymentAction}}/{{ mandateExternalId }}" class="link-back">Back</a>
-    </div>
-  {% endif %}
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <h1 class="heading-large">Direct Debit Guarantee</h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if paymentAction %}
+          {% set backLinkURL%}/{{paymentAction}}/{{ mandateExternalId }}{% endset %}
+          {{
+            govukBackLink({
+              text: "Back",
+              href: backLinkURL
+            })
+          }}
+        {% endif %}
+        <h1 class="govuk-heading-l">Direct Debit Guarantee</h1>
         <div class="dd-images"><img class="direct-debit-logo" src="/public/images/direct-debit.svg" alt="Direct Debit Logo"></div>
-        <p>The Guarantee is offered by all banks and building societies that accept instructions to pay Direct Debits.</p>
-        <p>If there are any changes to the amount, date or frequency of your Direct Debit GOV.UK Pay will notify you (normally 3 working days) in advance of your account being debited or as otherwise agreed. If you request GOV.UK Pay to collect a payment, confirmation of the amount and date will be given to you at the time of the request.</p>
-        <p>If an error is made in the payment of your Direct Debit, by GOV.UK Pay or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society.</p>
-        <p>If you receive a refund you are not entitled to, you must pay it back when GOV.UK Pay asks you to.</p>
-        <p>You can cancel a Direct Debit at any time by simply contacting your bank or building society. Written confirmation may be required. Please also notify GOV.UK Pay.</p>
+        <p class="govuk-body">The Guarantee is offered by all banks and building societies that accept instructions to pay Direct Debits.</p>
+        <p class="govuk-body">If there are any changes to the amount, date or frequency of your Direct Debit GOV.UK Pay will notify you (normally 3 working days) in advance of your account being debited or as otherwise agreed. If you request GOV.UK Pay to collect a payment, confirmation of the amount and date will be given to you at the time of the request.</p>
+        <p class="govuk-body">If an error is made in the payment of your Direct Debit, by GOV.UK Pay or your bank or building society, you are entitled to a full and immediate refund of the amount paid from your bank or building society.</p>
+        <p class="govuk-body">If you receive a refund you are not entitled to, you must pay it back when GOV.UK Pay asks you to.</p>
+        <p class="govuk-body">You can cancel a Direct Debit at any time by simply contacting your bank or building society. Written confirmation may be required. Please also notify GOV.UK Pay.</p>
       {% if paymentAction %}
-        <div class="form-group">
-          <a href="/{{paymentAction}}/{{mandateExternalId}}" class="button-link-back"><button class="button">Back to payment</button></a>
-        </div>
+        {{
+          govukButton({
+            text: "Back to payment",
+            href: backLinkURL
+          })
+        }}
       {% endif %}
       </div>
     </div>

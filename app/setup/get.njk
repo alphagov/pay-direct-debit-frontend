@@ -1,116 +1,199 @@
 {% extends "common/templates/layout.njk" %}
-{% import "common/macros/form-group.njk" as form %}
+{% from "components/input/macro.njk" import govukInput %}
+{% from "components/radios/macro.njk" import govukRadios %}
+{% from "components/button/macro.njk" import govukButton %}
 
 {% if validationErrors %}
   {% set fields = validationErrors %}
   {% set errors = validationErrors | groupby('id') %}
 {% endif %}
 
-{% block page_title %}
+{% block pageTitle %}
   Set up a Direct Debit
 {% endblock %}
 
 {% block content %}
   <main id="content" role="main">
-    <div class="grid-row relative">
-      <div class="column-two-thirds">
+    <div class="govuk-grid-row govuk-!-margin-bottom-9">
+      <div class="govuk-grid-column-two-thirds">
         {% if validationErrors %}
             {% include "common/templates/includes/validation-errors.njk" %}
         {% endif %}
-        <h1 class="heading-large">Set up a Direct Debit</h1>
+        <h1 class="govuk-heading-l">Set up a Direct Debit</h1>
         {% if mandateType == 'ONE_OFF' %}
-          <p>We’ll take a one-off payment from your bank account</p>
+          <p class="govuk-body">We’ll take a one-off payment from your bank account</p>
         {% endif %}
         <form class="form" method="POST" action="/setup/{{mandateExternalId}}" class="direct-debit-form" data-validate>
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
-          {{ form.input(
-            name='account-holder-name',
-            label='Name on the account',
-            value=formValues.account_holder_name,
-            extraClasses='form-control-2-3',
-            attributes={'data-validate': 'true'},
-            errorLabel='Please enter the name on the account',
-            isError=errors['account-holder-name']
-          )}}
+          {% set nameError = false %}
+          {% if errors['account-holder-name'] %}
+            {% set nameError = {
+                text: "Please enter the name on the account"
+              } %}
+          {% endif %}
+          {{
+            govukInput({
+              id: "account-holder-name",
+              name: "account-holder-name",
+              label: {
+                text: "Name on the account",
+                classes: "govuk-label--s"
+              },
+              value: formValues.account_holder_name,
+              classes: "govuk-!-width-two-thirds",
+              attributes: {
+                "data-validate": "true"
+              },
+              errorMessage: nameError
+            })
+          }}
 
-          {{ form.input(
-            name='sort-code',
-            label='Sort code',
-            value=formValues.sort_code,
-            hintText='Must be 6 digits long',
-            extraClasses='form-control-1-3',
-            attributes={'data-validate': 'sort-code'},
-            errorLabel='Either your sort code or account number is not right',
-            isError=errors['sort-code']
-          )}}
+          {% set sortCodeError = false %}
+          {% if errors['sort-code'] %}
+            {% set sortCodeError = {
+                text: "Either your sort code or account number is not right"
+              } %}
+          {% endif %}
+          {{
+            govukInput({
+              id: "sort-code",
+              name: "sort-code",
+              label: {
+                text: "Sort code",
+                classes: "govuk-label--s"
+              },
+              hint: {
+                text: "Must be 6 digits long"
+              },
+              value: formValues.sort_code,
+              classes: "govuk-!-width-one-third",
+              attributes: {
+                "data-validate": "sort-code"
+              },
+              errorMessage: sortCodeError
+            })
+          }}
 
-          {{ form.input(
-            name='account-number',
-            label='Account number',
-            value=formValues.account_number,
-            hintText='Must be between 8 and 10 digits long',
-            extraClasses='form-control-1-3',
-            attributes={'data-validate': 'account-number'},
-            errorLabel='Either your sort code or account number is not right',
-            isError=errors['account-number']
-          )}}
+          {% set accountNumberError = false %}
+          {% if errors['account-number'] %}
+            {% set accountNumberError = {
+                text: "Either your sort code or account number is not right"
+              } %}
+          {% endif %}
+          {{
+            govukInput({
+              id: "account-number",
+              name: "account-number",
+              label: {
+                text: "Account number",
+                classes: "govuk-label--s"
+              },
+              hint: {
+                text: "Must be between 8 and 10 digits long"
+              },
+              value: formValues.account_number,
+              classes: "govuk-!-width-one-third",
+              attributes: {
+                "data-validate": "account-number"
+              },
+              errorMessage: accountNumberError
+            })
+          }}
 
-          <div class="form-group{% if errors['requires-authorisation'] %} form-group-error{% endif %}">
-            <fieldset>
-              <legend  data-error-label="If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below">
-                <h1 id="requires-authorisation" class="heading-small">
-                  Are you allowed to authorise Direct Debits on this account?
-                </h1>
-                {% if errors['requires-authorisation'] %}
-                  <span class="error-message">If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below</span>
-                {% endif %}
-              </legend>
-              <div class="multiple-choice">
-                <input id="authorise-yes" type="radio" name="requires-authorisation" value="false"{% if formValues.requires_authorisation == 'false' %} checked="checked"{% endif %} data-validate="is-checked"/>
-                <label for="authorise-yes">Yes</label>
-              </div>
-              <div class="multiple-choice" data-target="unauthorised-message">
-                <input id="authorise-no" type="radio" name="requires-authorisation" value="true"{% if formValues.requires_authorisation == 'true' %} checked="checked"{% endif %} aria-controls="unauthorised-message" aria-expanded="false"/>
-                <label for="authorise-no">No</label>
-              </div>
-              <div class="panel panel-border-narrow js-hidden" id="unauthorised-message" aria-hidden="true">
-                <p>If more than one person is required to authorise Direct Debits on this bank account, you can't proceed with this online payment method.</p>
-                <p>If it’s a joint account but you can authorise payments on your own, click ‘Yes’.</p>
-                <p><a href="{{ returnUrl }}" id="return-url">Go back and try a different payment method</a></p>
-              </div>
-            </fieldset>
-          </div>
+          {% set unauthorisedMessage %}
+            <p class="govuk-body">If more than one person is required to authorise Direct Debits on this bank account, you can't proceed with this online payment method.</p>
+            <p class="govuk-body">If it’s a joint account but you can authorise payments on your own, click ‘Yes’.</p>
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="{{ returnUrl }}" id="return-url">Go back and try a different payment method</a></p>
+          {% endset %}
 
-          {{ form.input(
-            name='email',
-            label='Email address',
-            value=formValues.email,
-            type='email',
-            extraClasses='form-control-2-3',
-            hintText='We need this to confirm the Direct Debit with you',
-            errorLabel='Please use a valid email address',
-            isError=errors['email'],
-            attributes={
-              'data-validate': 'email',
-              'data-confirmation': 'true',
-              'data-confirmation-label': 'An email will be sent to: '
-            }
-          )}}
+          {% set unauthorisedMessageError = false %}
+          {% if errors['requires-authorisation'] %}
+            {% set unauthorisedMessageError = {
+                text: "If you’re not allowed to authorise Direct Debits on this account try a different payment method using the link below"
+              } %}
+          {% endif %}
+          {{
+            govukRadios({
+              idPrefix: "requires-authorisation",
+              name: "requires-authorisation",
+              fieldset: {
+                legend: {
+                  text: "Are you allowed to authorise Direct Debits on this account?",
+                  classes: "govuk-fieldset__legend--s"
+                }
+              },
+              errorMessage: unauthorisedMessageError,
+              items: [
+                {
+                  value: "false",
+                  text: "Yes",
+                  checked: formValues.requires_authorisation == 'false',
+                  id: "authorise-yes"
+                },
+                {
+                  value: "true",
+                  text: "No",
+                  checked: formValues.requires_authorisation == 'true',
+                  id: "authorise-no",
+                  conditional: {
+                    html: unauthorisedMessage
+                  }
+                }
+              ]
+            })
+          }}
 
-          <div class="form-group">
-            <button type="submit" id="submit-direct-debit-data" class="button">Continue</button>
-            <a class="cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
-          </div>
+          {% set emailError = false %}
+          {% if errors['email'] %}
+            {% set emailError = {
+                text: "Please use a valid email address"
+              } %}
+          {% endif %}
+          {{
+            govukInput({
+              id: "email",
+              name: "email",
+              label: {
+                text: "Email address",
+                classes: "govuk-label--s"
+              },
+              hint: {
+                text: "We need this to confirm the Direct Debit with you"
+              },
+              value: formValues.email,
+              classes: "govuk-!-width-two-thirds",
+              attributes: {
+                "data-validate": "email",
+                "data-confirmation": "true",
+                "data-confirmation-label": "An email will be sent to: "
+              },
+              errorMessage: emailError
+            })
+          }}
+
+          {{
+            govukButton({
+              text: 'Continue',
+              attributes: {
+                id: "submit-direct-debit-data"
+              }
+            })
+          }}
+
+          <p class="govuk-body">
+            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
+          </p>
+
         </div>
-        {% if mandateType == 'ONE_OFF' %}
-          <aside class="payment-summary">
-            <div class="payment-summary__inner js-stick-at-top-when-scrolling">
-              <h2 class="heading-medium">Payment summary</h2>
-              <p class="payment-summary__description" id="payment-description">{{description}}</p>
-              <p class="payment-summary__description">Total amount: <span class="payment-summary__amount" id="amount">£{{amount}}</span>
-            </div>
-          </aside>
-        {% endif %}
+      {% if mandateType == 'ONE_OFF' %}
+      <div class="govuk-grid-column-one-third payment-summary-wrap">
+        <aside class="payment-summary">
+          <h2 class="govuk-heading-m">Payment summary</h2>
+          <p class="govuk-body govuk-!-font-weight-bold" id="payment-description">{{description}}</p>
+          <p class="govuk-body govuk-!-margin-bottom-0">Total amount: <span class="amount govuk-!-font-size-36 govuk-!-font-weight-bold" id="amount">£{{amount}}</span>
+        </aside>
+      </div>
+      {% endif %}
     </div>
 
     {% block dd_guarantee_anchor %}
