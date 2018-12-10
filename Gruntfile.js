@@ -112,7 +112,7 @@ module.exports = function (grunt) {
   }
 
   grunt.initConfig({
-    clean: ['public', 'govuk_modules'],
+    clean: ['public'],
     sass,
     copy,
     watch,

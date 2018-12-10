@@ -20,7 +20,7 @@
     ],
     "ignore": [
       "common/assets/**/*.js",
-      "node_modules_local/**/*.*"
+      "node_modules/**/*.*"
     ]
   },
   "scripts": {
@@ -30,7 +30,7 @@
     "watch": "./node_modules/.bin/grunt watch",
     "lint": "./node_modules/.bin/standard",
     "lint-sass": "./node_modules/.bin/sass-lint -v",
-    "test": "node ./node_modules/mocha/bin/mocha '!(node_modules)/**/*+(.test|.tests)'.js",
+    "test": "./node_modules/mocha/bin/mocha '!(node_modules)/**/*+(.test|.tests)'.js",
     "snyk-protect": "snyk protect",
     "prepublish": "npm run snyk-protect"
   },
