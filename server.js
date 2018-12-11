@@ -31,7 +31,7 @@ const publicCaching = { maxAge: oneYear }
 const PORT = (process.env.PORT || 3000)
 const { NODE_ENV } = process.env
 const CSS_PATH = staticify.getVersionedPath('/stylesheets/application.min.css')
-const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.js')
+const JAVASCRIPT_PATH = staticify.getVersionedPath('/javascripts/application.min.js')
 const ANALYTICS_TRACKING_ID = process.env.ANALYTICS_TRACKING_ID || ''
 
 function warnIfAnalyticsNotSet () {
@@ -42,13 +42,13 @@ function warnIfAnalyticsNotSet () {
 
 // Define app views
 const APP_VIEWS = [
-  path.join(__dirname, '/govuk_modules/govuk_template/views/layouts'),
+  path.join(__dirname, 'node_modules/govuk-frontend/'),
   __dirname
 ]
 
 function initialiseGlobalMiddleware (app) {
   app.set('settings', { getVersionedPath: staticify.getVersionedPath })
-  app.use(favicon(path.join(__dirname, 'govuk_modules', 'govuk_template', 'assets', 'images', 'favicon.ico')))
+  app.use(favicon(path.join(__dirname, '/node_modules/govuk-frontend/assets/images', 'favicon.ico')))
   app.use(compression())
   app.use(staticify.middleware)
 
@@ -113,12 +113,11 @@ function initialiseTemplateEngine (app) {
 }
 
 function initialisePublic (app) {
+  app.use('/public', express.static(path.join(__dirname, '/public')))
+  app.use('/', express.static(path.join(__dirname, '/node_modules/govuk-frontend/')))
   app.use('/javascripts', express.static(path.join(__dirname, '/public/assets/javascripts'), publicCaching))
   app.use('/images', express.static(path.join(__dirname, '/public/images'), publicCaching))
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/assets/stylesheets'), publicCaching))
-  app.use('/public', express.static(path.join(__dirname, '/public')))
-  app.use('/public', express.static(path.join(__dirname, '/govuk_modules/govuk_frontend_toolkit')))
-  app.use('/public', express.static(path.join(__dirname, '/govuk_modules/govuk_template/assets')))
 }
 
 function initialiseRoutes (app) {

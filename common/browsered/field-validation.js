@@ -9,6 +9,13 @@ const checks = require('./field-validation-checks')
 // Global constants
 const validationErrorsTemplate = require('../templates/includes/validation-errors.njk')
 
+const ERROR_SUMMARY_CLASS = '.govuk-error-summary'
+const FORM_GROUP = '.govuk-form-group'
+const FORM_GROUP_WITH_ERROR = '.govuk-form-group--error'
+const FORM_GROUP_ERROR_CLASSNAME = 'govuk-form-group--error'
+const ERROR_LABEL_CLASSNAME = 'govuk-error-message'
+const INPUT_ERROR_CLASSNAME = 'govuk-input--error'
+
 exports.enableFieldValidation = function () {
   const allForms = Array.prototype.slice.call(document.getElementsByTagName('form'))
 
@@ -35,13 +42,13 @@ function initValidation (e) {
 }
 
 function clearPreviousErrors () {
-  const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll('.error-message, .error-summary'))
-  const previousErrorsFieldGroups = Array.prototype.slice.call(document.querySelectorAll('.form-group.form-group-error'))
-  const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll('.form-control.form-control-error'))
+  const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll(ERROR_SUMMARY_CLASS))
+  const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll(FORM_GROUP_WITH_ERROR))
+  const previousErroredInputs = Array.prototype.slice.call(document.querySelectorAll(`.${INPUT_ERROR_CLASSNAME}`))
 
+  previousErroredInputs.map(errorField => errorField.classList.remove(INPUT_ERROR_CLASSNAME))
   previousErrorsMessages.map(error => error.remove())
-  previousErrorsFieldGroups.map(errorFieldGroup => errorFieldGroup.classList.remove('form-group-error'))
-  previousErrorsFields.map(errorField => errorField.classList.remove('form-control-error'))
+  previousErrorsFields.map(errorField => errorField.classList.remove(FORM_GROUP_ERROR_CLASSNAME))
 }
 
 function findFields (form) {
@@ -84,13 +91,13 @@ function validateField (form, field) {
 
 function applyErrorMessaging (form, field, result) {
   // Modify the field
-  if (!field.classList.contains('form-control-error')) {
-    field.classList.add('form-control-error')
+  if (!field.classList.contains(INPUT_ERROR_CLASSNAME)) {
+    field.classList.add(INPUT_ERROR_CLASSNAME)
   }
   // Modify the form group
-  let formGroup = field.closest('.form-group')
-  if (!formGroup.classList.contains('form-group-error')) {
-    formGroup.classList.add('form-group-error')
+  let formGroup = field.closest(FORM_GROUP)
+  if (!formGroup.classList.contains(FORM_GROUP_ERROR_CLASSNAME)) {
+    formGroup.classList.add(FORM_GROUP_ERROR_CLASSNAME)
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
       const errorElement = document.querySelector('label[for="' + field.name + '"]')
@@ -104,14 +111,14 @@ function applyErrorMessaging (form, field, result) {
 
 function generateErrorMessageElement (message) {
   const errorElement = document.createElement('span')
-  errorElement.setAttribute('class', 'error-message')
+  errorElement.classList.add(ERROR_LABEL_CLASSNAME)
   errorElement.innerText = message
   return errorElement
 }
 
 function populateErrorSummary (form) {
   const configuration = {
-    fields: Array.prototype.slice.call(form.querySelectorAll('.form-group.form-group-error')).map(formGroup => {
+    fields: Array.prototype.slice.call(form.querySelectorAll(FORM_GROUP_WITH_ERROR)).map(formGroup => {
       let label = null
       let id = null
       if (formGroup.querySelector('legend') === null) {

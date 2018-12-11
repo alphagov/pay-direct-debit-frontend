@@ -424,7 +424,7 @@ describe('setup post controller', () => {
     })
 
     it('should contain account holder name pre-filled after redirect', () => {
-      expect($('#account-holder-name').val()).to.equal(formValues.accountHolderName)
+      expect($('#account-holder-name').val()).to.be.undefined // eslint-disable-line no-unused-expressions
     })
 
     it('should contain expected sort code field as error', () => {
@@ -440,15 +440,15 @@ describe('setup post controller', () => {
     })
 
     it('should contain an inline error for sort code', () => {
-      expect($('label[for=sort-code]').attr('data-error-label')).to.equal('Either your sort code or account number is not right')
+      expect($('label[for="sort-code"]').parent().find('.govuk-error-message').text()).to.contain('Either your sort code or account number is not right')
     })
 
     it('should contain an inline error for account number', () => {
-      expect($('label[for=account-number]').attr('data-error-label')).to.equal('Either your sort code or account number is not right')
+      expect($('label[for="account-number"]').parent().find('.govuk-error-message').text()).to.contain('Either your sort code or account number is not right')
     })
 
     it('should contain email pre-filled after redirect', () => {
-      expect($('#email').val()).to.equal(formValues.email)
+      expect($('#email').val()).to.be.undefined // eslint-disable-line no-unused-expressions
     })
 
     it('should contain requires authorisation pre-filled after redirect', () => {

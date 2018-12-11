@@ -50,8 +50,8 @@ describe('direct debit guarantee controller', () => {
       expect(response.statusCode).to.equal(200)
     })
     it('should display back links to the payment journey', () => {
-      expect($(`.back`).find('a').attr('href')).to.equal(`/setup/${mandateExternalId}`)
-      expect($(`.form-group`).find('a').attr('href')).to.equal(`/setup/${mandateExternalId}`)
+      expect($(`.govuk-back-link`).attr('href')).to.equal(`/setup/${mandateExternalId}`)
+      expect($(`.govuk-button`).attr('href')).to.equal(`/setup/${mandateExternalId}`)
     })
   })
 
@@ -74,8 +74,8 @@ describe('direct debit guarantee controller', () => {
       expect(response.statusCode).to.equal(200)
     })
     it('should display back links to the payment journey', () => {
-      expect($(`.back`).find('a').attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
-      expect($(`.form-group`).find('a').attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
+      expect($(`.govuk-back-link`).attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
+      expect($(`.govuk-button`).attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
     })
   })
 })

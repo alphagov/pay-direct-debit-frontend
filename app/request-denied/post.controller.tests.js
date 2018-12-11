@@ -26,7 +26,7 @@ describe('request-denied POST controller', () => {
     })
 
     it('should show an error page', () => {
-      expect($('.heading-large').text()).to.equal('Sorry, we’re experiencing technical problems')
+      expect($('.govuk-heading-l').text()).to.equal('Sorry, we’re experiencing technical problems')
       expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
     })
   })
