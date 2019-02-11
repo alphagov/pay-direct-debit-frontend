@@ -51,7 +51,7 @@
     "correlation-id": "^3.0.2",
     "csrf": "3.0.x",
     "express": "4.16.x",
-    "govuk-frontend": "^2.6.0",
+    "govuk-frontend": "^2.7.0",
     "i18n": "0.8.x",
     "lodash": "^4.17.11",
     "memory-cache": "^0.2.0",
