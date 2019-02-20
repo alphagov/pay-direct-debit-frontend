@@ -93,7 +93,7 @@
     "grunt-mocha-test": "^0.13.2",
     "grunt-sass": "3.0.x",
     "jquery": "^3.2.1",
-    "mocha": "5.2.x",
+    "mocha": "6.0.x",
     "nock": "^10.0.6",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
