@@ -86,7 +86,7 @@
     "cheerio": "^1.0.0-rc.1",
     "chokidar-cli": "latest",
     "envfile": "^3.0.0",
-    "eslint": "^5.15.2",
+    "eslint": "^5.15.3",
     "gaap-analytics": "^3.0.0",
     "grunt": "^1.0.3",
     "grunt-babel": "^8.0.0",
