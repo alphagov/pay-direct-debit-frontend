@@ -5,9 +5,6 @@ const logger = require('pino')()
 const request = require('requestretry')
 const wrapper = require('./wrapper')
 
-// Local Dependencies
-const customCertificate = require('../../utils/certificates/custom-certificate')
-
 // Create request.defaults config
 const requestOptions = {
   agentOptions: {
@@ -21,9 +18,7 @@ const requestOptions = {
   retryStrategy: retryOnECONNRESET()
 }
 
-if (process.env.DISABLE_INTERNAL_HTTPS !== 'true') {
-  customCertificate.addCertsToAgent(requestOptions.agentOptions)
-} else {
+if (process.env.DISABLE_INTERNAL_HTTPS === 'true') {
   logger.warn('DISABLE_INTERNAL_HTTPS is set.')
 }
 
