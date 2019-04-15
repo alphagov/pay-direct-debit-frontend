@@ -59,7 +59,7 @@
     "body-parser": "1.18.x",
     "client-sessions": "0.8.x",
     "compression": "1.7.x",
-    "correlation-id": "^3.0.2",
+    "correlation-id": "^3.1.0",
     "csrf": "3.1.x",
     "express": "4.16.x",
     "govuk-frontend": "^2.10.0",
