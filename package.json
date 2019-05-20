@@ -100,7 +100,7 @@
     "grunt-env": "0.4.x",
     "grunt-mocha-test": "^0.13.2",
     "grunt-sass": "3.0.x",
-    "husky": "^2.2.0",
+    "husky": "^2.3.0",
     "jquery": "^3.4.1",
     "lint-staged": "^8.1.7",
     "mocha": "6.1.x",
