@@ -61,7 +61,7 @@
     "compression": "1.7.x",
     "correlation-id": "^3.1.0",
     "csrf": "3.1.x",
-    "express": "4.16.x",
+    "express": "4.17.x",
     "govuk-frontend": "^2.11.0",
     "i18n": "0.8.x",
     "lodash": "^4.17.11",
