@@ -174,7 +174,9 @@ module.exports = {
   validService: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
-      name: opts.name || 'GOV.UK Direct Cake service',
+      service_name: {
+        en: opts.name || 'GOV.UK Direct Cake service'
+      },
       gateway_account_ids: opts.gateway_account_ids || [randomExternalId()],
       merchant_details: opts.merchant_details || {
         name: 'Silvia needs coffee',
