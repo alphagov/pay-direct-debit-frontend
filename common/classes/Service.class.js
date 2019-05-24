@@ -5,7 +5,7 @@ const countries = require('../utils/countries')
 class Service {
   constructor (opts) {
     this.externalId = opts.external_id
-    this.name = opts.name
+    this.name = opts.service_name.en
     this.gatewayAccountIds = opts.gateway_account_ids
     this.merchantDetails = opts.merchant_details ? {
       name: opts.merchant_details.name,

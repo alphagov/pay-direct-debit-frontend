@@ -32,7 +32,9 @@ const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
 
 describe('cancel GET controller', () => {
   const service = { external_id: 'eisuodfkf',
-    name: 'GOV.UK Direct Cake service',
+    service_name: {
+      en: 'GOV.UK Direct Cake service'
+    },
     gateway_account_ids: [gatewayAccoutExternalId],
     merchant_details: {
       name: 'Silvia needs coffee',
