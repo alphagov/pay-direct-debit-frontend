@@ -32,7 +32,6 @@ module.exports = {
       gatewayAccountId: opts.gatewayAccountId || randomNumber(),
       gatewayAccountExternalId: opts.gatewayAccountExternalId || randomExternalId(),
       paymentMethod: opts.paymentMethod || 'DIRECT_DEBIT',
-      serviceName: opts.serviceName || 'GOV.UK Direct Cake service',
       paymentProvider: opts.paymentProvider || 'SANDBOX',
       type: opts.type || 'TEST'
     }
