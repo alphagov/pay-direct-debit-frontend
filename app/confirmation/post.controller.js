@@ -11,9 +11,6 @@ module.exports = (req, res) => {
     account_number: session.confirmationDetails.accountNumber,
     sort_code: session.confirmationDetails.sortCode.match(/.{2}/g).join('')
   }
-  if (mandate.transaction) {
-    params.transaction_external_id = mandate.transaction.externalId
-  }
   connectorClient.payment.confirmDirectDebitDetails(mandate.gatewayAccountExternalId, mandate.externalId, params, req.correlationId)
     .then(() => {
       return res.redirect(303, mandate.returnUrl)

@@ -20,9 +20,6 @@
             {% include "common/templates/includes/validation-errors.njk" %}
         {% endif %}
         <h1 class="govuk-heading-l">Set up a Direct Debit</h1>
-        {% if mandateType == 'ONE_OFF' %}
-          <p class="govuk-body">We’ll take a one-off payment from your bank account</p>
-        {% endif %}
         <form class="form" method="POST" action="/setup/{{mandateExternalId}}" class="direct-debit-form" data-validate>
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           {% set nameError = false %}
@@ -181,19 +178,10 @@
           }}
 
           <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
+            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
           </p>
 
         </div>
-      {% if mandateType == 'ONE_OFF' %}
-      <div class="govuk-grid-column-one-third payment-summary-wrap">
-        <aside class="payment-summary">
-          <h2 class="govuk-heading-m">Payment summary</h2>
-          <p class="govuk-body govuk-!-font-weight-bold" id="payment-description">{{description}}</p>
-          <p class="govuk-body govuk-!-margin-bottom-0">Total amount: <span class="amount govuk-!-font-size-36 govuk-!-font-weight-bold" id="amount">£{{amount}}</span>
-        </aside>
-      </div>
-      {% endif %}
     </div>
 
     {% block dd_guarantee_anchor %}

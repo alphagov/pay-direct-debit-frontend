@@ -19,7 +19,6 @@ function middleware (req, res, next) {
   logger.info(`[${req.correlationId}] Valid session defined for ${mandateExternalId}`)
   res.locals.mandateExternalId = session.mandateExternalId
   res.locals.gatewayAccountExternalId = session.gatewayAccountExternalId
-  res.locals.transactionExternalId = session.transactionExternalId
   return next()
 }
 

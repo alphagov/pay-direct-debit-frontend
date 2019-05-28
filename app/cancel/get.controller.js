@@ -7,7 +7,6 @@ module.exports = (req, res) => {
   const mandate = res.locals.mandate
 
   const params = {
-    mandateType: mandate.type,
     returnUrl: mandate.returnUrl
   }
   connectorClient.payment.cancelTransaction(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)

@@ -22,7 +22,6 @@ describe('setup post controller', () => {
   let responseRedirect
   const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
-  const transactionExternalId = 'jhgdsfbkjsdhk'
   const service = { external_id: 'eisuodfkf',
     name: 'GOV.UK Direct Cake service',
     gateway_account_ids: [gatewayAccoutExternalId],
@@ -46,8 +45,7 @@ describe('setup post controller', () => {
     before(done => {
       const cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        mandateExternalId,
-        transactionExternalId
+        mandateExternalId
       )
         .withCsrfSecret('123')
         .build()
@@ -67,7 +65,7 @@ describe('setup post controller', () => {
     })
   })
   describe('when submitting the form for a valid mandate request', () => {
-    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -88,14 +86,13 @@ describe('setup post controller', () => {
     before(done => {
       const cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
-        mandateExternalId,
-        transactionExternalId
+        mandateExternalId
       )
         .withCsrfSecret(csrfSecret)
         .build()
       const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
       nock(config.CONNECTOR_URL)
-        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payments/${transactionExternalId}`)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
         .reply(200, mandateResponse)
       nock(config.CONNECTOR_URL)
         .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
@@ -143,7 +140,7 @@ describe('setup post controller', () => {
   })
 
   describe('should keep the field values when submitting the form with validation errors', () => {
-    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -254,7 +251,7 @@ describe('setup post controller', () => {
 
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     let $
-    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -355,7 +352,7 @@ describe('setup post controller', () => {
   })
   describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
     let $
-    const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {

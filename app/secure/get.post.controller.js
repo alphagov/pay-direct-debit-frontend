@@ -18,8 +18,7 @@ module.exports = (req, res) => {
       const url = setup.paths.index.replace(':mandateExternalId', mandate.externalId)
       setSessionVariable(req, mandate.externalId, {
         mandateExternalId: mandate.externalId,
-        gatewayAccountExternalId: mandate.gatewayAccountExternalId,
-        transactionExternalId: mandate.transactionExternalId
+        gatewayAccountExternalId: mandate.gatewayAccountExternalId
       })
       return res.redirect(303, url)
     })

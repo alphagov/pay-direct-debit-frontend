@@ -18,7 +18,7 @@ const setupFixtures = () => {
 }
 
 describe('Check secure coookie middleware', function () {
-  describe('the mandate external id is valid in session with no transaction id', () => {
+  describe('the mandate external id is valid in session', () => {
     const { res, next, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {
@@ -44,50 +44,11 @@ describe('Check secure coookie middleware', function () {
       expect(res.locals.gatewayAccountExternalId).to.be.equal(mandate.gatewayAccountExternalId)
     })
 
-    it('should not set the gateway account externalId in res.locals', function () {
-      expect(res.locals.transactionExternalId).to.not.exist // eslint-disable-line no-unused-expressions
-    })
-
     it('should call the next callback method', () => {
       assert(next.calledOnce)
     })
   })
 
-  describe('the mandate external id is valid in session with transaction id', () => {
-    const { res, next, mandate, checkSecureCookie } = setupFixtures()
-    const req = {
-      params: {
-        mandateExternalId: mandate.externalId
-      },
-      direct_debit_frontend_state: {
-        [mandate.externalId]: {
-          'mandateExternalId': mandate.externalId,
-          'gatewayAccountExternalId': mandate.gatewayAccountExternalId,
-          'transactionExternalId': mandate.transactionExternalId
-        }
-      }
-    }
-
-    before(() => {
-      checkSecureCookie(req, res, next)
-    })
-
-    it('should set the mandate externalId in res.locals', function () {
-      expect(res.locals.mandateExternalId).to.be.equal(mandate.externalId)
-    })
-
-    it('should set the gateway account externalId in res.locals', function () {
-      expect(res.locals.gatewayAccountExternalId).to.be.equal(mandate.gatewayAccountExternalId)
-    })
-
-    it('should set the transaction externalId in res.locals', function () {
-      expect(res.locals.transactionExternalId).to.be.equal(mandate.transactionExternalId)
-    })
-
-    it('should call the next callback method', () => {
-      assert(next.calledOnce)
-    })
-  })
   describe('the payment request externalId is not in session', () => {
     const { res, next, renderErrorView, mandate, checkSecureCookie } = setupFixtures()
     const req = {

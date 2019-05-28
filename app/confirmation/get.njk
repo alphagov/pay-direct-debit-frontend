@@ -62,7 +62,6 @@
           })
         }}
 
-        {% if mandateType == 'ON_DEMAND' %}
         {% set insetHTML %}
           <p class="govuk-body govuk-!-margin-top-6 govuk-!-margin-bottom-6">We will notify you by email 3 days before each future payment.</p>
         {% endset %}
@@ -71,7 +70,7 @@
             html: insetHTML
           })
         }}
-        {% endif %}
+
         <form
           class="form"
           method="POST"
@@ -81,7 +80,7 @@
         >
           <input id="csrf" name="csrfToken" type="hidden" value="{{csrf}}" />
           {% set buttonText%}
-            Confirm {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}
+            Confirm mandate
           {% endset%}
           {{
             govukButton({
@@ -93,19 +92,10 @@
           }}
 
           <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel {{ "payment" if mandateType == 'ONE_OFF' else "mandate" }}</a>
+            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
           </p>
         </form>
       </div>
-      {% if mandateType == 'ONE_OFF' %}
-      <div class="govuk-grid-column-one-third payment-summary-wrap">
-        <aside class="payment-summary">
-          <h2 class="govuk-heading-m">Payment summary</h2>
-          <p class="govuk-body govuk-!-font-weight-bold" id="payment-description">{{description}}</p>
-          <p class="govuk-body govuk-!-margin-bottom-0">Total amount: <span class="amount govuk-!-font-size-36 govuk-!-font-weight-bold" id="amount">£{{amount}}</span>
-        </aside>
-      </div>
-      {% endif %}
     </div>
     {% block dd_guarantee_anchor %}
       {% include "app/direct-debit-guarantee/anchor.njk" %}
