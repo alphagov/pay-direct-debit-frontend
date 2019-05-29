@@ -7,7 +7,7 @@ const express = require('express')
 const getController = require('./get.controller')
 const { validateAndRefreshCsrf } = require('../../common/middleware/csrf/csrf')
 const checkSecureCookie = require('../../common/middleware/check-secure-cookie/check-secure-cookie').middleware
-const getTransaction = require('../../common/middleware/get-mandate/get-mandate').middleware
+const getMandate = require('../../common/middleware/get-mandate/get-mandate').middleware
 const getGatewayAccount = require('../../common/middleware/get-gateway-account/get-gateway-account').middleware
 
 // Initialisation
@@ -18,7 +18,7 @@ const paths = {
 }
 
 // Routing
-router.get(paths.index, checkSecureCookie, validateAndRefreshCsrf, getTransaction, getGatewayAccount, getController)
+router.get(paths.index, checkSecureCookie, validateAndRefreshCsrf, getMandate, getGatewayAccount, getController)
 
 // Export
 module.exports = {

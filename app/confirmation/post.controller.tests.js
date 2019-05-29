@@ -16,7 +16,7 @@ const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 let response, $
 const mandateExternalId = 'sdfihsdufh2e'
 const gatewayAccoutExternalId = '1234567890'
-const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
   external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   state: {
@@ -71,8 +71,7 @@ describe('confirmation POST controller', () => {
       nock(config.CONNECTOR_URL)
         .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/confirm`, {
           sort_code: sortCode,
-          account_number: accountNumber,
-          transaction_external_id: mandateResponse.transaction.external_id
+          account_number: accountNumber
         })
         .reply(201)
       nock(config.CONNECTOR_URL).get(`/v1/api/accounts/${gatewayAccoutExternalId}`)

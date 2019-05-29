@@ -8,16 +8,14 @@ const _ = require('lodash')
 const cookieConfig = require('../../common/config/cookies')
 
 exports.CookieBuilder = class CookieBuilder {
-  constructor (gatewayAccountExternalId, mandateExternalId, transactionExternalId) {
+  constructor (gatewayAccountExternalId, mandateExternalId) {
     this._cookies = {}
     this.cookieName = 'direct_debit_frontend_state'
     this.gatewayAccountExternalId = gatewayAccountExternalId
     this.mandateExternalId = mandateExternalId
-    this.transactionExternalId = transactionExternalId
     this.withCookie(this.cookieName, {
       'gatewayAccountExternalId': gatewayAccountExternalId,
-      'mandateExternalId': mandateExternalId,
-      'transactionExternalId': transactionExternalId
+      'mandateExternalId': mandateExternalId
     })
   }
   withCookieName (cookieName) {

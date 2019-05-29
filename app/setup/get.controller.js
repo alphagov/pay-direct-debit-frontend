@@ -8,13 +8,9 @@ const { getSessionVariable } = require('../../common/config/cookies')
 
 module.exports = (req, res) => {
   const mandate = res.locals.mandate
-  const transaction = mandate.transaction || {}
   const session = getSessionVariable(req, mandate.externalId)
   const params = {
     mandateExternalId: mandate.externalId,
-    mandateType: mandate.type,
-    description: transaction.description,
-    amount: transaction.amount,
     returnUrl: `/change-payment-method/${mandate.externalId}`,
     paymentAction: 'setup',
     service: res.locals.service

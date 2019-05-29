@@ -55,7 +55,7 @@ describe('Get mandate middleware', () => {
         res.locals.mandateExternalId = MANDATE.externalId
         res.locals.gatewayAccountExternalId = MANDATE.gatewayAccountExternalId
         connectorClient.secure.retrievePaymentInformationByExternalId
-          .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, undefined, req.correlationId)
+          .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, req.correlationId)
           .returns(Promise.resolve(MANDATE))
         getMandate.middleware(req, res, next)
       })
@@ -68,27 +68,7 @@ describe('Get mandate middleware', () => {
         sinon.assert.calledOn(next)
       })
     })
-    describe('and the mandate with a transaction can be retrieved from connector', () => {
-      const { req, res, next, connectorClient, getMandate } = setupFixtures()
-      const transactionExternalId = 'transaction-external-id'
-      before(() => {
-        res.locals.mandateExternalId = MANDATE.externalId
-        res.locals.gatewayAccountExternalId = MANDATE.gatewayAccountExternalId
-        res.locals.transactionExternalId = transactionExternalId
-        connectorClient.secure.retrievePaymentInformationByExternalId
-          .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, transactionExternalId, req.correlationId)
-          .returns(Promise.resolve(MANDATE))
-        getMandate.middleware(req, res, next)
-      })
 
-      it('should set the gateway account that has been retrieved in res.locals', () => {
-        expect(res.locals).to.have.property('mandate', MANDATE)
-      })
-
-      it('should call the next callback method', () => {
-        sinon.assert.calledOn(next)
-      })
-    })
     describe('and the mandate can not be retrieved from connector', () => {
       let { req, res, next, connectorClient, renderErrorView, getMandate } = setupFixtures()
 
@@ -96,7 +76,7 @@ describe('Get mandate middleware', () => {
         res.locals.mandateExternalId = MANDATE.externalId
         res.locals.gatewayAccountExternalId = MANDATE.gatewayAccountExternalId
         connectorClient.secure.retrievePaymentInformationByExternalId
-          .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, undefined, req.correlationId)
+          .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, req.correlationId)
           .returns(Promise.reject(new Error()))
         getMandate.middleware(req, res, next)
       })

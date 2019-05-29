@@ -1,7 +1,6 @@
 'use strict'
 const Payer = require('../../common/classes/Payer.class')
 const Mandate = require('../../common/classes/Mandate.class')
-const Transaction = require('../../common/classes/Transaction.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
 // Create random values if none provided
@@ -41,50 +40,6 @@ module.exports = {
       }
     }
   },
-
-  validPaymentResponse: (opts = {}) => {
-    const data = {
-      external_id: opts.external_id || randomExternalId(),
-      return_url: opts.return_url || randomUrl(),
-      gateway_account_id: 23 || opts.gateway_account_id,
-      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      description: opts.description || 'buy Silvia a coffee',
-      amount: opts.amount || randomNumber(),
-      type: opts.type || 'CHARGE',
-      state: opts.state || 'NEW',
-      payer: opts.payer || null
-    }
-    return {
-      getPlain: () => {
-        return data
-      }
-    }
-  },
-  validOneOffMandateResponse: (opts = {}) => {
-    const data = {
-      external_id: opts.external_id || randomExternalId(),
-      return_url: opts.return_url || randomUrl(),
-      gateway_account_id: 23 || opts.gateway_account_id,
-      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
-      mandate_type: 'ONE_OFF',
-      state: opts.state || 'started',
-      internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
-      payer: opts.payer || null,
-      transaction: opts.transaction || {
-        external_id: randomExternalId(),
-        amount: 300,
-        description: 'transaction desc',
-        reference: 'transaction ref',
-        state: 'NEW'
-      }
-    }
-    return {
-      getPlain: () => {
-        return data
-      }
-    }
-  },
   validOnDemandMandateResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
@@ -92,11 +47,9 @@ module.exports = {
       gateway_account_id: 23 || opts.gateway_account_id,
       gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
       mandate_reference: opts.mandate_reference || 'buy Silvia a beer',
-      mandate_type: 'ON_DEMAND',
       state: opts.state || 'started',
       internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
-      payer: opts.payer || null,
-      transaction: null
+      payer: opts.payer || null
     }
     return {
       getPlain: () => {
@@ -126,20 +79,6 @@ module.exports = {
     }
     return new Payer(data)
   },
-
-  validTransaction: (opts = {}) => {
-    const data = {
-      external_id: opts.external_id || randomExternalId(),
-      return_url: opts.return_url || randomUrl(),
-      gateway_account_id: 23 || opts.gateway_account_id,
-      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      description: opts.description || 'buy Silvia a coffee',
-      amount: opts.amount || randomNumber(),
-      state: opts.state || 'NEW',
-      payer: opts.payer || null
-    }
-    return new Transaction(data)
-  },
   validMandate: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
@@ -149,9 +88,7 @@ module.exports = {
       mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
       state: opts.state || 'started',
       internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
-      type: opts.type || 'ONE_OFF',
-      payer: opts.payer || null,
-      transaction: opts.transaction || null
+      payer: opts.payer || null
     }
     return new Mandate(data)
   },

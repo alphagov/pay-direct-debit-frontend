@@ -16,7 +16,7 @@ let response
 const mandateExternalId = 'sdfihsdufh2e123'
 const gatewayAccoutExternalId = '1234567890'
 const returnUrl = '/change-payment-method'
-const mandateResponse = paymentFixtures.validOneOffMandateResponse({
+const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
   external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   return_url: returnUrl

@@ -38,8 +38,8 @@ function retrieveGatewayAccount (gatewayAccountId, correlationId) {
   }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
-function retrievePaymentInformationByExternalId (gatewayAccountExternalId, mandateExternalId, paymentExternalId, correlationId) {
-  const url = `/accounts/${gatewayAccountExternalId}/mandates/${mandateExternalId}` + (paymentExternalId ? `/payments/${paymentExternalId}` : '')
+function retrievePaymentInformationByExternalId (gatewayAccountExternalId, mandateExternalId, correlationId) {
+  const url = `/accounts/${gatewayAccountExternalId}/mandates/${mandateExternalId}`
   return baseClient.get({
     headers,
     baseUrl,
@@ -120,7 +120,7 @@ function cancelTransaction (accountId, mandateExternalId, correlationId) {
     url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/cancel`,
     service: service,
     correlationId: correlationId,
-    description: `cancel a payment request`
+    description: `cancel mandate setup`
   })
 }
 
