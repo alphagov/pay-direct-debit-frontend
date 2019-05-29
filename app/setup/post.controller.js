@@ -39,14 +39,14 @@ module.exports = (req, res) => {
   const payerValidatorErrors = payerValidator(payer)
   const redirectWithValidationErrors = prepareValidationErrors(res, req, mandateExternalId, formValues)
   if (lodash.isEmpty(payerValidatorErrors)) {
-    connectorClient.payment.validateBankAccountDetails(gatewayAccountExternalId, mandateExternalId, {
+    connectorClient.mandate.validateBankAccountDetails(gatewayAccountExternalId, mandateExternalId, {
       account_number: normalisedFormValues.account_number,
       sort_code: normalisedFormValues.sort_code
     }, req.correlationId)
       .then(bankAccount => {
         if (bankAccount.is_valid) {
           normalisedFormValues.bank_name = bankAccount.bank_name
-          connectorClient.payment.submitDirectDebitDetails(gatewayAccountExternalId, mandateExternalId, normalisedFormValues, req.correlationId)
+          connectorClient.mandate.submitDirectDebitDetails(gatewayAccountExternalId, mandateExternalId, normalisedFormValues, req.correlationId)
             .then(payerExternalId => {
               logger.info(`[${req.correlationId}] Submitted payment details for request: ${mandateExternalId}, payer: ${payerExternalId}`)
               req.body.payer_external_id = payerExternalId

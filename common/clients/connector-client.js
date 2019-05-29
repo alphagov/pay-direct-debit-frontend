@@ -15,13 +15,13 @@ module.exports = {
   retrieveGatewayAccount,
   secure: {
     retrieveMandateByToken,
-    retrievePaymentInformationByExternalId,
     deleteToken
   },
-  payment: {
+  mandate: {
+    retrieveMandateByExternalId,
     submitDirectDebitDetails,
     confirmDirectDebitDetails,
-    cancelTransaction,
+    cancelMandate,
     changePaymentMethod,
     validateBankAccountDetails
   }
@@ -38,7 +38,7 @@ function retrieveGatewayAccount (gatewayAccountId, correlationId) {
   }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
-function retrievePaymentInformationByExternalId (gatewayAccountExternalId, mandateExternalId, correlationId) {
+function retrieveMandateByExternalId (gatewayAccountExternalId, mandateExternalId, correlationId) {
   const url = `/accounts/${gatewayAccountExternalId}/mandates/${mandateExternalId}`
   return baseClient.get({
     headers,
@@ -113,7 +113,7 @@ function validateBankAccountDetails (accountId, mandateExternalId, body, correla
   })
 }
 
-function cancelTransaction (accountId, mandateExternalId, correlationId) {
+function cancelMandate (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
