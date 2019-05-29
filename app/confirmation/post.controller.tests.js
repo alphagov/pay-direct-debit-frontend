@@ -63,7 +63,7 @@ describe('confirmation POST controller', () => {
     nock.cleanAll()
   })
 
-  describe('when a payment is successfully confirmed', () => {
+  describe('when a mandate is successfully confirmed', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)

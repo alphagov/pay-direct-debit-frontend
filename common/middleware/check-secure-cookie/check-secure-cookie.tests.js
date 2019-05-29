@@ -49,7 +49,7 @@ describe('Check secure coookie middleware', function () {
     })
   })
 
-  describe('the payment request externalId is not in session', () => {
+  describe('the mandate externalId is not in session', () => {
     const { res, next, renderErrorView, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {

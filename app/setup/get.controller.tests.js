@@ -75,7 +75,7 @@ describe('setup get controller', () => {
       expect($(`.direct-debit-guarantee`).find('a').attr('href')).to.equal(`/direct-debit-guarantee/setup/${mandateExternalId}`)
     })
 
-    it('should display the enter direct debit page with a link to cancel the payment', () => {
+    it('should display the enter direct debit page with a link to cancel the mandate', () => {
       expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
     })
 

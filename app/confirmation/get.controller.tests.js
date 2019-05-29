@@ -92,7 +92,7 @@ describe('confirmation get controller', function () {
     expect($(`#bank-statement-description`).text()).to.equal('')
   })
 
-  it('should display the enter direct debit page with a link to cancel the payment', () => {
+  it('should display the enter direct debit page with a link to cancel the mandate', () => {
     expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
   })
 
@@ -161,7 +161,7 @@ describe('confirmation get controller with no confirmationDetails', function () 
   })
 })
 
-describe('confirmation get controller after successful payment', function () {
+describe('confirmation get controller after successful mandate setup', function () {
   let response, $
   const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
@@ -215,7 +215,7 @@ describe('confirmation get controller after successful payment', function () {
     expect(response.statusCode).to.equal(200)
   })
 
-  it('should display the payment completed summary page', () => {
+  it('should display the mandate setup completed summary page', () => {
     expect($('form').length).to.equal(0)
     expect($('.govuk-heading-l.SUBMITTED').length).to.equal(1)
   })

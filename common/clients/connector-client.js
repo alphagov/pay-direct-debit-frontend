@@ -96,7 +96,7 @@ function confirmDirectDebitDetails (accountId, mandateExternalId, body, correlat
     service: service,
     body: body,
     correlationId: correlationId,
-    description: `confirm a payment`
+    description: `confirm mandate setup`
   })
 }
 
@@ -131,6 +131,6 @@ function changePaymentMethod (accountId, mandateExternalId, correlationId) {
     url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/change-payment-method`,
     service: service,
     correlationId: correlationId,
-    description: `cancel a payment request when user not eligible for setting up a Direct Debit`
+    description: `cancel a mandate when user not eligible for setting up a Direct Debit`
   })
 }

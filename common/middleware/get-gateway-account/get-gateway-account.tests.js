@@ -29,7 +29,7 @@ const setup = () => {
 }
 
 describe('Get gateway account middleware', () => {
-  describe('when the payment request external id is not found in res.locals', () => {
+  describe('when the gateway account external id is not found in res.locals', () => {
     const { req, res, next, renderErrorView, getGatewayAccount } = setup()
 
     before(() => {
