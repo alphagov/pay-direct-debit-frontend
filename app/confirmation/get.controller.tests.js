@@ -11,7 +11,7 @@ const nock = require('nock')
 const setup = require('../setup')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 
 describe('confirmation get controller', function () {
@@ -38,7 +38,7 @@ describe('confirmation get controller', function () {
   const accountNumber = '12345678'
 
   before(done => {
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccountExternalId,
       state: {
@@ -46,10 +46,10 @@ describe('confirmation get controller', function () {
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccountExternalId
     }).getPlain()
-    const payer = paymentFixtures.validPayer({
+    const payer = mandateFixtures.validPayer({
       account_holder_name: accountName,
       sort_code: sortCode,
       account_number: accountNumber
@@ -118,7 +118,7 @@ describe('confirmation get controller with no confirmationDetails', function () 
   const gatewayAccoutExternalId = '1234567890'
 
   before(done => {
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -126,7 +126,7 @@ describe('confirmation get controller with no confirmationDetails', function () 
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const cookieHeader = new CookieBuilder(
@@ -165,20 +165,20 @@ describe('confirmation get controller after successful payment', function () {
   let response, $
   const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
-  const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+  const mandateResponse = mandateFixtures.validMandateResponse({
     external_id: mandateExternalId,
     gateway_account_external_id: gatewayAccoutExternalId,
     state: { status: 'pending' },
     internal_state: 'SUBMITTED'
   }).getPlain()
-  const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+  const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
     gateway_account_external_id: gatewayAccoutExternalId
   })
 
   const csrfSecret = '123'
   const sortCode = '123456'
   const accountNumber = '12345678'
-  const payer = paymentFixtures.validPayer({
+  const payer = mandateFixtures.validPayer({
     account_holder_name: 'payer',
     sort_code: sortCode,
     account_number: accountNumber

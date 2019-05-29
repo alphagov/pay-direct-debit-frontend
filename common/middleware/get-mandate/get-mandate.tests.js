@@ -1,9 +1,9 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../../test/fixtures/mandate-fixtures')
 
-const MANDATE = paymentFixtures.validMandate()
+const MANDATE = mandateFixtures.validMandateResponse().getObject()
 
 const setupFixtures = () => {
   const req = { params: {}, correlationId: 'correlation-id' }

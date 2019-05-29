@@ -10,7 +10,7 @@ const lodash = require('lodash')
 const csrf = require('csrf')
 
 // Local dependencies
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
 const confirmation = require('../confirmation')
@@ -65,7 +65,7 @@ describe('setup post controller', () => {
     })
   })
   describe('when submitting the form for a valid mandate request', () => {
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -73,14 +73,14 @@ describe('setup post controller', () => {
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const validateBankAccountResponse = {
       is_valid: true,
       bank_name: 'bank name'
     }
-    const formValues = paymentFixtures.validPayer()
+    const formValues = mandateFixtures.validPayer()
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     before(done => {
@@ -90,7 +90,7 @@ describe('setup post controller', () => {
       )
         .withCsrfSecret(csrfSecret)
         .build()
-      const createPayerResponse = paymentFixtures.validCreatePayerResponse().getPlain()
+      const createPayerResponse = mandateFixtures.validCreatePayerResponse().getPlain()
       nock(config.CONNECTOR_URL)
         .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
         .reply(200, mandateResponse)
@@ -140,7 +140,7 @@ describe('setup post controller', () => {
   })
 
   describe('should keep the field values when submitting the form with validation errors', () => {
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -152,7 +152,7 @@ describe('setup post controller', () => {
       is_valid: true,
       bank_name: 'bank name'
     }
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const csrfSecret = '123'
@@ -251,7 +251,7 @@ describe('setup post controller', () => {
 
   describe('Submitting the form with validation errors displays an error summary with respective links', () => {
     let $
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -259,7 +259,7 @@ describe('setup post controller', () => {
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const validateBankAccountResponse = {
@@ -352,7 +352,7 @@ describe('setup post controller', () => {
   })
   describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
     let $
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       state: {
@@ -360,7 +360,7 @@ describe('setup post controller', () => {
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const validateBankAccountResponse = {

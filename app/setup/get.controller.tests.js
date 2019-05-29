@@ -10,7 +10,7 @@ const nock = require('nock')
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 
 describe('setup get controller', () => {
@@ -34,7 +34,7 @@ describe('setup get controller', () => {
   }
 
   describe('when a mandate is valid', () => {
-    const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+    const mandateResponse = mandateFixtures.validMandateResponse({
       external_id: mandateExternalId,
       gateway_account_external_id: gatewayAccoutExternalId,
       return_url: `/change-payment-method/${mandateExternalId}`,
@@ -43,7 +43,7 @@ describe('setup get controller', () => {
       },
       internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
     }).getPlain()
-    const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
     const cookieHeader = new CookieBuilder(

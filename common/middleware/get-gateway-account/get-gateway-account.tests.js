@@ -1,10 +1,10 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../../test/fixtures/mandate-fixtures')
 
-const MANDATE = paymentFixtures.validMandate()
-const GATEWAY_ACCOUNT = paymentFixtures.validGatewayAccount({
+const MANDATE = mandateFixtures.validMandateResponse().getObject()
+const GATEWAY_ACCOUNT = mandateFixtures.validGatewayAccount({
   gateway_account_id: MANDATE.gatewayAccountId,
   gateway_account_external_id: MANDATE.gatewayAccountExternalId
 })

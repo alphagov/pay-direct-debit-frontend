@@ -1,15 +1,15 @@
 'use strict'
+
 const Payer = require('../../common/classes/Payer.class')
 const Mandate = require('../../common/classes/Mandate.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
-// Create random values if none provided
+
 const randomExternalId = () => Math.random().toString(36).substring(7)
 const randomNumber = () => Math.round(Math.random() * 10000) + 1
 const randomUrl = () => 'https://' + randomExternalId() + '.com'
-// todo add pactified
-module.exports = {
 
+module.exports = {
   validTokenExchangeResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
@@ -96,7 +96,6 @@ module.exports = {
 
     return new GatewayAccount(data)
   },
-
   validService: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
