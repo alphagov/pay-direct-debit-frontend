@@ -15,13 +15,13 @@ module.exports = {
   retrieveGatewayAccount,
   secure: {
     retrieveMandateByToken,
-    retrievePaymentInformationByExternalId,
     deleteToken
   },
-  payment: {
+  mandate: {
+    retrieveMandateByExternalId,
     submitDirectDebitDetails,
     confirmDirectDebitDetails,
-    cancelTransaction,
+    cancelMandate,
     changePaymentMethod,
     validateBankAccountDetails
   }
@@ -38,7 +38,7 @@ function retrieveGatewayAccount (gatewayAccountId, correlationId) {
   }).then(gatewayAccount => new GatewayAccount(gatewayAccount))
 }
 
-function retrievePaymentInformationByExternalId (gatewayAccountExternalId, mandateExternalId, correlationId) {
+function retrieveMandateByExternalId (gatewayAccountExternalId, mandateExternalId, correlationId) {
   const url = `/accounts/${gatewayAccountExternalId}/mandates/${mandateExternalId}`
   return baseClient.get({
     headers,
@@ -96,7 +96,7 @@ function confirmDirectDebitDetails (accountId, mandateExternalId, body, correlat
     service: service,
     body: body,
     correlationId: correlationId,
-    description: `confirm a payment`
+    description: `confirm mandate setup`
   })
 }
 
@@ -113,7 +113,7 @@ function validateBankAccountDetails (accountId, mandateExternalId, body, correla
   })
 }
 
-function cancelTransaction (accountId, mandateExternalId, correlationId) {
+function cancelMandate (accountId, mandateExternalId, correlationId) {
   return baseClient.post({
     headers,
     baseUrl,
@@ -131,6 +131,6 @@ function changePaymentMethod (accountId, mandateExternalId, correlationId) {
     url: `/api/accounts/${accountId}/mandates/${mandateExternalId}/change-payment-method`,
     service: service,
     correlationId: correlationId,
-    description: `cancel a payment request when user not eligible for setting up a Direct Debit`
+    description: `cancel a mandate when user not eligible for setting up a Direct Debit`
   })
 }

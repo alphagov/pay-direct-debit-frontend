@@ -21,7 +21,7 @@ function middleware (req, res, next) {
     return renderErrorView(req, res)
   }
 
-  connectorClient.secure.retrievePaymentInformationByExternalId(gatewayAccountExternalId, mandateExternalId, req.correlationId)
+  connectorClient.mandate.retrieveMandateByExternalId(gatewayAccountExternalId, mandateExternalId, req.correlationId)
     .then(mandate => {
       res.locals.mandate = mandate
       next()

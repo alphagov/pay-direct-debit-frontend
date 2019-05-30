@@ -9,7 +9,7 @@ module.exports = (req, res) => {
   const params = {
     returnUrl: mandate.returnUrl
   }
-  connectorClient.payment.cancelTransaction(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)
+  connectorClient.mandate.cancelMandate(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)
     .then(() => {
       return res.render('app/cancel/get', params)
     })

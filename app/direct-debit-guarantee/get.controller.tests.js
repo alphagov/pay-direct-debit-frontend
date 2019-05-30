@@ -26,7 +26,7 @@ describe('direct debit guarantee controller', () => {
     it('should return a 200 status code', () => {
       expect(response.statusCode).to.equal(200)
     })
-    it('should not display back links to the payment journey', () => {
+    it('should not display back links to the mandate setup journey', () => {
       expect($(`.back`).find('a').attr('href')).to.not.exist // eslint-disable-line no-unused-expressions
       expect($(`.form-group`).find('a').attr('href')).to.not.exist // eslint-disable-line no-unused-expressions
     })
@@ -49,7 +49,7 @@ describe('direct debit guarantee controller', () => {
     it('should return a 200 status code', () => {
       expect(response.statusCode).to.equal(200)
     })
-    it('should display back links to the payment journey', () => {
+    it('should display back links to the mandate setup journey', () => {
       expect($(`.govuk-back-link`).attr('href')).to.equal(`/setup/${mandateExternalId}`)
       expect($(`.govuk-button`).attr('href')).to.equal(`/setup/${mandateExternalId}`)
     })
@@ -73,7 +73,7 @@ describe('direct debit guarantee controller', () => {
     it('should return a 200 status code', () => {
       expect(response.statusCode).to.equal(200)
     })
-    it('should display back links to the payment journey', () => {
+    it('should display back links to the mandate setup journey', () => {
       expect($(`.govuk-back-link`).attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
       expect($(`.govuk-button`).attr('href')).to.equal(`/confirmation/${mandateExternalId}`)
     })

@@ -1,15 +1,15 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../../test/fixtures/mandate-fixtures')
 
-const MANDATE = paymentFixtures.validMandate()
+const MANDATE = mandateFixtures.validMandateResponse().getObject()
 
 const setupFixtures = () => {
   const req = { params: {}, correlationId: 'correlation-id' }
   const res = { locals: {} }
   const next = sinon.spy()
-  const connectorClient = { secure: { retrievePaymentInformationByExternalId: sinon.stub() } }
+  const connectorClient = { mandate: { retrieveMandateByExternalId: sinon.stub() } }
   const renderErrorView = sinon.spy()
 
   const getMandate = proxyquire('./get-mandate', {
@@ -54,7 +54,7 @@ describe('Get mandate middleware', () => {
       before(() => {
         res.locals.mandateExternalId = MANDATE.externalId
         res.locals.gatewayAccountExternalId = MANDATE.gatewayAccountExternalId
-        connectorClient.secure.retrievePaymentInformationByExternalId
+        connectorClient.mandate.retrieveMandateByExternalId
           .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, req.correlationId)
           .returns(Promise.resolve(MANDATE))
         getMandate.middleware(req, res, next)
@@ -75,7 +75,7 @@ describe('Get mandate middleware', () => {
       before(() => {
         res.locals.mandateExternalId = MANDATE.externalId
         res.locals.gatewayAccountExternalId = MANDATE.gatewayAccountExternalId
-        connectorClient.secure.retrievePaymentInformationByExternalId
+        connectorClient.mandate.retrieveMandateByExternalId
           .withArgs(MANDATE.gatewayAccountExternalId, MANDATE.externalId, req.correlationId)
           .returns(Promise.reject(new Error()))
         getMandate.middleware(req, res, next)

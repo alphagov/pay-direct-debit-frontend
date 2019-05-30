@@ -2,10 +2,10 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const assert = require('assert')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../../test/fixtures/mandate-fixtures')
 
 const setupFixtures = () => {
-  const mandate = paymentFixtures.validMandate()
+  const mandate = mandateFixtures.validMandateResponse().getObject()
   const res = { locals: {} }
   const next = sinon.spy()
   const renderErrorView = sinon.spy()
@@ -49,7 +49,7 @@ describe('Check secure coookie middleware', function () {
     })
   })
 
-  describe('the payment request externalId is not in session', () => {
+  describe('the mandate externalId is not in session', () => {
     const { res, next, renderErrorView, mandate, checkSecureCookie } = setupFixtures()
     const req = {
       params: {

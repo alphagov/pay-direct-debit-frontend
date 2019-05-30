@@ -1,10 +1,10 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const proxyquire = require('proxyquire')
-const paymentFixtures = require('../../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../../test/fixtures/mandate-fixtures')
 
 const GATEWAY_ACCOUNT_ID = 'DIRECT_DEBIT:23823o2iousda'
-const SERVICE = paymentFixtures.validService({
+const SERVICE = mandateFixtures.validService({
   gateway_account_ids: [GATEWAY_ACCOUNT_ID]
 })
 

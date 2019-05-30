@@ -11,12 +11,12 @@ const csrf = require('csrf')
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 let response, $
 const mandateExternalId = 'sdfihsdufh2e'
 const gatewayAccoutExternalId = '1234567890'
-const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+const mandateResponse = mandateFixtures.validMandateResponse({
   external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   state: {
@@ -24,7 +24,7 @@ const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
   },
   internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
 }).getPlain()
-const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
   gateway_account_external_id: gatewayAccoutExternalId
 })
 
@@ -47,7 +47,7 @@ describe('confirmation POST controller', () => {
       email: 'bla@bla.test'
     }
   }
-  const payer = paymentFixtures.validPayer({
+  const payer = mandateFixtures.validPayer({
     account_holder_name: 'payer',
     sort_code: sortCode,
     account_number: accountNumber
@@ -63,7 +63,7 @@ describe('confirmation POST controller', () => {
     nock.cleanAll()
   })
 
-  describe('when a payment is successfully confirmed', () => {
+  describe('when a mandate is successfully confirmed', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)

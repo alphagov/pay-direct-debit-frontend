@@ -11,13 +11,13 @@ const csrf = require('csrf')
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const { CookieBuilder } = require('../../test/test_helpers/cookie-helper')
 let response, $
 const mandateExternalId = 'sdfihsdufh2e123'
 const gatewayAccoutExternalId = '1234567890'
 const returnUrl = '/change-payment-method'
-const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
+const mandateResponse = mandateFixtures.validMandateResponse({
   external_id: mandateExternalId,
   gateway_account_external_id: gatewayAccoutExternalId,
   return_url: returnUrl,
@@ -26,7 +26,7 @@ const mandateResponse = paymentFixtures.validOnDemandMandateResponse({
   },
   internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
 }).getPlain()
-const gatewayAccountResponse = paymentFixtures.validGatewayAccountResponse({
+const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
   gateway_account_external_id: gatewayAccoutExternalId
 })
 
@@ -59,7 +59,7 @@ describe('cancel GET controller', () => {
     nock.cleanAll()
   })
 
-  describe('when cancelling a payment journey', () => {
+  describe('when cancelling a mandate', () => {
     before(done => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)

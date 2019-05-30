@@ -1,15 +1,15 @@
 'use strict'
+
 const Payer = require('../../common/classes/Payer.class')
 const Mandate = require('../../common/classes/Mandate.class')
 const GatewayAccount = require('../../common/classes/GatewayAccount.class')
 const Service = require('../../common/classes/Service.class')
-// Create random values if none provided
+
 const randomExternalId = () => Math.random().toString(36).substring(7)
 const randomNumber = () => Math.round(Math.random() * 10000) + 1
 const randomUrl = () => 'https://' + randomExternalId() + '.com'
-// todo add pactified
-module.exports = {
 
+module.exports = {
   validTokenExchangeResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
@@ -40,7 +40,7 @@ module.exports = {
       }
     }
   },
-  validOnDemandMandateResponse: (opts = {}) => {
+  validMandateResponse: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),
       return_url: opts.return_url || randomUrl(),
@@ -54,6 +54,9 @@ module.exports = {
     return {
       getPlain: () => {
         return data
+      },
+      getObject: () => {
+        return new Mandate(data)
       }
     }
   },
@@ -79,19 +82,6 @@ module.exports = {
     }
     return new Payer(data)
   },
-  validMandate: (opts = {}) => {
-    const data = {
-      external_id: opts.external_id || randomExternalId(),
-      return_url: opts.return_url || randomUrl(),
-      gateway_account_id: 23 || opts.gateway_account_id,
-      gateway_account_external_id: opts.gateway_account_external_id || randomExternalId(),
-      mandate_reference: opts.mandate_reference || 'buy Silvia a coffee',
-      state: opts.state || 'started',
-      internal_state: opts.internal_state || 'AWAITING_DIRECT_DEBIT_DETAILS',
-      payer: opts.payer || null
-    }
-    return new Mandate(data)
-  },
   validGatewayAccount: (opts = {}) => {
     const data = {
       gateway_account_id: opts.gateway_account_id || randomExternalId(),
@@ -106,7 +96,6 @@ module.exports = {
 
     return new GatewayAccount(data)
   },
-
   validService: (opts = {}) => {
     const data = {
       external_id: opts.external_id || randomExternalId(),

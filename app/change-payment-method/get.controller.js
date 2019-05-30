@@ -6,7 +6,7 @@ const connectorClient = require('../../common/clients/connector-client')
 module.exports = (req, res) => {
   const mandate = res.locals.mandate
 
-  connectorClient.payment.changePaymentMethod(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)
+  connectorClient.mandate.changePaymentMethod(mandate.gatewayAccountExternalId, mandate.externalId, req.correlationId)
     .then(() => {
       return res.redirect(303, mandate.returnUrl)
     })

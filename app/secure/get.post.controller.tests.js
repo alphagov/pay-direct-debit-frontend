@@ -10,11 +10,11 @@ const nock = require('nock')
 // Local dependencies
 const config = require('../../common/config')
 const getApp = require('../../server').getApp
-const paymentFixtures = require('../../test/fixtures/payments-fixtures')
+const mandateFixtures = require('../../test/fixtures/mandate-fixtures')
 const setup = require('../setup')
 let response, $
 
-const MANDATE = paymentFixtures.validTokenExchangeResponse().getPlain()
+const MANDATE = mandateFixtures.validTokenExchangeResponse().getPlain()
 const TOKEN = 'sdfihsdufh2e'
 
 describe('secure controller', () => {
