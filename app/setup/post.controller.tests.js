@@ -22,7 +22,8 @@ describe('setup post controller', () => {
   let responseRedirect
   const mandateExternalId = 'sdfihsdufh2e'
   const gatewayAccoutExternalId = '1234567890'
-  const service = { external_id: 'eisuodfkf',
+  const service = {
+    external_id: 'eisuodfkf',
     name: 'GOV.UK Direct Cake service',
     gateway_account_ids: [gatewayAccoutExternalId],
     merchant_details: {
@@ -113,7 +114,8 @@ describe('setup post controller', () => {
         .reply(201, createPayerResponse)
       supertest(getApp())
         .post(`/setup/${mandateExternalId}`)
-        .send({ 'csrfToken': csrfToken,
+        .send({
+          'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -185,7 +187,8 @@ describe('setup post controller', () => {
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${mandateExternalId}`)
-        .send({ 'csrfToken': csrfToken,
+        .send({
+          'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -262,10 +265,6 @@ describe('setup post controller', () => {
     const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
       gateway_account_external_id: gatewayAccoutExternalId
     })
-    const validateBankAccountResponse = {
-      is_valid: true,
-      bank_name: 'bank name'
-    }
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     let cookieHeader
@@ -289,13 +288,11 @@ describe('setup post controller', () => {
       nock(config.CONNECTOR_URL)
         .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
         .reply(200, gatewayAccountResponse)
-      nock(config.CONNECTOR_URL)
-        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
-        .reply(200, validateBankAccountResponse)
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${mandateExternalId}`)
-        .send({ 'csrfToken': csrfToken,
+        .send({
+          'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -350,6 +347,7 @@ describe('setup post controller', () => {
       expect(errorField.find('a[href="#requires-authorisation"]').length).to.equal(1)
     })
   })
+
   describe('Submitting the form when bank account validation fails in connector displays an error summary with respective links', () => {
     let $
     const mandateResponse = mandateFixtures.validMandateResponse({
@@ -366,16 +364,10 @@ describe('setup post controller', () => {
     const validateBankAccountResponse = {
       is_valid: false
     }
+    const formValues = mandateFixtures.validPayer()
     const csrfSecret = '123'
     const csrfToken = csrf().create(csrfSecret)
     let cookieHeader
-    const formValues = {
-      accountHolderName: '',
-      sortCode: '',
-      accountNumber: '',
-      requiresAuthorisation: 'false',
-      email: ''
-    }
     before(done => {
       cookieHeader = new CookieBuilder(
         gatewayAccoutExternalId,
@@ -395,7 +387,8 @@ describe('setup post controller', () => {
       nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
       supertest(getApp())
         .post(`/setup/${mandateExternalId}`)
-        .send({ 'csrfToken': csrfToken,
+        .send({
+          'csrfToken': csrfToken,
           'account-holder-name': formValues.accountHolderName,
           'sort-code': formValues.sortCode,
           'account-number': formValues.accountNumber,
@@ -421,7 +414,19 @@ describe('setup post controller', () => {
     })
 
     it('should contain account holder name pre-filled after redirect', () => {
-      expect($('#account-holder-name').val()).to.be.undefined // eslint-disable-line no-unused-expressions
+      expect($('#account-holder-name').val()).to.equal(formValues.accountHolderName)
+    })
+
+    it('should contain sort code pre-filled after', () => {
+      expect($('#sort-code').val()).to.equal(formValues.sortCode)
+    })
+
+    it('should contain account number pre-filled after redirect', () => {
+      expect($('#account-number').val()).to.equal(formValues.accountNumber)
+    })
+
+    it('should contain email pre-filled after redirect', () => {
+      expect($('#email').val()).to.equal(formValues.email)
     })
 
     it('should contain expected sort code field as error', () => {
@@ -444,13 +449,75 @@ describe('setup post controller', () => {
       expect($('label[for="account-number"]').parent().find('.govuk-error-message').text()).to.contain('Either your sort code or account number is not right')
     })
 
-    it('should contain email pre-filled after redirect', () => {
-      expect($('#email').val()).to.be.undefined // eslint-disable-line no-unused-expressions
-    })
-
     it('should contain requires authorisation pre-filled after redirect', () => {
       expect($('#authorise-no').is(':checked')).to.equal(false)
       expect($('#authorise-yes').is(':checked')).to.equal(true)
+    })
+  })
+
+  describe('connector returns an error', () => {
+    let $
+    const mandateResponse = mandateFixtures.validMandateResponse({
+      external_id: mandateExternalId,
+      gateway_account_external_id: gatewayAccoutExternalId,
+      state: {
+        status: 'started'
+      },
+      internal_state: 'AWAITING_DIRECT_DEBIT_DETAILS'
+    }).getPlain()
+    const gatewayAccountResponse = mandateFixtures.validGatewayAccountResponse({
+      gateway_account_external_id: gatewayAccoutExternalId
+    })
+    const formValues = mandateFixtures.validPayer()
+    const csrfSecret = '123'
+    const csrfToken = csrf().create(csrfSecret)
+    let cookieHeader
+
+    before(done => {
+      cookieHeader = new CookieBuilder(
+        gatewayAccoutExternalId,
+        mandateExternalId
+      )
+        .withCsrfSecret(csrfSecret)
+        .build()
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}`)
+        .reply(200, mandateResponse)
+      nock(config.CONNECTOR_URL)
+        .get(`/v1/api/accounts/${gatewayAccoutExternalId}`)
+        .reply(200, gatewayAccountResponse)
+      nock(config.CONNECTOR_URL)
+        .post(`/v1/api/accounts/${gatewayAccoutExternalId}/mandates/${mandateExternalId}/payers/bank-account/validate`)
+        .reply(400)
+      nock(config.ADMINUSERS_URL).get(`/v1/api/services?gatewayAccountId=${gatewayAccoutExternalId}`).reply(200, service)
+
+      supertest(getApp())
+        .post(`/setup/${mandateExternalId}`)
+        .send({
+          'csrfToken': csrfToken,
+          'account-holder-name': formValues.accountHolderName,
+          'sort-code': formValues.sortCode,
+          'account-number': formValues.accountNumber,
+          'requires-authorisation': formValues.requiresAuthorisation,
+          'email': formValues.email
+        })
+        .set('Cookie', cookieHeader)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+          responseRedirect = res
+          $ = cheerio.load(res.text || '')
+          done(err)
+        })
+    })
+
+    it('should return a 500', () => {
+      expect(responseRedirect.statusCode).to.equal(500)
+    })
+
+    it('should render error page', () => {
+      expect($('.govuk-heading-l').text()).to.equal('Sorry, we’re experiencing technical problems')
+      expect($('#errorMsg').text()).to.equal('No money has been taken from your account, please try again later.')
     })
   })
 })
