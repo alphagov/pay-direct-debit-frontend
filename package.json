@@ -80,7 +80,7 @@
     "url-join": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "chai": "^4.2.0",
     "cheerio": "^1.0.0-rc.3",
