@@ -1,7 +1,7 @@
 {% extends "common/templates/layout.njk" %}
-{% from "components/input/macro.njk" import govukInput %}
-{% from "components/radios/macro.njk" import govukRadios %}
-{% from "components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% if validationErrors %}
   {% set fields = validationErrors %}
