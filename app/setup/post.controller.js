@@ -40,20 +40,20 @@ module.exports = async function (req, res) {
 
   try {
     const formValues = extractFormValues(requestBody)
-    const normalisedPayerDetais = normaliseFormValues(formValues)
+    const normalisedPayerDetails = normaliseFormValues(formValues)
 
-    const payer = new Payer(normalisedPayerDetais)
+    const payer = new Payer(normalisedPayerDetails)
     let validationErrors = payerValidator(payer)
 
     if (lodash.isEmpty(validationErrors)) {
       const bankAccount = await connectorClient.mandate.validateBankAccountDetails(gatewayAccountExternalId, mandateExternalId, {
-        account_number: normalisedPayerDetais.account_number,
-        sort_code: normalisedPayerDetais.sort_code
+        account_number: normalisedPayerDetails.account_number,
+        sort_code: normalisedPayerDetails.sort_code
       }, req.correlationId)
 
       if (bankAccount.is_valid) {
-        normalisedPayerDetais.bank_name = bankAccount.bank_name
-        const payerExternalId = await connectorClient.mandate.submitDirectDebitDetails(gatewayAccountExternalId, mandateExternalId, normalisedPayerDetais, req.correlationId)
+        normalisedPayerDetails.bank_name = bankAccount.bank_name
+        const payerExternalId = await connectorClient.mandate.submitDirectDebitDetails(gatewayAccountExternalId, mandateExternalId, normalisedPayerDetails, req.correlationId)
         logger.info(`[${req.correlationId}] Submitted payment details for request: ${mandateExternalId}, payer: ${payerExternalId}`)
         req.body.payer_external_id = payerExternalId
       } else {
