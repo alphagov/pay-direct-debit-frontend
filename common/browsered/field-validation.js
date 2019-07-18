@@ -45,10 +45,12 @@ function clearPreviousErrors () {
   const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll(ERROR_SUMMARY_CLASS))
   const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll(FORM_GROUP_WITH_ERROR))
   const previousErroredInputs = Array.prototype.slice.call(document.querySelectorAll(`.${INPUT_ERROR_CLASSNAME}`))
+  const previousErrorLabels = Array.prototype.slice.call(document.querySelectorAll(`.${ERROR_LABEL_CLASSNAME}`))
 
   previousErroredInputs.map(errorField => errorField.classList.remove(INPUT_ERROR_CLASSNAME))
   previousErrorsMessages.map(error => error.remove())
   previousErrorsFields.map(errorField => errorField.classList.remove(FORM_GROUP_ERROR_CLASSNAME))
+  previousErrorLabels.map(label => label.remove())
 }
 
 function findFields (form) {
