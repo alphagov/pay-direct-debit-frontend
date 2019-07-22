@@ -18,12 +18,25 @@ const INPUT_ERROR_CLASSNAME = 'govuk-input--error'
 
 exports.enableFieldValidation = function () {
   const allForms = Array.prototype.slice.call(document.getElementsByTagName('form'))
+  const allInputs = Array.prototype.slice.call(document.getElementsByTagName('input'))
 
   allForms.filter(form => {
     return form.hasAttribute('data-validate')
   }).map(form => {
     form.addEventListener('submit', initValidation, false)
   })
+
+  allInputs.filter(input => {
+    return input.hasAttribute('data-validate')
+  }).map(input => {
+    input.addEventListener('blur', initFieldValidate, false)
+  })
+}
+
+function initFieldValidate (e) {
+  const { target, form } = e
+  clearPreviousError(target)
+  validateField(form, target)
 }
 
 function initValidation (e) {
@@ -41,14 +54,27 @@ function initValidation (e) {
   }
 }
 
+function clearPreviousError (input) {
+  input.classList.remove(INPUT_ERROR_CLASSNAME)
+  input.parentElement.classList.remove(FORM_GROUP_ERROR_CLASSNAME)
+
+  const errorLabel = Array.prototype.slice.call(input.parentElement.querySelectorAll(`.${ERROR_LABEL_CLASSNAME}`))
+
+  if (errorLabel.length > 0) {
+    errorLabel[0].remove()
+  }
+}
+
 function clearPreviousErrors () {
   const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll(ERROR_SUMMARY_CLASS))
   const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll(FORM_GROUP_WITH_ERROR))
   const previousErroredInputs = Array.prototype.slice.call(document.querySelectorAll(`.${INPUT_ERROR_CLASSNAME}`))
+  const previousErrorLabels = Array.prototype.slice.call(document.querySelectorAll(`.${ERROR_LABEL_CLASSNAME}`))
 
   previousErroredInputs.map(errorField => errorField.classList.remove(INPUT_ERROR_CLASSNAME))
   previousErrorsMessages.map(error => error.remove())
   previousErrorsFields.map(errorField => errorField.classList.remove(FORM_GROUP_ERROR_CLASSNAME))
+  previousErrorLabels.map(label => label.remove())
 }
 
 function findFields (form) {
