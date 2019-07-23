@@ -63,27 +63,25 @@ describe('field validation checks', () => {
     })
   })
   describe('isAccountNumber', () => {
-    it('should be true for a valid account number', () => {
-      expect(isAccountNumber('1234 5678').valid).to.equal(true)
-      expect(isAccountNumber(' 1 2 3 4 5 6 7 8').valid).to.equal(true)
+    it('should be valid for a valid account number', () => {
+      expect(isAccountNumber('123 456').valid).to.equal(true)
+      expect(isAccountNumber(' 1 2 3 4 5 6 ').valid).to.equal(true)
       expect(isAccountNumber('12 34 56 78').valid).to.equal(true)
       expect(isAccountNumber('12345678').valid).to.equal(true)
       expect(isAccountNumber('01234567').valid).to.equal(true)
       expect(isAccountNumber(' 12345678 ').valid).to.equal(true)
-      expect(isAccountNumber('123456789').valid).to.equal(true)
-      expect(isAccountNumber('1234567890').valid).to.equal(true)
     })
 
-    it('should be false for an invalid account number', () => {
+    it('should not be valid for an invalid account number', () => {
       expect(isAccountNumber('123-456').valid).to.equal(false)
       expect(isAccountNumber('1-2-3-4-5-6').valid).to.equal(false)
       expect(isAccountNumber('12-34-56').valid).to.equal(false)
-      expect(isAccountNumber('123456').valid).to.equal(false)
-      expect(isAccountNumber('12345678910').valid).to.equal(false)
+      expect(isAccountNumber('12345').valid).to.equal(false)
+      expect(isAccountNumber('123456789').valid).to.equal(false)
       expect(isAccountNumber('1234a56789').valid).to.equal(false)
     })
     it('should display an error message for an invalid account number', () => {
-      expect(isAccountNumber('invalid').message).to.equal('Enter a real account number between 8 and 10 digits long')
+      expect(isAccountNumber('invalid').message).to.equal('Enter a real account number between 6 and 8 digits long')
     })
   })
   describe('isChecked', () => {
