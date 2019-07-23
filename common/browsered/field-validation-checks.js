@@ -44,7 +44,7 @@ exports.isSortCode = value => {
 exports.isAccountNumber = value => {
   const trimmedAccountNumber = value.replace(/\s/g, '')
   return {
-    valid: NUMBERS_ONLY.test(trimmedAccountNumber) && (trimmedAccountNumber.length >= 8 && trimmedAccountNumber.length <= 10),
+    valid: NUMBERS_ONLY.test(trimmedAccountNumber) && (trimmedAccountNumber.length >= 6 && trimmedAccountNumber.length <= 8),
     message: errorMessages.accountNumber
   }
 }
