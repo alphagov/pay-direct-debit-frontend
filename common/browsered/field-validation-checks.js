@@ -10,7 +10,7 @@ const errorMessages = {
   validEmail: 'Please use a valid email address',
   checked: 'Please choose an option',
   sortCode: 'Enter a real sort code with 6 digits',
-  accountNumber: 'Enter a real account number between 8 and 10 digits long'
+  accountNumber: 'Enter a real account number between 6 and 8 digits long'
 }
 
 // Exports
