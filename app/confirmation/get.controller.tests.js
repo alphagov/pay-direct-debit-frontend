@@ -93,7 +93,7 @@ describe('confirmation get controller', function () {
   })
 
   it('should display the enter direct debit page with a link to cancel the mandate', () => {
-    expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
+    expect($('#cancel').attr('href')).to.equal(`/cancel/${mandateExternalId}`)
   })
 
   it('should display the confirmation page with a back link to the setup page', () => {
