@@ -40,11 +40,11 @@ function initFieldValidate (e) {
 }
 
 function initValidation (e) {
-  let form = e.target
+  const form = e.target
   e.preventDefault()
   clearPreviousErrors()
 
-  let validatedFields = findFields(form)
+  const validatedFields = findFields(form)
     .map(field => validateField(form, field))
 
   if (every(validatedFields, 'valid')) {
@@ -87,7 +87,7 @@ function findFields (form) {
 
 function validateField (form, field) {
   let result = {}
-  let validationTypes = field.getAttribute('data-validate').split(' ')
+  const validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
     switch (validationType) {
@@ -121,7 +121,7 @@ function applyErrorMessaging (form, field, result) {
     field.classList.add(INPUT_ERROR_CLASSNAME)
   }
   // Modify the form group
-  let formGroup = field.closest(FORM_GROUP)
+  const formGroup = field.closest(FORM_GROUP)
   if (!formGroup.classList.contains(FORM_GROUP_ERROR_CLASSNAME)) {
     formGroup.classList.add(FORM_GROUP_ERROR_CLASSNAME)
     const errorLegendElement = formGroup.querySelector('legend')
