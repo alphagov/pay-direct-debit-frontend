@@ -35,7 +35,7 @@ pipeline {
         }
       }
     }
-    stage('Direct-Debit End-to-End') {
+    stage('End-to-End tests') {
       when {
         anyOf {
           branch 'master'
@@ -43,7 +43,7 @@ pipeline {
         }
       }
       steps {
-        runDirectDebitE2E("directdebit-frontend")
+        runAppE2E("directdebit-frontend", "directdebit")
       }
     }
     stage('Docker Tag') {
