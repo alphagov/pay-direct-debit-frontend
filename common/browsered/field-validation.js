@@ -126,9 +126,9 @@ function applyErrorMessaging (form, field, result) {
     formGroup.classList.add(FORM_GROUP_ERROR_CLASSNAME)
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
-      const errorElement = document.querySelector('label[for="' + field.name + '"]')
-      const errorLabel = result.message || errorElement.getAttribute('data-error-label')
-      errorElement.appendChild(generateErrorMessageElement(errorLabel))
+      const errorLabelElement = document.querySelector('label[for="' + field.name + '"]')
+      const errorLabelText = result.message || errorLabelElement.getAttribute('data-error-label')
+      field.parentNode.insertBefore(generateErrorMessageElement(errorLabelText), field)
     } else {
       errorLegendElement.appendChild(generateErrorMessageElement(errorLegendElement.getAttribute('data-error-label')))
     }
