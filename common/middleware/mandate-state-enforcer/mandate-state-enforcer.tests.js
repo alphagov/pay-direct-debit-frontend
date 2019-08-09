@@ -136,6 +136,28 @@ describe('Mandate state enforcer', () => {
         includeReturnUrl: true
       })
     })
+    it('should render error page for mandate status of "USER_SETUP_CANCELLED" on page "setup"', () => {
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
+        locals: {
+          mandate: {
+            returnUrl: returnUrl,
+            state: {
+              status: 'cancelled'
+            },
+            internalState: 'USER_SETUP_CANCELLED'
+          }
+        }
+      })
+      mandateStateEnforcer.middleware('setup')(req, res, next, response)
+      expect(next.called).to.equal(false)
+      sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
+        message: 'Your mandate has not been set up.',
+	heading: 'You have cancelled the Direct Debit mandate setup',
+        status: 'USER_SETUP_CANCELLED',
+        returnUrl,
+        includeReturnUrl: true
+      })
+    })
     it('should render error page for mandate status of "USER_SETUP_EXPIRED" on page "setup"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
@@ -281,6 +303,28 @@ describe('Mandate state enforcer', () => {
         message: 'You might have entered your details incorrectly or your session may have timed out.',
         heading: 'Your Direct Debit mandate has not been set up',
         status: 'FAILED',
+        returnUrl,
+        includeReturnUrl: true
+      })
+    })
+    it('should render error page for mandate status of "USER_SETUP_CANCELLED"', () => {
+      const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
+        locals: {
+          mandate: {
+            returnUrl: returnUrl,
+            state: {
+              status: 'cancelled'
+            },
+            internalState: 'USER_SETUP_CANCELLED'
+          }
+        }
+      })
+      mandateStateEnforcer.middleware('confirmation')(req, res, next, response)
+      expect(next.called).to.equal(false)
+      sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
+        message: 'Your mandate has not been set up.',
+        heading: 'You have cancelled the Direct Debit mandate setup',
+        status: 'USER_SETUP_CANCELLED',
         returnUrl,
         includeReturnUrl: true
       })

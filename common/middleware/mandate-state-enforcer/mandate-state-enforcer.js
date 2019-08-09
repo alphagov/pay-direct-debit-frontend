@@ -31,6 +31,11 @@ const mandateStateToMessageMap = {
     message: 'You might have entered your details incorrectly or your session may have timed out.',
     includeReturnUrl: true
   },
+  USER_SETUP_CANCELLED: {
+    heading: 'You have cancelled the Direct Debit mandate setup',
+    message: 'Your mandate has not been set up.',
+    includeReturnUrl: true
+  },
   default: {
     heading: 'Sorry, we are experiencing technical problems',
     message: 'Your session may have timed out.',
