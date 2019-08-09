@@ -11,35 +11,29 @@ const pageToValidMandateStateMap = {
   'cancel': ['AWAITING_DIRECT_DEBIT_DETAILS']
 }
 
+const inProgressMessage = {
+  heading: 'Your Direct Debit mandate is being processed',
+  message: 'Check your confirmation email for details of your mandate.',
+  includeReturnUrl: false
+}
+
 const mandateStateToMessageMap = {
-  USER_CANCEL_NOT_ELIGIBLE: {
-    heading: 'You have cancelled the Direct Debit mandate setup',
-    message: 'Your mandate has not been set up.',
-    includeReturnUrl: true
-  },
-  SUBMITTED: {
-    heading: 'Your Direct Debit mandate is being processed',
-    message: 'Check your confirmation email for details of your mandate.',
-    includeReturnUrl: false
-  },
-  PENDING: {
-    heading: 'Your Direct Debit mandate is being processed',
-    message: 'Check your confirmation email for details of your mandate.',
-    includeReturnUrl: false
-  },
+  SUBMITTED_TO_PROVIDER: inProgressMessage,
+  SUBMITTED_TO_BANK: inProgressMessage,
+  ACTIVE: inProgressMessage,
   FAILED: {
     heading: 'Your Direct Debit mandate has not been set up',
     message: 'You might have entered your details incorrectly or your session may have timed out.',
     includeReturnUrl: true
   },
-  ACTIVE: {
-    heading: 'Your Direct Debit mandate has been set up',
-    message: 'We have sent you a confirmation email with your mandate details.',
-    includeReturnUrl: false
-  },
-  EXPIRED: {
+  USER_SETUP_EXPIRED: {
     heading: 'Your Direct Debit mandate has not been set up',
     message: 'You might have entered your details incorrectly or your session may have timed out.',
+    includeReturnUrl: true
+  },
+  USER_SETUP_CANCELLED: {
+    heading: 'You have cancelled the Direct Debit mandate setup',
+    message: 'Your mandate has not been set up.',
     includeReturnUrl: true
   },
   default: {

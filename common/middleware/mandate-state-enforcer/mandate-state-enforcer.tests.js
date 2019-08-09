@@ -48,7 +48,7 @@ describe('Mandate state enforcer', () => {
 
       expect(next.called).to.equal(true)
     })
-    it('should render error page for mandate status of "SUBMITTED" on page "setup"', () => {
+    it('should render error page for mandate status of "SUBMITTED_TO_BANK" on page "setup"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -56,7 +56,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'pending'
             },
-            internalState: 'SUBMITTED'
+            internalState: 'SUBMITTED_TO_BANK'
           }
         }
       })
@@ -65,12 +65,12 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Check your confirmation email for details of your mandate.',
         heading: 'Your Direct Debit mandate is being processed',
-        status: 'SUBMITTED',
+        status: 'SUBMITTED_TO_BANK',
         returnUrl,
         includeReturnUrl: false
       })
     })
-    it('should render error page for mandate status of "PENDING" on page "setup"', () => {
+    it('should render error page for mandate status of "SUBMITTED_TO_PROVIDER" on page "setup"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -78,7 +78,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'pending'
             },
-            internalState: 'PENDING'
+            internalState: 'SUBMITTED_TO_PROVIDER'
           }
         }
       })
@@ -87,7 +87,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Check your confirmation email for details of your mandate.',
         heading: 'Your Direct Debit mandate is being processed',
-        status: 'PENDING',
+        status: 'SUBMITTED_TO_PROVIDER',
         returnUrl,
         includeReturnUrl: false
       })
@@ -107,8 +107,8 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middleware('setup')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'We have sent you a confirmation email with your mandate details.',
-        heading: 'Your Direct Debit mandate has been set up',
+        message: 'Check your confirmation email for details of your mandate.',
+        heading: 'Your Direct Debit mandate is being processed',
         status: 'ACTIVE',
         returnUrl,
         includeReturnUrl: false
@@ -136,7 +136,7 @@ describe('Mandate state enforcer', () => {
         includeReturnUrl: true
       })
     })
-    it('should render error page for mandate status of "USER_CANCEL_NOT_ELIGIBLE" on page "setup"', () => {
+    it('should render error page for mandate status of "USER_SETUP_CANCELLED" on page "setup"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -144,7 +144,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'cancelled'
             },
-            internalState: 'USER_CANCEL_NOT_ELIGIBLE'
+            internalState: 'USER_SETUP_CANCELLED'
           }
         }
       })
@@ -152,13 +152,13 @@ describe('Mandate state enforcer', () => {
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Your mandate has not been set up.',
-        heading: 'You have cancelled the Direct Debit mandate setup',
-        status: 'USER_CANCEL_NOT_ELIGIBLE',
+	heading: 'You have cancelled the Direct Debit mandate setup',
+        status: 'USER_SETUP_CANCELLED',
         returnUrl,
         includeReturnUrl: true
       })
     })
-    it('should render error page for mandate status of "EXPIRED" on page "setup"', () => {
+    it('should render error page for mandate status of "USER_SETUP_EXPIRED" on page "setup"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -166,7 +166,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'cancelled'
             },
-            internalState: 'EXPIRED'
+            internalState: 'USER_SETUP_EXPIRED'
           }
         }
       })
@@ -175,7 +175,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'You might have entered your details incorrectly or your session may have timed out.',
         heading: 'Your Direct Debit mandate has not been set up',
-        status: 'EXPIRED',
+        status: 'USER_SETUP_EXPIRED',
         returnUrl,
         includeReturnUrl: true
       })
@@ -219,7 +219,7 @@ describe('Mandate state enforcer', () => {
 
       expect(next.called).to.equal(true)
     })
-    it('should render error page for mandate status of "SUBMITTED"', () => {
+    it('should render error page for mandate status of "SUBMITTED_TO_BANK"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -227,7 +227,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'pending'
             },
-            internalState: 'SUBMITTED'
+            internalState: 'SUBMITTED_TO_BANK'
           }
         }
       })
@@ -236,12 +236,12 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Check your confirmation email for details of your mandate.',
         heading: 'Your Direct Debit mandate is being processed',
-        status: 'SUBMITTED',
+        status: 'SUBMITTED_TO_BANK',
         returnUrl,
         includeReturnUrl: false
       })
     })
-    it('should render error page for mandate status of "PENDING"', () => {
+    it('should render error page for mandate status of "SUBMITTED_TO_PROVIDER"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -249,7 +249,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'pending'
             },
-            internalState: 'PENDING'
+            internalState: 'SUBMITTED_TO_PROVIDER'
           }
         }
       })
@@ -258,7 +258,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Check your confirmation email for details of your mandate.',
         heading: 'Your Direct Debit mandate is being processed',
-        status: 'PENDING',
+        status: 'SUBMITTED_TO_PROVIDER',
         returnUrl,
         includeReturnUrl: false
       })
@@ -278,8 +278,8 @@ describe('Mandate state enforcer', () => {
       mandateStateEnforcer.middleware('confirmation')(req, res, next, response)
       expect(next.called).to.equal(false)
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
-        message: 'We have sent you a confirmation email with your mandate details.',
-        heading: 'Your Direct Debit mandate has been set up',
+        message: 'Check your confirmation email for details of your mandate.',
+        heading: 'Your Direct Debit mandate is being processed',
         status: 'ACTIVE',
         returnUrl,
         includeReturnUrl: false
@@ -307,7 +307,7 @@ describe('Mandate state enforcer', () => {
         includeReturnUrl: true
       })
     })
-    it('should render error page for mandate status of "USER_CANCEL_NOT_ELIGIBLE"', () => {
+    it('should render error page for mandate status of "USER_SETUP_CANCELLED"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -315,7 +315,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'cancelled'
             },
-            internalState: 'USER_CANCEL_NOT_ELIGIBLE'
+            internalState: 'USER_SETUP_CANCELLED'
           }
         }
       })
@@ -324,12 +324,12 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'Your mandate has not been set up.',
         heading: 'You have cancelled the Direct Debit mandate setup',
-        status: 'USER_CANCEL_NOT_ELIGIBLE',
+        status: 'USER_SETUP_CANCELLED',
         returnUrl,
         includeReturnUrl: true
       })
     })
-    it('should render error page for mandate status of "EXPIRED"', () => {
+    it('should render error page for mandate status of "USER_SETUP_EXPIRED"', () => {
       const { req, res, next, response, mandateStateEnforcer } = setupFixtures({
         locals: {
           mandate: {
@@ -337,7 +337,7 @@ describe('Mandate state enforcer', () => {
             state: {
               status: 'cancelled'
             },
-            internalState: 'EXPIRED'
+            internalState: 'USER_SETUP_EXPIRED'
           }
         }
       })
@@ -346,7 +346,7 @@ describe('Mandate state enforcer', () => {
       sinon.assert.calledWith(response, req, res, 'common/templates/mandate_state_page', {
         message: 'You might have entered your details incorrectly or your session may have timed out.',
         heading: 'Your Direct Debit mandate has not been set up',
-        status: 'EXPIRED',
+        status: 'USER_SETUP_EXPIRED',
         returnUrl,
         includeReturnUrl: true
       })
