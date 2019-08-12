@@ -34,7 +34,7 @@ exports.enableFieldValidation = function () {
 }
 
 function initFieldValidate (e) {
-  const { target, form } = e
+  const { target, target: { form } } = e
   clearPreviousError(target)
   validateField(form, target)
 }
