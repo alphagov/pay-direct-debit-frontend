@@ -34,17 +34,17 @@ exports.enableFieldValidation = function () {
 }
 
 function initFieldValidate (e) {
-  const { target, form } = e
+  const { target, target: { form } } = e
   clearPreviousError(target)
   validateField(form, target)
 }
 
 function initValidation (e) {
-  let form = e.target
+  const form = e.target
   e.preventDefault()
   clearPreviousErrors()
 
-  let validatedFields = findFields(form)
+  const validatedFields = findFields(form)
     .map(field => validateField(form, field))
 
   if (every(validatedFields, 'valid')) {
@@ -87,7 +87,7 @@ function findFields (form) {
 
 function validateField (form, field) {
   let result = {}
-  let validationTypes = field.getAttribute('data-validate').split(' ')
+  const validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
     switch (validationType) {
@@ -121,14 +121,14 @@ function applyErrorMessaging (form, field, result) {
     field.classList.add(INPUT_ERROR_CLASSNAME)
   }
   // Modify the form group
-  let formGroup = field.closest(FORM_GROUP)
+  const formGroup = field.closest(FORM_GROUP)
   if (!formGroup.classList.contains(FORM_GROUP_ERROR_CLASSNAME)) {
     formGroup.classList.add(FORM_GROUP_ERROR_CLASSNAME)
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
-      const errorElement = document.querySelector('label[for="' + field.name + '"]')
-      const errorLabel = result.message || errorElement.getAttribute('data-error-label')
-      errorElement.appendChild(generateErrorMessageElement(errorLabel))
+      const errorLabelElement = document.querySelector('label[for="' + field.name + '"]')
+      const errorLabelText = result.message || errorLabelElement.getAttribute('data-error-label')
+      field.parentNode.insertBefore(generateErrorMessageElement(errorLabelText), field)
     } else {
       errorLegendElement.appendChild(generateErrorMessageElement(errorLegendElement.getAttribute('data-error-label')))
     }
