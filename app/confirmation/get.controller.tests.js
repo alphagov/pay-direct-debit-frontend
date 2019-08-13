@@ -33,6 +33,7 @@ describe('confirmation get controller', function () {
     }
   }
   const accountName = 'bla'
+  const accountEmail = 'test@test.test'
   const sortCode = '123456'
   const formattedSortCode = '12 34 56'
   const accountNumber = '12345678'
@@ -52,7 +53,8 @@ describe('confirmation get controller', function () {
     const payer = mandateFixtures.validPayer({
       account_holder_name: accountName,
       sort_code: sortCode,
-      account_number: accountNumber
+      account_number: accountNumber,
+      email: accountEmail
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccountExternalId,
@@ -86,6 +88,7 @@ describe('confirmation get controller', function () {
     expect($('#account-holder-name').text()).to.equal(accountName)
     expect($('#sort-code').text()).to.equal(formattedSortCode)
     expect($('#account-number').text()).to.equal(accountNumber)
+    expect($('#account-email-address').text()).to.equal(accountEmail)
   })
 
   it('should display the enter confirmation page with bank statement description', () => {
