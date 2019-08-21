@@ -1,8 +1,8 @@
 'use strict'
-const logger = require('pino')()
 const _ = require('lodash')
 
 // local dependencies
+const logger = require('../../../app/utils/logger')
 const { renderErrorView } = require('../../response')
 const { getSessionVariable } = require('../../config/cookies')
 

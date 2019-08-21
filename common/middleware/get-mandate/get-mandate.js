@@ -2,9 +2,9 @@
 
 // npm dependencies
 const _ = require('lodash')
-const logger = require('pino')()
 
 // local dependencies
+const logger = require('../../../app/utils/logger')
 const { renderErrorView } = require('../../response')
 const connectorClient = require('../../clients/connector-client')
 
