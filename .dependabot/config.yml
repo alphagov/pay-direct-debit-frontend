@@ -16,5 +16,9 @@ update_configs:
           dependency_type: "production"
           update_type: "all"
   - package_manager: "docker"
+    default_labels:
+      - "dependencies"
+      - "govuk-pay"
+      - "docker"
     directory: "/"
     update_schedule: "weekly"
