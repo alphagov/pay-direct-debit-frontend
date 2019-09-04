@@ -2,9 +2,9 @@
 
 // NPM dependencies
 const lodash = require('lodash')
-const logger = require('pino')()
 
 // Local dependencies
+const logger = require('../utils/logger')
 const confirmation = require('./../confirmation')
 const normalise = require('../../common/utils/normalise')
 const Payer = require('../../common/classes/Payer.class')

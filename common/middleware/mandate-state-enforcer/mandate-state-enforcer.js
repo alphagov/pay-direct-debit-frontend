@@ -1,14 +1,14 @@
 // npm dependencies
 const _ = require('lodash')
-const logger = require('pino')()
 
 // local dependencies
+const logger = require('../../../app/utils/logger')
 const { response } = require('../../response')
 
 const pageToValidMandateStateMap = {
-  'setup': ['AWAITING_DIRECT_DEBIT_DETAILS'],
-  'confirmation': ['AWAITING_DIRECT_DEBIT_DETAILS'],
-  'cancel': ['AWAITING_DIRECT_DEBIT_DETAILS']
+  setup: ['AWAITING_DIRECT_DEBIT_DETAILS'],
+  confirmation: ['AWAITING_DIRECT_DEBIT_DETAILS'],
+  cancel: ['AWAITING_DIRECT_DEBIT_DETAILS']
 }
 
 const inProgressMessage = {

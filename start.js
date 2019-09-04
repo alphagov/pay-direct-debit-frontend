@@ -2,7 +2,7 @@
 
 const path = require('path')
 const fs = require('fs')
-const logger = require('pino')()
+const logger = require('./app/utils/logger')
 const throng = require('throng')
 const server = require('./server')
 const pidFile = path.join(__dirname, '/.start.pid')
