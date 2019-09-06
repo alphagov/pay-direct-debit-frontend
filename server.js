@@ -22,7 +22,7 @@ const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
 const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
 const cookieConfig = require('./common/config/cookies')
-const logger = require('./app/utils/logger')
+const logger = require('./app/utils/logger')(__filename)
 
 // Global constants
 const unconfiguredApp = express()

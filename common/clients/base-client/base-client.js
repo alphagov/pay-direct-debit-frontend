@@ -4,7 +4,7 @@
 const request = require('requestretry')
 const wrapper = require('./wrapper')
 
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 
 // Create request.defaults config
 const requestOptions = {

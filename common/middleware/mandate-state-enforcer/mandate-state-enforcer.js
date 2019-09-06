@@ -2,7 +2,7 @@
 const _ = require('lodash')
 
 // local dependencies
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 const { response } = require('../../response')
 
 const pageToValidMandateStateMap = {

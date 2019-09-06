@@ -4,7 +4,7 @@
 const _ = require('lodash')
 
 // local dependencies
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const connectorClient = require('../../clients/connector-client')
 

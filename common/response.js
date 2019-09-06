@@ -1,6 +1,6 @@
 'use strict'
 
-const logger = require('../app/utils/logger')
+const logger = require('../app/utils/logger')(__filename)
 const ERROR_MESSAGE = 'There is a problem with the payments platform'
 
 function response (req, res, template, data) {

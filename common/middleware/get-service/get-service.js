@@ -5,7 +5,7 @@ const _ = require('lodash')
 const { Cache } = require('memory-cache')
 
 // local dependencies
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const adminusersClient = require('../../clients/adminusers-client')
 
