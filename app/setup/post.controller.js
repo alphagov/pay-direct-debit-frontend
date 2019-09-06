@@ -4,7 +4,7 @@
 const lodash = require('lodash')
 
 // Local dependencies
-const logger = require('../utils/logger')
+const logger = require('../utils/logger')(__filename)
 const confirmation = require('./../confirmation')
 const normalise = require('../../common/utils/normalise')
 const Payer = require('../../common/classes/Payer.class')

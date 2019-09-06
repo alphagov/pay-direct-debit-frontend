@@ -5,7 +5,7 @@ const _ = require('lodash')
 const { EXTERNAL_ID } = require('@govuk-pay/pay-js-commons').loggingKeys
 
 // local dependencies
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const { getSessionVariable } = require('../../config/cookies')
 

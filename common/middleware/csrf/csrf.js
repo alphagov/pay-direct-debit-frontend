@@ -4,7 +4,7 @@
 const csrf = require('csrf')
 
 // Local Dependencies
-const logger = require('../../../app/utils/logger')
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const { getSessionVariable, setSessionVariable } = require('../../config/cookies')
 // Assignments and Variables

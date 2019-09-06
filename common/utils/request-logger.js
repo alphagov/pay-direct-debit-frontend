@@ -1,4 +1,4 @@
-const logger = require('../../app/utils/logger')
+const logger = require('../../app/utils/logger')(__filename)
 
 module.exports = {
   logRequestStart: context => {

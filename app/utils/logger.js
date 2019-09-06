@@ -13,4 +13,6 @@ const logger = createLogger({
   ]
 })
 
-module.exports = logger
+module.exports = ( loggerName ) => {
+  return logger.child({ logger: loggerName })
+}
