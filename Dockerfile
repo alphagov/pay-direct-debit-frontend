@@ -25,4 +25,4 @@ ADD . /app
 
 RUN ["ln", "-s", "/tmp/node_modules", "/app/node_modules"]
 
-CMD ./docker-startup.sh
+CMD ["npm", "start"]
