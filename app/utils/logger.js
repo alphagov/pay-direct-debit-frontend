@@ -1,19 +1,14 @@
 const { createLogger, format, transports } = require('winston')
-const { timestamp, json, label, splat, prettyPrint } = format
-
-const timetstampFormat = format((timestamp) => {
-  return {
-    '@timestamp': timestamp
-  }
-})
+const { timestamp, json, label, prettyPrint } = format
 
 const logger = createLogger({
   format: format.combine(
-    splat(),
+    timestamp({
+      alias: '@timestamp'
+    }),
     label({ label: 'direct-debit-frontend-sl-beta' }),
     prettyPrint(),
-    json(),
-    timetstampFormat(timestamp())
+    json()
   ),
   transports: [
     new transports.Console()
