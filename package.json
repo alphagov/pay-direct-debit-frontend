@@ -73,7 +73,7 @@
     "pino": "5.13.x",
     "readdir": "0.1.x",
     "request": "^2.88.0",
-    "requestretry": "^4.0.0",
+    "requestretry": "^4.0.2",
     "rfc822-validate": "^1.0.0",
     "serve-favicon": "2.5.0",
     "staticify": "3.3.x",
