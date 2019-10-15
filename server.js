@@ -16,7 +16,7 @@ const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
 const compression = require('compression')
 const nunjucks = require('nunjucks')
-const sentry = require('@sentry/node')
+const Sentry = require('@sentry/node')
 
 // Local dependencies
 const router = require('./app/router')
@@ -125,8 +125,8 @@ function initialiseRoutes (app) {
   router.bind(app)
 }
 
-function initialiseSentry() {
-  Sentry.init({ dsn: process.env.SENTRY_DSN })
+function initialiseSentry () {
+  Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.ENVIRONMENT })
 }
 
 function listen () {
@@ -142,6 +142,7 @@ function listen () {
 function initialise () {
   const app = unconfiguredApp
   initialiseSentry()
+  app.use(Sentry.Handlers.requestHandler())
   app.disable('x-powered-by')
   initialiseProxy(app)
   initialiseCookies(app)
@@ -150,6 +151,7 @@ function initialise () {
   initialiseTemplateEngine(app)
   initialisePublic(app)
   initialiseRoutes(app) // this needs to be at the bottom otherwise all assets in public 404
+  app.use(Sentry.Handlers.errorHandler())
   warnIfAnalyticsNotSet()
   return app
 }

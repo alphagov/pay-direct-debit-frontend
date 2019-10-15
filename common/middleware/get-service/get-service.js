@@ -3,6 +3,7 @@
 // npm dependencies
 const _ = require('lodash')
 const { Cache } = require('memory-cache')
+const Sentry = require('@sentry/node')
 
 // local dependencies
 const logger = require('../../../app/utils/logger')(__filename)
@@ -31,7 +32,8 @@ function middleware (req, res, next) {
         res.locals.service = service
         next()
       })
-      .catch(() => {
+      .catch((err) => {
+        Sentry.captureException(err)
         logger.error(
           `[${req.correlationId}] Failed to load service from adminusers: ${gatewayAccountExternalId}`)
         renderErrorView(req, res)
