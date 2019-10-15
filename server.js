@@ -16,6 +16,7 @@ const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
 const compression = require('compression')
 const nunjucks = require('nunjucks')
+const sentry = require('@sentry/node')
 
 // Local dependencies
 const router = require('./app/router')
@@ -124,6 +125,10 @@ function initialiseRoutes (app) {
   router.bind(app)
 }
 
+function initialiseSentry() {
+  Sentry.init({ dsn: process.env.SENTRY_DSN })
+}
+
 function listen () {
   const app = initialise()
   app.listen(PORT)
@@ -136,6 +141,7 @@ function listen () {
  */
 function initialise () {
   const app = unconfiguredApp
+  initialiseSentry()
   app.disable('x-powered-by')
   initialiseProxy(app)
   initialiseCookies(app)
