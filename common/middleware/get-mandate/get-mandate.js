@@ -26,9 +26,9 @@ function middleware (req, res, next) {
       res.locals.mandate = mandate
       next()
     })
-    .catch(() => {
+    .catch(err => {
       logger.error(`[${req.correlationId}] Failed to load mandate from connector: ${mandateExternalId}`)
-      renderErrorView(req, res)
+      renderErrorView(req, res, 'Faild to load mandate', 500, err)
     })
 }
 

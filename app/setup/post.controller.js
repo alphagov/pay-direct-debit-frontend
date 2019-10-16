@@ -80,6 +80,6 @@ module.exports = async function (req, res) {
     const url = confirmation.paths.index.replace(':mandateExternalId', mandateExternalId)
     return res.redirect(303, url)
   } catch (error) {
-    renderErrorView(req, res, 'No money has been taken from your account, please try again later.')
+    renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500, error)
   }
 }

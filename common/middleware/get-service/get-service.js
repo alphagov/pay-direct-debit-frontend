@@ -31,10 +31,10 @@ function middleware (req, res, next) {
         res.locals.service = service
         next()
       })
-      .catch(() => {
+      .catch((err) => {
         logger.error(
           `[${req.correlationId}] Failed to load service from adminusers: ${gatewayAccountExternalId}`)
-        renderErrorView(req, res)
+        renderErrorView(req, res, 'Failed to load service', 500, err)
       })
   }
 }

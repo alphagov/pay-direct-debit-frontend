@@ -22,7 +22,7 @@ module.exports = (req, res) => {
       })
       return res.redirect(303, url)
     })
-    .catch(() => {
-      renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500)
+    .catch(err => {
+      renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500, err)
     })
 }

@@ -31,9 +31,9 @@ function middleware (req, res, next) {
         res.locals.gatewayAccount = gatewayAccount
         next()
       })
-      .catch(() => {
+      .catch(err => {
         logger.error(`[${req.correlationId}] Failed to load gateway account from connector: ${gatewayAccountExternalId}`)
-        renderErrorView(req, res)
+        renderErrorView(req, res, 'Failed to load gateway account', 500, err)
       })
   }
 }
