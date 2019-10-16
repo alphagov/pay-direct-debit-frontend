@@ -1,13 +1,13 @@
 const { createLogger, format, transports } = require('winston')
 const { json, label, splat, prettyPrint } = format
-const timestampFormat = require('./timestamp-format')
+const loggerFormat = require('./logger-format')
 
 const logger = createLogger({
   format: format.combine(
     splat(),
-    label({ label: 'direct-debit-frontend-sl-beta' }),
+    label({ label: 'directdebit-frontend' }),
     prettyPrint(),
-    timestampFormat(),
+    loggerFormat(),
     json()
   ),
   transports: [
@@ -16,5 +16,5 @@ const logger = createLogger({
 })
 
 module.exports = (loggerName) => {
-  return logger.child({ logger: loggerName })
+  return logger.child({ logger_name: loggerName })
 }
