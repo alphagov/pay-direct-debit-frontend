@@ -22,6 +22,7 @@ const Sentry = require('@sentry/node')
 const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
 const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
+const loggingSession = require('./common/middleware/logging/logging-session')
 const cookieConfig = require('./common/config/cookies')
 const logger = require('./app/utils/logger')(__filename)
 
@@ -53,6 +54,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(compression())
   app.use(staticify.middleware)
 
+  // TODO make this log in JSON?
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
     app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
       ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'))
@@ -67,6 +69,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
+  app.use('*', loggingSession)
   app.use('*', correlationHeader)
 }
 function initialiseCookies (app) {

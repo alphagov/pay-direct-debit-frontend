@@ -2,6 +2,8 @@
 
 // npm dependencies
 const _ = require('lodash')
+const { getNamespace } = require('cls-hooked')
+const { RESOURCE_TYPE, EXTERNAL_ID } = require('@govuk-pay/pay-js-commons').loggingKeys
 
 // local dependencies
 const logger = require('../../../app/utils/logger')(__filename)
@@ -24,6 +26,8 @@ function middleware (req, res, next) {
   connectorClient.mandate.retrieveMandateByExternalId(gatewayAccountExternalId, mandateExternalId, req.correlationId)
     .then(mandate => {
       res.locals.mandate = mandate
+      getNamespace('govuk-pay-logging').set(RESOURCE_TYPE, 'mandate')
+      getNamespace('govuk-pay-logging').set(EXTERNAL_ID, mandate.externalId)
       next()
     })
     .catch(err => {

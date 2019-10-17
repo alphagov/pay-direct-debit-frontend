@@ -3,6 +3,8 @@
 // npm dependencies
 const _ = require('lodash')
 const { Cache } = require('memory-cache')
+const { getNamespace } = require('cls-hooked')
+const { GATEWAY_ACCOUNT_ID } = require('@govuk-pay/pay-js-commons').loggingKeys
 
 // local dependencies
 const logger = require('../../../app/utils/logger')(__filename)
@@ -20,15 +22,19 @@ function middleware (req, res, next) {
     return renderErrorView(req, res)
   }
 
+  const loggingSession = getNamespace('govuk-pay-logging')
+
   const cachedGatewayAccount = cache.get(gatewayAccountExternalId)
   if (cachedGatewayAccount) {
     res.locals.gatewayAccount = cachedGatewayAccount
+    loggingSession.set(GATEWAY_ACCOUNT_ID, cachedGatewayAccount.id)
     next()
   } else {
     connectorClient.retrieveGatewayAccount(gatewayAccountExternalId, req.correlationId)
       .then(gatewayAccount => {
         cache.put(gatewayAccountExternalId, gatewayAccount, CACHE_MAX_AGE)
         res.locals.gatewayAccount = gatewayAccount
+        loggingSession.set(GATEWAY_ACCOUNT_ID, gatewayAccount.gatewayAccountId)
         next()
       })
       .catch(err => {

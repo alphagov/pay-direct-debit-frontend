@@ -54,12 +54,13 @@
     ]
   },
   "dependencies": {
-    "@govuk-pay/pay-js-commons": "^2.13.1",
+    "@govuk-pay/pay-js-commons": "^2.13.2",
     "@sentry/node": "5.7.1",
     "appmetrics": "4.0.1",
     "appmetrics-statsd": "3.0.0",
     "body-parser": "1.19.x",
     "client-sessions": "0.8.x",
+    "cls-hooked": "^4.2.2",
     "compression": "1.7.x",
     "correlation-id": "^3.1.1",
     "csrf": "3.1.x",
