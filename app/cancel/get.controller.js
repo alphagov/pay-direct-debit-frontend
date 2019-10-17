@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     .then(() => {
       return res.render('app/cancel/get', params)
     })
-    .catch(() => {
-      renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500)
+    .catch(err => {
+      renderErrorView(req, res, 'No money has been taken from your account, please try again later.', 500, err)
     })
 }
