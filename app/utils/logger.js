@@ -1,13 +1,12 @@
 const { createLogger, format, transports } = require('winston')
-const { json, label, splat, prettyPrint } = format
+const { json, splat, prettyPrint } = format
 const loggerFormat = require('./logger-format')
 
 const logger = createLogger({
   format: format.combine(
     splat(),
-    label({ label: 'directdebit-frontend' }),
     prettyPrint(),
-    loggerFormat(),
+    loggerFormat({ container: 'directdebit-frontend' }),
     json()
   ),
   transports: [
