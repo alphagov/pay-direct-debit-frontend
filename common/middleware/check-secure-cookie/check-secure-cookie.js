@@ -2,7 +2,7 @@
 const _ = require('lodash')
 
 // NPM Dependencies
-const { EXTERNAL_ID } = require('@govuk-pay/pay-js-commons').loggingKeys
+const { EXTERNAL_ID } = require('@govuk-pay/pay-js-commons').logging.keys
 
 // local dependencies
 const logger = require('../../../app/utils/logger')(__filename)
