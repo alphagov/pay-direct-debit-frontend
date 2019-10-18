@@ -1,12 +1,12 @@
 const { createLogger, format, transports } = require('winston')
 const { json, splat, prettyPrint } = format
-const loggerFormat = require('./logger-format')
+const { govUkPayLoggingFormat } = require('@govuk-pay/pay-js-commons').logging
 
 const logger = createLogger({
   format: format.combine(
     splat(),
     prettyPrint(),
-    loggerFormat({ container: 'directdebit-frontend' }),
+    govUkPayLoggingFormat({ container: 'directdebit-frontend' }),
     json()
   ),
   transports: [
