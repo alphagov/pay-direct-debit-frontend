@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">8.11.3"
+    "node": ">8.12.0"
   },
   "standard": {
     "globals": [
@@ -54,7 +54,7 @@
     ]
   },
   "dependencies": {
-    "@govuk-pay/pay-js-commons": "2.14.1",
+    "@govuk-pay/pay-js-commons": "2.16.0",
     "@sentry/node": "5.7.1",
     "appmetrics": "4.0.1",
     "appmetrics-statsd": "3.0.0",
