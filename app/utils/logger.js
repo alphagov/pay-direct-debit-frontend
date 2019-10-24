@@ -6,7 +6,7 @@ const logger = createLogger({
   format: format.combine(
     splat(),
     prettyPrint(),
-    govUkPayLoggingFormat({ container: 'directdebit-frontend' }),
+    govUkPayLoggingFormat({ container: 'directdebit-frontend', environment: process.env.ENVIRONMENT }),
     json()
   ),
   transports: [
