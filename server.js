@@ -11,7 +11,6 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const i18n = require('i18n')
-const loggingMiddleware = require('morgan')
 const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
 const compression = require('compression')
@@ -24,6 +23,7 @@ const noCache = require('./common/utils/no-cache')
 const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
 const cookieConfig = require('./common/config/cookies')
 const logger = require('./app/utils/logger')(__filename)
+const loggingMiddleware = require('./common/middleware/logging_middleware')
 
 // Global constants
 const unconfiguredApp = express()
@@ -54,8 +54,7 @@ function initialiseGlobalMiddleware (app) {
   app.use(staticify.middleware)
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
-    app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
-      ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'))
+    app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware())
   }
 
   app.use(function (req, res, next) {
