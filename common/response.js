@@ -1,6 +1,4 @@
 'use strict'
-const Sentry = require('@sentry/node')
-
 const logger = require('../app/utils/logger')(__filename)
 const ERROR_MESSAGE = 'There is a problem with the payments platform'
 
@@ -9,14 +7,6 @@ function response (req, res, template, data) {
 }
 
 function renderErrorView (req, res, msg = ERROR_MESSAGE, status = 500, err) {
-  if (status >= 500) {
-    if (err) {
-      Sentry.captureException(err)
-    } else {
-      Sentry.captureMessage(msg)
-    }
-  }
-
   logger.error(`[${req.correlationId}] ${status} An error has occurred. Rendering error view -`, { errorMessage: msg })
   res.setHeader('Content-Type', 'text/html')
   res.status(status)
