@@ -125,7 +125,24 @@ function initialiseRoutes (app) {
 }
 
 function initialiseSentry () {
-  Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.ENVIRONMENT })
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.ENVIRONMENT,
+    beforeSend (event) {
+      if (event.request) {
+        delete event.request // This can include sensitive data such as card numbers
+      }
+      return event
+    }
+  })
+}
+
+const configureSentryRequestHandler = function configureSentryRequestHandler (app) {
+  app.use(Sentry.Handlers.requestHandler())
+}
+
+const configureSentryErrorHandler = function configureSentryErrorHandler (app) {
+  app.use(Sentry.Handlers.errorHandler())
 }
 
 function listen () {
@@ -141,7 +158,7 @@ function listen () {
 function initialise () {
   const app = unconfiguredApp
   initialiseSentry()
-  app.use(Sentry.Handlers.requestHandler()) // Sentry's request handler must be the first middleware on the app
+  configureSentryRequestHandler(app) // The request handler must be the first middleware on the app
   app.disable('x-powered-by')
   initialiseProxy(app)
   initialiseCookies(app)
@@ -150,7 +167,7 @@ function initialise () {
   initialiseTemplateEngine(app)
   initialisePublic(app)
   initialiseRoutes(app) // this needs to be at the bottom otherwise all assets in public 404
-  app.use(Sentry.Handlers.errorHandler()) // Sentry's error handler must be before any other error middleware and after all controllers
+  configureSentryErrorHandler(app) // Sentry's error handler must be before any other error middleware and after all controllers
   warnIfAnalyticsNotSet()
   return app
 }
