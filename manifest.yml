@@ -1,8 +1,0 @@
----
-org: govuk-pay
-applications:
-- name: govukpay-directdebit-frontend
-  memory: 1G
-  instances: 1
-  health-check-type: http
-  health-check-http-endpoint: /healthcheck
