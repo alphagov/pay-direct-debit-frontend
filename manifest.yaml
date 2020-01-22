@@ -1,0 +1,24 @@
+---
+applications:
+- name: directdebit-frontend
+  buildpacks:
+  - nodejs_buildpack
+  health-check-type: http
+  health-check-http-endpoint: '/healthcheck'
+  health-check-invocation-timeout: 5
+  memory: ((memory))
+  disk_quota: ((disk_quota))
+  command: npm start
+  env:
+    NODE_ENV: production
+    SESSION_ENCRYPTION_KEY: ((direct_debit_frontend_session_encryption_key))
+    COOKIE_MAX_AGE: '10800000'
+    ANALYTICS_TRACKING_ID: ((direct_debit_frontend_analytics_tracking_id))
+    ANALYTICS_TRACKING_ID_XGOV: ((direct_debit_frontend_analytics_tracking_id_xgov))
+    CONNECTOR_URL: ((direct_debit_connector_url))
+    PRODUCTS_URL: ((products_url))
+    PUBLICAUTH_URL: ((publicauth_url))
+    SENTRY_DSN: ((direct_debit_frontend_sentry_dsn))
+    ENVIRONMENT: ((space))
+  routes:
+  - route: ((direct_debit_frontend_url))
