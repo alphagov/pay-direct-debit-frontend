@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - 12.2.0
+
+cache:
+  # Caches $HOME/.npm when npm ci is default script command
+  # Caches node_modules in all other cases
+  npm: true
+
+install:
+  - npm ci
+
+script:
+  - npm run compile
+  - npm run lint
+  - npm test -- --forbid-only --forbid-pending
