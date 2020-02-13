@@ -11,12 +11,20 @@ applications:
   disk_quota: ((disk_quota))
   services:
     - app-catalog
+    - directdebit-frontend-secret-service
   command: npm start
   env:
     NODE_ENV: production
-    SESSION_ENCRYPTION_KEY: ((direct_debit_frontend_session_encryption_key))
     COOKIE_MAX_AGE: '10800000'
-    ANALYTICS_TRACKING_ID: ((direct_debit_frontend_analytics_tracking_id))
-    ANALYTICS_TRACKING_ID_XGOV: ((direct_debit_frontend_analytics_tracking_id_xgov))
-    SENTRY_DSN: ((direct_debit_frontend_sentry_dsn))
     ENVIRONMENT: ((space))
+
+    # Provided by directdebit-frontend-secret-service
+    SENTRY_DSN: ""
+    ANALYTICS_TRACKING_ID: ""
+    ANALYTICS_TRACKING_ID_XGOV: ""
+    SESSION_ENCRYPTION_KEY: ""
+ 
+    # Provided by app-catalog service
+    CONNECTOR_URL: ""
+    ADMINUSERS_URL: ""
+    PUBLICAUTH_URL: ""
