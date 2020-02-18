@@ -73,7 +73,7 @@
     "nunjucks": "^3.2.0",
     "pino": "5.16.x",
     "readdir": "1.0.x",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "requestretry": "^4.1.0",
     "rfc822-validate": "^1.0.0",
     "serve-favicon": "2.5.0",
