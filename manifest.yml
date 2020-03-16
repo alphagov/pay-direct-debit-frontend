@@ -23,8 +23,10 @@ applications:
     ANALYTICS_TRACKING_ID: ""
     ANALYTICS_TRACKING_ID_XGOV: ""
     SESSION_ENCRYPTION_KEY: ""
- 
+
     # Provided by app-catalog service
     CONNECTOR_URL: ""
     ADMINUSERS_URL: ""
     PUBLICAUTH_URL: ""
+    METRICS_HOST: ""
+    METRICS_PORT: ""
