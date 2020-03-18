@@ -13,7 +13,7 @@ pipeline {
   }
 
   libraries {
-    lib("pay-jenkins-library@master")
+    lib("pay-jenkins-library@do_not_mert_debugging_jenkins")
   }
 
   environment {
