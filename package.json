@@ -70,7 +70,7 @@
     "memory-cache": "^0.2.0",
     "minimist": "1.2.x",
     "morgan": "1.9.x",
-    "nunjucks": "^3.2.0",
+    "nunjucks": "^3.2.1",
     "pino": "5.17.x",
     "readdir": "1.0.x",
     "request": "^2.88.2",
