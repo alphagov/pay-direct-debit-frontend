@@ -1,0 +1,20 @@
+// Because we have JS validating on blur there is
+// an edge case (PP-5533) where when clicking the
+// submit button when you‘re focused on a errored
+// field causes the page to jump up and then the
+// click event misses the button.
+// So we can fix this by making the button invisibly
+// bigger when it becomes active.
+
+.govuk-button {
+  position: relative;
+
+  &:active:before {
+    content: "";
+    position: absolute;
+    top: -2rem;
+    bottom: -2rem;
+    left: -2rem;
+    right: -2rem;
+  }
+}

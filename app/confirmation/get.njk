@@ -1,8 +1,8 @@
 {% extends "common/templates/layout.njk" %}
-{% from "components/back-link/macro.njk" import govukBackLink %}
-{% from "components/table/macro.njk" import govukTable %}
-{% from "components/inset-text/macro.njk" import govukInsetText %}
-{% from "components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block pageTitle %}
   Check your details are correct
@@ -36,7 +36,7 @@
                   }
                 }
               ],
-              [
+	      [
                 {
                   text: "Sort code:"
                 },
@@ -55,6 +55,17 @@
                   text: accountNumber,
                   attributes: {
                     id: "account-number"
+                  }
+                }
+              ],
+              [
+                {
+                  text: "Email:"
+                },
+                {
+                  text: accountEmailAddress,
+                  attributes: {
+                    id: "account-email-address"
                   }
                 }
               ]
@@ -92,7 +103,7 @@
           }}
 
           <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
+            <a id="cancel" class="govuk-link govuk-link--no-visited-state govuk-!-margin-top-6 gouk-!-display-block cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
           </p>
         </form>
       </div>

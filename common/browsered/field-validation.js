@@ -18,20 +18,33 @@ const INPUT_ERROR_CLASSNAME = 'govuk-input--error'
 
 exports.enableFieldValidation = function () {
   const allForms = Array.prototype.slice.call(document.getElementsByTagName('form'))
+  const allInputs = Array.prototype.slice.call(document.getElementsByTagName('input'))
 
   allForms.filter(form => {
     return form.hasAttribute('data-validate')
   }).map(form => {
     form.addEventListener('submit', initValidation, false)
   })
+
+  allInputs.filter(input => {
+    return input.hasAttribute('data-validate')
+  }).map(input => {
+    input.addEventListener('blur', initFieldValidate, false)
+  })
+}
+
+function initFieldValidate (e) {
+  const { target, target: { form } } = e
+  clearPreviousError(target)
+  validateField(form, target)
 }
 
 function initValidation (e) {
-  let form = e.target
+  const form = e.target
   e.preventDefault()
   clearPreviousErrors()
 
-  let validatedFields = findFields(form)
+  const validatedFields = findFields(form)
     .map(field => validateField(form, field))
 
   if (every(validatedFields, 'valid')) {
@@ -41,14 +54,27 @@ function initValidation (e) {
   }
 }
 
+function clearPreviousError (input) {
+  input.classList.remove(INPUT_ERROR_CLASSNAME)
+  input.parentElement.classList.remove(FORM_GROUP_ERROR_CLASSNAME)
+
+  const errorLabel = Array.prototype.slice.call(input.parentElement.querySelectorAll(`.${ERROR_LABEL_CLASSNAME}`))
+
+  if (errorLabel.length > 0) {
+    errorLabel[0].remove()
+  }
+}
+
 function clearPreviousErrors () {
   const previousErrorsMessages = Array.prototype.slice.call(document.querySelectorAll(ERROR_SUMMARY_CLASS))
   const previousErrorsFields = Array.prototype.slice.call(document.querySelectorAll(FORM_GROUP_WITH_ERROR))
   const previousErroredInputs = Array.prototype.slice.call(document.querySelectorAll(`.${INPUT_ERROR_CLASSNAME}`))
+  const previousErrorLabels = Array.prototype.slice.call(document.querySelectorAll(`.${ERROR_LABEL_CLASSNAME}`))
 
   previousErroredInputs.map(errorField => errorField.classList.remove(INPUT_ERROR_CLASSNAME))
   previousErrorsMessages.map(error => error.remove())
   previousErrorsFields.map(errorField => errorField.classList.remove(FORM_GROUP_ERROR_CLASSNAME))
+  previousErrorLabels.map(label => label.remove())
 }
 
 function findFields (form) {
@@ -61,7 +87,7 @@ function findFields (form) {
 
 function validateField (form, field) {
   let result = {}
-  let validationTypes = field.getAttribute('data-validate').split(' ')
+  const validationTypes = field.getAttribute('data-validate').split(' ')
 
   validationTypes.forEach(validationType => {
     switch (validationType) {
@@ -95,14 +121,14 @@ function applyErrorMessaging (form, field, result) {
     field.classList.add(INPUT_ERROR_CLASSNAME)
   }
   // Modify the form group
-  let formGroup = field.closest(FORM_GROUP)
+  const formGroup = field.closest(FORM_GROUP)
   if (!formGroup.classList.contains(FORM_GROUP_ERROR_CLASSNAME)) {
     formGroup.classList.add(FORM_GROUP_ERROR_CLASSNAME)
     const errorLegendElement = formGroup.querySelector('legend')
     if (errorLegendElement === null) {
-      const errorElement = document.querySelector('label[for="' + field.name + '"]')
-      const errorLabel = result.message || errorElement.getAttribute('data-error-label')
-      errorElement.appendChild(generateErrorMessageElement(errorLabel))
+      const errorLabelElement = document.querySelector('label[for="' + field.name + '"]')
+      const errorLabelText = result.message || errorLabelElement.getAttribute('data-error-label')
+      field.parentNode.insertBefore(generateErrorMessageElement(errorLabelText), field)
     } else {
       errorLegendElement.appendChild(generateErrorMessageElement(errorLegendElement.getAttribute('data-error-label')))
     }

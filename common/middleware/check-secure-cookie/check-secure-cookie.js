@@ -1,8 +1,11 @@
 'use strict'
-const logger = require('pino')()
 const _ = require('lodash')
 
+// NPM Dependencies
+const { EXTERNAL_ID } = require('@govuk-pay/pay-js-commons').logging.keys
+
 // local dependencies
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const { getSessionVariable } = require('../../config/cookies')
 
@@ -12,7 +15,11 @@ function middleware (req, res, next) {
   const found = _.get(session, 'mandateExternalId') === mandateExternalId
 
   if (!found) {
-    logger.error(`[${req.correlationId}] Session is not defined for ${mandateExternalId}`)
+    const loggedObject = {
+      message: `[${req.correlationId}] Session is not defined for ${mandateExternalId}`,
+      [EXTERNAL_ID]: mandateExternalId
+    }
+    logger.error(loggedObject)
     return renderErrorView(req, res, 'There is a problem with the payments platform')
   }
 

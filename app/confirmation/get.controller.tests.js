@@ -33,6 +33,7 @@ describe('confirmation get controller', function () {
     }
   }
   const accountName = 'bla'
+  const accountEmail = 'test@test.test'
   const sortCode = '123456'
   const formattedSortCode = '12 34 56'
   const accountNumber = '12345678'
@@ -52,7 +53,8 @@ describe('confirmation get controller', function () {
     const payer = mandateFixtures.validPayer({
       account_holder_name: accountName,
       sort_code: sortCode,
-      account_number: accountNumber
+      account_number: accountNumber,
+      email: accountEmail
     })
     const cookieHeader = new CookieBuilder(
       gatewayAccountExternalId,
@@ -86,6 +88,7 @@ describe('confirmation get controller', function () {
     expect($('#account-holder-name').text()).to.equal(accountName)
     expect($('#sort-code').text()).to.equal(formattedSortCode)
     expect($('#account-number').text()).to.equal(accountNumber)
+    expect($('#account-email-address').text()).to.equal(accountEmail)
   })
 
   it('should display the enter confirmation page with bank statement description', () => {
@@ -93,7 +96,7 @@ describe('confirmation get controller', function () {
   })
 
   it('should display the enter direct debit page with a link to cancel the mandate', () => {
-    expect($(`.cancel-link`).attr('href')).to.equal(`/cancel/${mandateExternalId}`)
+    expect($('#cancel').attr('href')).to.equal(`/cancel/${mandateExternalId}`)
   })
 
   it('should display the confirmation page with a back link to the setup page', () => {
@@ -107,8 +110,8 @@ describe('confirmation get controller', function () {
   it('should display merchant details in the footer', () => {
     expect($(`.merchant-details-line-1`).text()).to.equal(`Service provided by ${service.merchant_details.name}`)
     expect($(`.merchant-details-line-2`).text()).to.equal(`${service.merchant_details.address_line1}, ${service.merchant_details.address_line2}, ${service.merchant_details.address_city} ${service.merchant_details.address_postcode} United Kingdom`)
-    expect($(`.merchant-details-phone-number`).text()).to.equal(`Phone: ${service.merchant_details.telephone_number}`)
-    expect($(`.merchant-details-email`).text()).to.equal(`Email: ${service.merchant_details.email}`)
+    expect($(`.merchant-details-phone-number`).text()).to.equal(`${service.merchant_details.telephone_number}`)
+    expect($(`.merchant-details-email`).text()).to.equal(`${service.merchant_details.email}`)
   })
 })
 

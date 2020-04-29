@@ -2,12 +2,14 @@
 
 const path = require('path')
 const fs = require('fs')
-const logger = require('pino')()
+const logger = require('./app/utils/logger')(__filename)
 const throng = require('throng')
 const server = require('./server')
 const pidFile = path.join(__dirname, '/.start.pid')
 const fileOptions = { encoding: 'utf-8' }
 let pid
+
+logger.info(`[process.version=${process.version}] [NODE_VERSION=${process.env.NODE_VERSION}]`)
 
 /**
  * throng is a wrapper around node cluster

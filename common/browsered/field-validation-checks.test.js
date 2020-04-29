@@ -81,7 +81,7 @@ describe('field validation checks', () => {
       expect(isAccountNumber('1234a56789').valid).to.equal(false)
     })
     it('should display an error message for an invalid account number', () => {
-      expect(isAccountNumber('invalid').message).to.equal('Enter a real account number between 8 and 10 digits long')
+      expect(isAccountNumber('invalid').message).to.equal('Enter a real account number between 6 and 8 digits long')
     })
   })
   describe('isChecked', () => {

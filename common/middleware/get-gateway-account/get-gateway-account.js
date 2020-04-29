@@ -2,10 +2,10 @@
 
 // npm dependencies
 const _ = require('lodash')
-const logger = require('pino')()
 const { Cache } = require('memory-cache')
 
 // local dependencies
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const connectorClient = require('../../clients/connector-client')
 
@@ -31,9 +31,9 @@ function middleware (req, res, next) {
         res.locals.gatewayAccount = gatewayAccount
         next()
       })
-      .catch(() => {
+      .catch(err => {
         logger.error(`[${req.correlationId}] Failed to load gateway account from connector: ${gatewayAccountExternalId}`)
-        renderErrorView(req, res)
+        renderErrorView(req, res, 'Failed to load gateway account', 500, err)
       })
   }
 }

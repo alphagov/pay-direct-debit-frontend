@@ -1,7 +1,8 @@
-@import "govuk-frontend/all";
+@import "govuk-frontend/govuk/all";
 
 // Direct Debit Modules
 @import "modules/cookie-message";
-@import "modules/charge";
+@import "modules/text-colour";
 @import "modules/input-confirm";
 @import "modules/direct-debit-logo";
+@import "modules/button";

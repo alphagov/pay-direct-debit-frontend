@@ -11,18 +11,19 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const i18n = require('i18n')
-const logger = require('pino')()
-const loggingMiddleware = require('morgan')
 const argv = require('minimist')(process.argv.slice(2))
 const staticify = require('staticify')(path.join(__dirname, 'public'))
 const compression = require('compression')
 const nunjucks = require('nunjucks')
+const Sentry = require('@sentry/node')
 
 // Local dependencies
 const router = require('./app/router')
 const noCache = require('./common/utils/no-cache')
 const correlationHeader = require('./common/middleware/correlation-header/correlation-header')
 const cookieConfig = require('./common/config/cookies')
+const logger = require('./app/utils/logger')(__filename)
+const loggingMiddleware = require('./common/middleware/logging_middleware')
 
 // Global constants
 const unconfiguredApp = express()
@@ -48,13 +49,12 @@ const APP_VIEWS = [
 
 function initialiseGlobalMiddleware (app) {
   app.set('settings', { getVersionedPath: staticify.getVersionedPath })
-  app.use(favicon(path.join(__dirname, '/node_modules/govuk-frontend/assets/images', 'favicon.ico')))
+  app.use(favicon(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets/images', 'favicon.ico')))
   app.use(compression())
   app.use(staticify.middleware)
 
   if (process.env.DISABLE_REQUEST_LOGGING !== 'true') {
-    app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware(
-      ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - total time :response-time ms'))
+    app.use(/\/((?!images|public|stylesheets|javascripts).)*/, loggingMiddleware())
   }
 
   app.use(function (req, res, next) {
@@ -114,7 +114,7 @@ function initialiseTemplateEngine (app) {
 
 function initialisePublic (app) {
   app.use('/public', express.static(path.join(__dirname, '/public')))
-  app.use('/', express.static(path.join(__dirname, '/node_modules/govuk-frontend/')))
+  app.use('/', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/')))
   app.use('/javascripts', express.static(path.join(__dirname, '/public/assets/javascripts'), publicCaching))
   app.use('/images', express.static(path.join(__dirname, '/public/images'), publicCaching))
   app.use('/stylesheets', express.static(path.join(__dirname, '/public/assets/stylesheets'), publicCaching))
@@ -122,6 +122,27 @@ function initialisePublic (app) {
 
 function initialiseRoutes (app) {
   router.bind(app)
+}
+
+function initialiseSentry () {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.ENVIRONMENT,
+    beforeSend (event) {
+      if (event.request) {
+        delete event.request // This can include sensitive data such as card numbers
+      }
+      return event
+    }
+  })
+}
+
+const configureSentryRequestHandler = function configureSentryRequestHandler (app) {
+  app.use(Sentry.Handlers.requestHandler())
+}
+
+const configureSentryErrorHandler = function configureSentryErrorHandler (app) {
+  app.use(Sentry.Handlers.errorHandler())
 }
 
 function listen () {
@@ -136,6 +157,8 @@ function listen () {
  */
 function initialise () {
   const app = unconfiguredApp
+  initialiseSentry()
+  configureSentryRequestHandler(app) // The request handler must be the first middleware on the app
   app.disable('x-powered-by')
   initialiseProxy(app)
   initialiseCookies(app)
@@ -144,6 +167,7 @@ function initialise () {
   initialiseTemplateEngine(app)
   initialisePublic(app)
   initialiseRoutes(app) // this needs to be at the bottom otherwise all assets in public 404
+  configureSentryErrorHandler(app) // Sentry's error handler must be before any other error middleware and after all controllers
   warnIfAnalyticsNotSet()
   return app
 }

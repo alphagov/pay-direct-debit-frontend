@@ -1,0 +1,7 @@
+memory: 500M
+disk_quota: 500M
+direct_debit_frontend_session_encryption_key: asdjhbwefbo23r23rbfik2roiwhefwbqw
+direct_debit_frontend_analytics_tracking_id: testing-123
+direct_debit_frontend_analytics_tracking_id_xgov: testing-123
+space: dev
+direct_debit_frontend_sentry_dsn: sentrydsn

@@ -1,7 +1,7 @@
 {% extends "common/templates/layout.njk" %}
-{% from "components/input/macro.njk" import govukInput %}
-{% from "components/radios/macro.njk" import govukRadios %}
-{% from "components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% if validationErrors %}
   {% set fields = validationErrors %}
@@ -86,7 +86,7 @@
                 classes: "govuk-label--s"
               },
               hint: {
-                text: "Must be between 8 and 10 digits long"
+                text: "Must be between 6 and 8 digits long"
               },
               value: formValues.account_number,
               classes: "govuk-!-width-one-third",
@@ -178,7 +178,7 @@
           }}
 
           <p class="govuk-body">
-            <a class="govuk-link govuk-link--no-visited-state cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
+            <a id="cancel" class="govuk-link govuk-link--no-visited-state govuk-!-margin-top-6 gouk-!-display-block cancel-link" href="/cancel/{{mandateExternalId}}">Cancel mandate</a>
           </p>
 
         </div>

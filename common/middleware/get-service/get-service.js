@@ -2,10 +2,10 @@
 
 // npm dependencies
 const _ = require('lodash')
-const logger = require('pino')()
 const { Cache } = require('memory-cache')
 
 // local dependencies
+const logger = require('../../../app/utils/logger')(__filename)
 const { renderErrorView } = require('../../response')
 const adminusersClient = require('../../clients/adminusers-client')
 
@@ -31,10 +31,10 @@ function middleware (req, res, next) {
         res.locals.service = service
         next()
       })
-      .catch(() => {
+      .catch((err) => {
         logger.error(
           `[${req.correlationId}] Failed to load service from adminusers: ${gatewayAccountExternalId}`)
-        renderErrorView(req, res)
+        renderErrorView(req, res, 'Failed to load service', 500, err)
       })
   }
 }
