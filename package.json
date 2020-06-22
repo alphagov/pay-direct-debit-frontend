@@ -80,7 +80,7 @@
     "staticify": "4.0.x",
     "throng": "4.0.x",
     "url-join": "^4.0.1",
-    "winston": "^3.2.1"
+    "winston": "^3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",
