@@ -77,7 +77,7 @@
     "requestretry": "^4.1.1",
     "rfc822-validate": "^1.0.0",
     "serve-favicon": "2.5.0",
-    "staticify": "4.0.x",
+    "staticify": "5.0.x",
     "throng": "4.0.x",
     "url-join": "^4.0.1",
     "winston": "^3.3.3"
