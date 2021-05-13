@@ -20,7 +20,6 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - dependencies
-  - govuk-pay
   - javascript
   ignore:
   - dependency-name: node
